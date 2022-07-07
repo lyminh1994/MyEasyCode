@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * 克隆工具类，实现原理通过JSON序列化反序列化实现
+ * Clone the tool class, the implementation principle is realized by JSON serialization and deserialization
  *
  * @author makejava
  * @version 1.0.0
@@ -21,69 +21,69 @@ import java.util.Objects;
 @SuppressWarnings("unchecked")
 public final class CloneUtils {
     /**
-     * 禁用构造方法
+     * Disable constructor
      */
     private CloneUtils() {
         throw new UnsupportedOperationException();
     }
 
     /**
-     * 通过JSON序列化方式进行克隆，默认不copy忽略对象
+     * Clone through JSON serialization, and ignore objects by default
      *
-     * @param entity        实例对象
-     * @param typeReference 返回类型
-     * @return 克隆后的实体对象
+     * @param entity        Instance object
+     * @param typeReference Return type
+     * @return Cloned entity object
      */
     public static <E, T extends E> E cloneByJson(E entity, TypeReference<T> typeReference) {
         return cloneByJson(entity, typeReference, false);
     }
 
     /**
-     * 通过JSON序列化方式进行克隆
+     * Clone via JSON serialization
      *
-     * @param entity 实例对象
-     * @return 克隆后的实体对象
+     * @param entity Instance object
+     * @return Cloned entity object
      */
     public static <E> E cloneByJson(E entity) {
         return cloneByJson(entity, false);
     }
 
     /**
-     * 通过JSON序列化方式进行克隆
+     * Clone via JSON serialization
      *
-     * @param entity 实例对象
-     * @param copy   是否复制被忽略的属性
-     * @return 克隆后的实体对象
+     * @param entity Instance object
+     * @param copy   Whether to copy ignored properties
+     * @return Cloned entity object
      */
     public static <E> E cloneByJson(E entity, boolean copy) {
         return cloneByJson(entity, null, copy);
     }
 
     /**
-     * 通过JSON序列化方式进行克隆
+     * Clone via JSON serialization
      *
-     * @param entity        实例对象
-     * @param copy          是否复制被忽略的属性
-     * @param typeReference 返回类型
-     * @return 克隆后的实体对象
+     * @param entity        Instance object
+     * @param copy          Whether to copy ignored properties
+     * @param typeReference Return type
+     * @return Cloned entity object
      */
     public static <E, T extends E> E cloneByJson(E entity, TypeReference<T> typeReference, boolean copy) {
         if (entity == null) {
             return null;
         }
-        // 进行序列化
+        // Serialize
         String json = JSON.toJson(entity);
-        // 进行反序列化
+        // Deserialize
         E result;
         if (typeReference == null) {
             result = (E) JSON.parse(json, entity.getClass());
         } else {
             result = JSON.parse(json, typeReference);
         }
-        // 复制被忽略的属性
+        // Copy ignored properties
         if (copy) {
             copyIgnoreProp(entity, result);
-            // 针对TableInfo对象做特殊处理
+            // Do special processing for TableInfo objects
             if (entity instanceof TableInfo) {
                 handlerTableInfo((TableInfo) entity, (TableInfo) result);
             }
@@ -92,10 +92,10 @@ public final class CloneUtils {
     }
 
     /**
-     * 对TableInfo做特殊处理
+     * Do special treatment for TableInfo
      *
-     * @param oldEntity 旧实体对象
-     * @param newEntity 新实体对象
+     * @param oldEntity Old entity object
+     * @param newEntity New entity object
      */
     private static void handlerTableInfo(TableInfo oldEntity, TableInfo newEntity) {
         List<ColumnInfo> oldColumnInfoList = oldEntity.getFullColumn();
@@ -103,10 +103,10 @@ public final class CloneUtils {
         if (CollectionUtil.isEmpty(oldColumnInfoList) || CollectionUtil.isEmpty(newColumnInfoList)) {
             return;
         }
-        // 进行处理
+        // To process
         for (ColumnInfo oldColumnInfo : oldColumnInfoList) {
             for (ColumnInfo newColumnInfo : newColumnInfoList) {
-                // 对相同的列信息忽略复制
+                // Ignore replication for the same column information
                 if (Objects.equals(oldColumnInfo.getName(), newColumnInfo.getName())) {
                     copyIgnoreProp(oldColumnInfo, newColumnInfo);
                     break;
@@ -116,26 +116,26 @@ public final class CloneUtils {
     }
 
     /**
-     * 复制属性
+     * Copy properties
      *
-     * @param oldEntity 就实体
-     * @param newEntity 新实例
+     * @param oldEntity On the entity
+     * @param newEntity New instance
      */
     private static void copyIgnoreProp(Object oldEntity, Object newEntity) {
-        // 类型不一样直接返回
+        // The types are different and return directly
         if (!Objects.equals(oldEntity.getClass(), newEntity.getClass())) {
             return;
         }
-        // 获取所有字段
+        // Get all fields
         List<Field> fieldList = ReflectionUtil.collectFields(oldEntity.getClass());
         if (CollectionUtil.isEmpty(fieldList)) {
             return;
         }
         fieldList.forEach(field -> {
             if (field.getAnnotation(JsonIgnore.class) != null) {
-                // 设置允许访问
+                // Set allow access
                 field.setAccessible(true);
-                // 复制字段
+                // Copy field
                 try {
                     field.set(newEntity, field.get(oldEntity));
                 } catch (IllegalAccessException e) {

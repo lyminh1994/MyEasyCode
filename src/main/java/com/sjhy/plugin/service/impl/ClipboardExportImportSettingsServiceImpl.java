@@ -11,17 +11,17 @@ import com.sjhy.plugin.tool.JSON;
 import java.awt.datatransfer.DataFlavor;
 
 /**
- * 剪切板导入导出配置服务实现
+ * Clipboard import and export configuration service implementation
  *
  * @author makejava
  * @version 1.0.0
- * @date 2021/08/12 14:57
+ * @since 2021/08/12 14:57
  */
 public class ClipboardExportImportSettingsServiceImpl implements ExportImportSettingsService {
     /**
-     * 导出设置
+     * Export settings
      *
-     * @param settingsStorage 要导出的设置
+     * @param settingsStorage Settings to export
      */
     @Override
     public void exportConfig(SettingsStorageDTO settingsStorage) {
@@ -31,9 +31,9 @@ public class ClipboardExportImportSettingsServiceImpl implements ExportImportSet
     }
 
     /**
-     * 导入设置
+     * Import settings
      *
-     * @return 设置信息
+     * @return Setup information
      */
     @Override
     public SettingsStorageDTO importConfig() {

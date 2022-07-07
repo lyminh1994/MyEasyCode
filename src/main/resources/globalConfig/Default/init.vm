@@ -1,36 +1,36 @@
-##初始化区域
+##Initialize area
 
-##去掉表的t_前缀
+##Remove the T_ prefix from the table
 $!tableInfo.setName($tool.getClassName($tableInfo.obj.name.replaceFirst("book_","")))
 
-##参考阿里巴巴开发手册，POJO 类中布尔类型的变量，都不要加 is 前缀，否则部分框架解析会引起序列化错误
+##Referring to the Alibaba development manual, do not add the `is` prefix to the boolean variables in the POJO class, otherwise some framework parsing will cause serialization errors
 #foreach($column in $tableInfo.fullColumn)
 #if($column.name.startsWith("is") && $column.type.equals("java.lang.Boolean"))
     $!column.setName($tool.firstLowerCase($column.name.substring(2)))
 #end
 #end
 
-##实现动态排除列
+##Implement dynamic exclusion columns
 #set($temp = $tool.newHashSet("testCreateTime", "otherColumn"))
 #foreach($item in $temp)
     #set($newList = $tool.newArrayList())
     #foreach($column in $tableInfo.fullColumn)
         #if($column.name!=$item)
-            ##带有反回值的方法调用时使用$tool.call来消除返回值
+            ##Use $tool.call to eliminate the return value when calling a method with a return value
             $tool.call($newList.add($column))
         #end
     #end
-    ##重新保存
+    ##Save again
     $tableInfo.setFullColumn($newList)
 #end
 
-##对importList进行篡改
+##Tampering with import List
 #set($temp = $tool.newHashSet())
 #foreach($column in $tableInfo.fullColumn)
     #if(!$column.type.startsWith("java.lang."))
-        ##带有反回值的方法调用时使用$tool.call来消除返回值
+        ##Use $tool.call to eliminate the return value when calling a method with a return value
         $tool.call($temp.add($column.type))
     #end
 #end
-##覆盖
+##Cover
 #set($importList = $temp)

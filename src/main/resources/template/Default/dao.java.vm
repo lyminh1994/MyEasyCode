@@ -1,10 +1,10 @@
-##定义初始变量
+##Define initial variables
 #set($tableName = $tool.append($tableInfo.name, "Dao"))
-##设置回调
+##Set callback
 $!callback.setFileName($tool.append($tableName, ".java"))
 $!callback.setSavePath($tool.append($tableInfo.savePath, "/dao"))
 
-##拿到主键
+##Get the primary key
 #if(!$tableInfo.pkColumn.isEmpty())
     #set($pk = $tableInfo.pkColumn.get(0))
 #end
@@ -17,7 +17,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 /**
- * $!{tableInfo.comment}($!{tableInfo.name})表数据库访问层
+ * $!{tableInfo.comment}($!{tableInfo.name}) Table database access layer
  *
  * @author $!author
  * @since $!time.currTime()
@@ -25,69 +25,68 @@ import java.util.List;
 public interface $!{tableName} {
 
     /**
-     * 通过ID查询单条数据
+     * Query a single piece of data by ID
      *
-     * @param $!pk.name 主键
-     * @return 实例对象
+     * @param $!pk.name Primary key
+     * @return Instance object
      */
     $!{tableInfo.name} queryById($!pk.shortType $!pk.name);
 
     /**
-     * 查询指定行数据
+     * Query the specified row data
      *
-     * @param $!tool.firstLowerCase($!{tableInfo.name}) 查询条件
-     * @param pageable         分页对象
-     * @return 对象列表
+     * @param $!tool.firstLowerCase($!{tableInfo.name}) Query conditions
+     * @param pageable       Paging object
+     * @return List objects
      */
     List<$!{tableInfo.name}> queryAllByLimit($!{tableInfo.name} $!tool.firstLowerCase($!{tableInfo.name}), @Param("pageable") Pageable pageable);
 
     /**
-     * 统计总行数
+     * Count the total number of rows
      *
-     * @param $!tool.firstLowerCase($!{tableInfo.name}) 查询条件
-     * @return 总行数
+     * @param $!tool.firstLowerCase($!{tableInfo.name}) Query conditions
+     * @return total number of rows
      */
     long count($!{tableInfo.name} $!tool.firstLowerCase($!{tableInfo.name}));
 
     /**
-     * 新增数据
+     * Add data
      *
-     * @param $!tool.firstLowerCase($!{tableInfo.name}) 实例对象
-     * @return 影响行数
+     * @param $!tool.firstLowerCase($!{tableInfo.name}) Instance object
+     * @return Number of rows affected
      */
     int insert($!{tableInfo.name} $!tool.firstLowerCase($!{tableInfo.name}));
 
     /**
-     * 批量新增数据（MyBatis原生foreach方法）
+     * Add data in batches (MyBatis native foreach method)
      *
-     * @param entities List<$!{tableInfo.name}> 实例对象列表
-     * @return 影响行数
+     * @param entities List<$!{tableInfo.name}> List of instance objects
+     * @return Number of rows affected
      */
     int insertBatch(@Param("entities") List<$!{tableInfo.name}> entities);
 
     /**
-     * 批量新增或按主键更新数据（MyBatis原生foreach方法）
+     * Batch add or update data by primary key (MyBatis native foreach method)
      *
-     * @param entities List<$!{tableInfo.name}> 实例对象列表
-     * @return 影响行数
-     * @throws org.springframework.jdbc.BadSqlGrammarException 入参是空List的时候会抛SQL语句错误的异常，请自行校验入参
+     * @param entities List<$!{tableInfo.name}> List of instance objects
+     * @return Number of rows affected
+     * @throws org.springframework.jdbc.BadSqlGrammarException When the input parameter is an empty List, an exception to SQL statement error will be thrown, please verify the input parameter by yourself
      */
     int insertOrUpdateBatch(@Param("entities") List<$!{tableInfo.name}> entities);
 
     /**
-     * 修改数据
+     * Change the data
      *
-     * @param $!tool.firstLowerCase($!{tableInfo.name}) 实例对象
-     * @return 影响行数
+     * @param $!tool.firstLowerCase($!{tableInfo.name}) Instance object
+     * @return Number of rows affected
      */
     int update($!{tableInfo.name} $!tool.firstLowerCase($!{tableInfo.name}));
 
     /**
-     * 通过主键删除数据
+     * Delete data by primary key
      *
-     * @param $!pk.name 主键
-     * @return 影响行数
+     * @param $!pk.name Primary key
+     * @return Number of rows affected
      */
     int deleteById($!pk.shortType $!pk.name);
-
 }

@@ -3,7 +3,7 @@ package com.sjhy.plugin.entity;
 import lombok.Data;
 
 /**
- * 回调实体类
+ * Callback entity class
  *
  * @author makejava
  * @version 1.0.0
@@ -12,19 +12,19 @@ import lombok.Data;
 @Data
 public class Callback {
     /**
-     * 文件名
+     * File name
      */
     private String fileName;
     /**
-     * 保存路径
+     * Save route
      */
     private String savePath;
     /**
-     * 是否重新格式化代码
+     * Whether to reformat the code
      */
     private Boolean reformat;
     /**
-     * 是否写入文件，部分模块不需要写入文件。例如debug.json模板
+     * Whether to write files, some modules do not need to write files. For example debug.json template
      */
     private Boolean writeFile;
 }

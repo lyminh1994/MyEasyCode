@@ -7,8 +7,7 @@ import com.sjhy.plugin.dict.GlobalDict;
 import javax.swing.*;
 
 /**
- * 消息弹框工具类
- * 对message dialog弹框进行兼容处理
+ * Message popup tool class Compatible processing of the message dialog popup
  *
  * @author makejava
  * @version 1.0.0
@@ -16,22 +15,25 @@ import javax.swing.*;
  */
 public class MessageDialogUtils {
 
+    private MessageDialogUtils() {
+    }
+
     /**
-     * yes no确认框
+     * Yes/No confirmation box
      *
-     * @param msg 消息
-     * @return 是否确认
+     * @param msg Information
+     * @return Confirm
      */
     public static boolean yesNo(String msg) {
         return yesNo(null, msg);
     }
 
     /**
-     * yes no确认框
+     * Yes/No confirmation box
      *
-     * @param project 项目对象
-     * @param msg     消息
-     * @return 是否确认
+     * @param project Project object
+     * @param msg     Information
+     * @return Confirm
      */
     public static boolean yesNo(Project project, String msg) {
         Object[] options = new Object[]{"Yes", "No"};
@@ -43,11 +45,11 @@ public class MessageDialogUtils {
     }
 
     /**
-     * 显示确认框
+     * Show confirmation box
      *
-     * @param msg     确认框消息
-     * @param project 项目
-     * @return 点击按钮
+     * @param msg     Confirmation box message
+     * @param project Project
+     * @return Click the button
      */
     public static int yesNoCancel(Project project, String msg, String yesText, String noText, String cancelText) {
         Object[] options = new Object[]{yesText, noText, cancelText};

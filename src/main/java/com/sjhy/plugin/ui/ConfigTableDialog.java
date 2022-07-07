@@ -20,7 +20,7 @@ import javax.swing.table.TableColumn;
 import java.awt.*;
 
 /**
- * 表配置窗口
+ * Table configuration window
  *
  * @author makejava
  * @version 1.0.0
@@ -28,11 +28,11 @@ import java.awt.*;
  */
 public class ConfigTableDialog extends DialogWrapper {
     /**
-     * 主面板
+     * Main panel
      */
     private JPanel mainPanel;
     /**
-     * 表信息对象
+     * Table info object
      */
     private TableInfo tableInfo;
 
@@ -50,12 +50,12 @@ public class ConfigTableDialog extends DialogWrapper {
         JBTable table = new JBTable(model);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        // 配置列编辑器
+        // Configure column editor
         table.getColumn("name").setCellEditor(CellEditorFactory.createTextFieldEditor());
         table.getColumn("type").setCellEditor(CellEditorFactory.createComboBoxEditor(true, GlobalDict.DEFAULT_JAVA_TYPE_LIST));
         table.getColumn("type").setMinWidth(120);
         table.getColumn("comment").setCellEditor(CellEditorFactory.createTextFieldEditor());
-        // 其他附加列
+        // Other additional columns
         for (ColumnConfig columnConfig : CurrGroupUtils.getCurrColumnConfigGroup().getElementList()) {
             TableColumn column = table.getColumn(columnConfig.getTitle());
             switch (columnConfig.getType()) {
@@ -89,7 +89,7 @@ public class ConfigTableDialog extends DialogWrapper {
 
     @Override
     protected void doOKAction() {
-        // 保存信息
+        // Save information
         TableInfoSettingsService.getInstance().saveTableInfo(tableInfo);
         super.doOKAction();
     }

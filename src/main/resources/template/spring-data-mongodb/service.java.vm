@@ -1,14 +1,14 @@
-##导入宏定义、设置包名、类名、文件名##导入宏定义
+##Import macro definition, set package name, class name, file name
 $!{define.vm}
 #setPackageSuffix("service")
 #setTableSuffix("Service")
 #save("/service", "Service.java")
 
-##拿到主键
+##Get the primary key
 #if(!$tableInfo.pkColumn.isEmpty())
     #set($pk = $tableInfo.pkColumn.get(0))
 #end
-##实体类名、主键类名
+##Entity class name, primary key class name
 #set($entityShortType = $!tableInfo.name)
 #set($entityType = $!tableInfo.psiClassObj.getQualifiedName())
 #set($entityVarName = $!tool.firstLowerCase($!tableInfo.name))
@@ -24,7 +24,7 @@ import java.util.List;
 
 
 /**
- * $!{tableInfo.comment}业务层
+ * $!{tableInfo.comment} Business Layer
  *
  * @author $!author
  * @since $!time.currTime()
@@ -40,5 +40,4 @@ public interface $!{tableName} {
     List<$entityShortType> findById(Collection<$pkShortType> ids);
 
     Page<$entityShortType> list(Pageable page);
-
 }

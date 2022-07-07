@@ -13,30 +13,29 @@ import lombok.NonNull;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
-import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 /**
- * 表格组件
+ * Form component
  *
  * @author makejava
  * @version 1.0.0
- * @date 2021/08/10 09:52
+ * @since 2021/08/10 09:52
  */
 public class TableComponent<T extends AbstractItem<T>> extends DefaultTableModel implements EditableModel {
     /**
-     * 列信息
+     * Column information
      */
     private List<Column<T>> columns;
     /**
-     * 表数据
+     * Table data
      */
     private List<T> dataList;
     /**
-     * 表格
+     * Sheet
      */
     @Getter
     private JBTable table;
@@ -66,7 +65,7 @@ public class TableComponent<T extends AbstractItem<T>> extends DefaultTableModel
     private void initTable() {
         this.table = new JBTable(this);
         this.table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        // 指定编辑器
+        // Specified editor
         for (Column<T> column : this.columns) {
             if (column.editor != null) {
                 this.table.getColumn(column.name).setCellEditor(column.editor);
@@ -82,7 +81,7 @@ public class TableComponent<T extends AbstractItem<T>> extends DefaultTableModel
 
     public void setDataList(List<T> dataList) {
         this.dataList = dataList;
-        // 清空数据
+        // Clear data
         removeAllRow();
         for (T entity : this.dataList) {
             addRow(entity);
@@ -99,7 +98,7 @@ public class TableComponent<T extends AbstractItem<T>> extends DefaultTableModel
     }
 
     /**
-     * 移除所有行
+     * Remove all lines
      */
     public void removeAllRow() {
         int rowCount = getRowCount();
@@ -142,19 +141,19 @@ public class TableComponent<T extends AbstractItem<T>> extends DefaultTableModel
     @AllArgsConstructor
     public static class Column<T> {
         /**
-         * 列名
+         * Column name
          */
         private String name;
         /**
-         * get方法
+         * Get method
          */
         private Function<T, String> getFun;
         /**
-         * set方法
+         * Set method
          */
         private BiConsumer<T, String> setFun;
         /**
-         * 列编辑器
+         * Column editor
          */
         private TableCellEditor editor;
     }

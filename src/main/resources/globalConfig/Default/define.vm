@@ -1,22 +1,22 @@
-##（Velocity宏定义）
+##（Velocity macro definition）
 
-##定义设置表名后缀的宏定义，调用方式：#setTableSuffix("Test")
+##Define the macro definition for setting the table name suffix, calling method: #setTableSuffix("Test")
 #macro(setTableSuffix $suffix)
     #set($tableName = $!tool.append($tableInfo.name, $suffix))
 #end
 
-##定义设置包名后缀的宏定义，调用方式：#setPackageSuffix("Test")
+##Define the macro definition for setting the package name suffix, calling method: #setPackageSuffix("Test")
 #macro(setPackageSuffix $suffix)
 #if($suffix!="")package #end#if($tableInfo.savePackageName!="")$!{tableInfo.savePackageName}.#{end}$!suffix;
 #end
 
-##定义直接保存路径与文件名简化的宏定义，调用方式：#save("/entity", ".java")
+##Define the macro definition that directly saves the path and file name, calling method: #save("/entity", ".java")
 #macro(save $path $fileName)
     $!callback.setSavePath($tool.append($tableInfo.savePath, $path))
     $!callback.setFileName($tool.append($tableInfo.name, $fileName))
 #end
 
-##定义表注释的宏定义，调用方式：#tableComment("注释信息")
+##Define the macro definition of table comments, calling method: #tableComment("comment information")
 #macro(tableComment $desc)
 /**
  * $!{tableInfo.comment}($!{tableInfo.name})$desc
@@ -26,7 +26,7 @@
  */
 #end
 
-##定义GET，SET方法的宏定义，调用方式：#getSetMethod($column)
+##Define the macro definition of GET and SET methods, calling method: #getSetMethod($column)
 #macro(getSetMethod $column)
 
     public $!{tool.getClsNameByFullName($column.type)} get$!{tool.firstUpperCase($column.name)}() {

@@ -8,7 +8,7 @@ import com.sjhy.plugin.entity.TypeMapperGroup;
 import com.sjhy.plugin.service.SettingsStorageService;
 
 /**
- * 当前分组配置获取工具
+ * Current group configuration acquisition tool
  *
  * @author makejava
  * @version 1.0.0
@@ -16,16 +16,16 @@ import com.sjhy.plugin.service.SettingsStorageService;
  */
 public final class CurrGroupUtils {
     /**
-     * 禁用构造方法
+     * Disable constructor
      */
     private CurrGroupUtils() {
         throw new UnsupportedOperationException();
     }
 
     /**
-     * 获取当前模板组对象
+     * Get the current template group object
      *
-     * @return 模板组对象
+     * @return Template group object
      */
     public static TemplateGroup getCurrTemplateGroup() {
         SettingsStorageDTO settingsStorage = SettingsStorageService.getSettingsStorage();
@@ -35,9 +35,9 @@ public final class CurrGroupUtils {
 
 
     /**
-     * 获取当前全局配置组对象
+     * Get the current global configuration group object
      *
-     * @return 全局配置组对象
+     * @return Global configuration group object
      */
     public static GlobalConfigGroup getCurrGlobalConfigGroup() {
         SettingsStorageDTO settingsStorage = SettingsStorageService.getSettingsStorage();
@@ -47,9 +47,9 @@ public final class CurrGroupUtils {
 
 
     /**
-     * 获取当前类型映射组对象
+     * Get the current type map group object
      *
-     * @return 类型映射组对象
+     * @return Type map group object
      */
     public static TypeMapperGroup getCurrTypeMapperGroup() {
         SettingsStorageDTO settingsStorage = SettingsStorageService.getSettingsStorage();
@@ -58,9 +58,9 @@ public final class CurrGroupUtils {
     }
 
     /**
-     * 获取当前列配置组对象
+     * Get the current column configuration group object
      *
-     * @return 列配置组对象
+     * @return Column Configuration Group Object
      */
     public static ColumnConfigGroup getCurrColumnConfigGroup() {
         SettingsStorageDTO settingsStorage = SettingsStorageService.getSettingsStorage();

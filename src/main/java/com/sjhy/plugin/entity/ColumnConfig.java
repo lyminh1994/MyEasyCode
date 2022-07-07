@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 列配置信息
+ * Column configuration information
  *
  * @author makejava
  * @version 1.0.0
@@ -15,15 +15,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ColumnConfig implements AbstractItem<ColumnConfig> {
     /**
-     * 标题
+     * Title
      */
     private String title;
     /**
-     * 类型
+     * Type
      */
     private ColumnConfigType type;
     /**
-     * 可选值，逗号分割
+     * Optional values, comma separated
      */
     private String selectValue;
 

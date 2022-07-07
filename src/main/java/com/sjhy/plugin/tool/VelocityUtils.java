@@ -10,67 +10,68 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * Velocity工具类，主要用于代码生成
+ * Velocity tool class, mainly used for code generation
  *
  * @author makejava
  * @version 1.0.0
  * @since 2018/07/17 13:10
  */
 public class VelocityUtils {
+
     /**
-     * velocity配置
+     * Velocity configuration
      */
     private static final Properties INIT_PROP;
 
     static {
-        // 设置初始化配置
+        // Set initial configuration
         INIT_PROP = new Properties();
-        // 修复部分用户的velocity日志记录无权访问velocity.log文件问题
+        // Fixed the issue that the velocity logging of some users did not have access to the velocity.log file
         INIT_PROP.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS, "org.apache.velocity.runtime.log.Log4JLogChute");
         INIT_PROP.setProperty("runtime.log.logsystem.log4j.logger", "velocity");
     }
 
     /**
-     * 禁止创建实例对象
+     * Forbid creation of instance objects
      */
     private VelocityUtils() {
         throw new UnsupportedOperationException();
     }
 
     /**
-     * 渲染模板
+     * Render template
      *
-     * @param template 模板字符串
-     * @param map      参数集合
-     * @return 渲染结果
+     * @param template Template string
+     * @param map      Parameter set
+     * @return Render result
      */
     public static String generate(String template, Map<String, Object> map) {
-        // 每次创建一个新实例，防止velocity缓存宏定义
+        // Create a new instance each time, preventing velocity from caching macro definitions
         VelocityEngine velocityEngine = new VelocityEngine(INIT_PROP);
-        // 创建上下文对象
+        // Create context object
         VelocityContext velocityContext = new VelocityContext();
         if (map != null) {
             map.forEach(velocityContext::put);
         }
         StringWriter stringWriter = new StringWriter();
         try {
-            // 生成代码
+            // Generate code
             velocityEngine.evaluate(velocityContext, stringWriter, "Velocity Code Generate", template);
         } catch (Exception e) {
-            // 将异常全部捕获，直接返回，用于写入模板
-            StringBuilder builder = new StringBuilder("在生成代码时，模板发生了如下语法错误：\n");
+            // Catch all exceptions and return them directly for writing to templates
+            StringBuilder builder = new StringBuilder("When generating code, the template has the following syntax error：\n");
             StringWriter writer = new StringWriter();
             e.printStackTrace(new PrintWriter(writer));
-            builder.append(writer.toString());
+            builder.append(writer);
             return builder.toString().replace("\r", "");
         }
         String code = stringWriter.toString();
-        // 清除前面空格
+        // Clear leading spaces
         StringBuilder sb = new StringBuilder(code);
         while (sb.length() > 0 && Character.isWhitespace(sb.charAt(0))) {
             sb.deleteCharAt(0);
         }
-        // 返回结果
+        // Return result
         return sb.toString();
     }
 }

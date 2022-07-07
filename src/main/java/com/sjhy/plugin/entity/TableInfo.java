@@ -7,7 +7,7 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * 表信息
+ * Table information
  *
  * @author makejava
  * @version 1.0.0
@@ -16,57 +16,57 @@ import java.util.List;
 @Data
 public class TableInfo {
     /**
-     * 原始对象
+     * Primitive object
      */
     @JsonIgnore
     private DbTable obj;
 
     /**
-     * 原始对象（从实体生成）
+     * Primitive object (generated from entity)
      *
-     * Note: 实际类型是com.intellij.psi.PsiClass，为了避免velocity反射出现ClassNotFound，写为Object类型
+     * Note: The actual type is com.intellij.psi.PsiClass. In order to avoid ClassNotFound in velocity reflection, it is written as Object type
      */
     @JsonIgnore
     private Object psiClassObj;
 
     /**
-     * 表名（首字母大写）
+     * Table name (first letter capitalized)
      */
     private String name;
     /**
-     * 表名前缀
+     * Table name prefix
      */
     private String preName;
     /**
-     * 注释
+     * Notes
      */
     private String comment;
     /**
-     * 模板组名称
+     * Template group name
      */
     private String templateGroupName;
     /**
-     * 所有列
+     * All columns
      */
     private List<ColumnInfo> fullColumn;
     /**
-     * 主键列
+     * Primary key column
      */
     private List<ColumnInfo> pkColumn;
     /**
-     * 其他列
+     * Other columns
      */
     private List<ColumnInfo> otherColumn;
     /**
-     * 保存的包名称
+     * Saved package name
      */
     private String savePackageName;
     /**
-     * 保存路径
+     * Save route
      */
     private String savePath;
     /**
-     * 保存的model名称
+     * Saved model name
      */
     private String saveModelName;
 }

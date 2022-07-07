@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * 列配置分组
+ * Column configuration grouping
  *
  * @author makejava
  * @version 1.0.0
@@ -14,11 +14,11 @@ import java.util.List;
 @Data
 public class ColumnConfigGroup implements AbstractGroup<ColumnConfigGroup, ColumnConfig> {
     /**
-     * 分组名称
+     * Group Name
      */
     private String name;
     /**
-     * 元素对象
+     * Element object
      */
     private List<ColumnConfig> elementList;
 }

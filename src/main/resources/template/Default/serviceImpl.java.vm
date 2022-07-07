@@ -1,10 +1,10 @@
-##定义初始变量
+##Define initial variables
 #set($tableName = $tool.append($tableInfo.name, "ServiceImpl"))
-##设置回调
+##Set callback
 $!callback.setFileName($tool.append($tableName, ".java"))
 $!callback.setSavePath($tool.append($tableInfo.savePath, "/service/impl"))
 
-##拿到主键
+##Get the primary key
 #if(!$tableInfo.pkColumn.isEmpty())
     #set($pk = $tableInfo.pkColumn.get(0))
 #end
@@ -22,7 +22,7 @@ import org.springframework.data.domain.PageRequest;
 import javax.annotation.Resource;
 
 /**
- * $!{tableInfo.comment}($!{tableInfo.name})表服务实现类
+ * $!{tableInfo.comment}($!{tableInfo.name}) Table service implementation class
  *
  * @author $!author
  * @since $!time.currTime()
@@ -33,10 +33,10 @@ public class $!{tableName} implements $!{tableInfo.name}Service {
     private $!{tableInfo.name}Dao $!tool.firstLowerCase($!{tableInfo.name})Dao;
 
     /**
-     * 通过ID查询单条数据
+     * Query a single piece of data by ID
      *
-     * @param $!pk.name 主键
-     * @return 实例对象
+     * @param $!pk.name Primary key
+     * @return Instance object
      */
     @Override
     public $!{tableInfo.name} queryById($!pk.shortType $!pk.name) {
@@ -44,11 +44,11 @@ public class $!{tableName} implements $!{tableInfo.name}Service {
     }
 
     /**
-     * 分页查询
+     * Paging query
      *
-     * @param $!{tool.firstLowerCase($tableInfo.name)} 筛选条件
-     * @param pageRequest      分页对象
-     * @return 查询结果
+     * @param $!{tool.firstLowerCase($tableInfo.name)} Filter
+     * @param pageRequest      Paging object
+     * @return Query results
      */
     @Override
     public Page<$!{tableInfo.name}> queryByPage($!{tableInfo.name} $!{tool.firstLowerCase($tableInfo.name)}, PageRequest pageRequest) {
@@ -57,10 +57,10 @@ public class $!{tableName} implements $!{tableInfo.name}Service {
     }
 
     /**
-     * 新增数据
+     * Add data
      *
-     * @param $!tool.firstLowerCase($!{tableInfo.name}) 实例对象
-     * @return 实例对象
+     * @param $!tool.firstLowerCase($!{tableInfo.name}) Instance object
+     * @return Instance object
      */
     @Override
     public $!{tableInfo.name} insert($!{tableInfo.name} $!tool.firstLowerCase($!{tableInfo.name})) {
@@ -69,10 +69,10 @@ public class $!{tableName} implements $!{tableInfo.name}Service {
     }
 
     /**
-     * 修改数据
+     * Change the data
      *
-     * @param $!tool.firstLowerCase($!{tableInfo.name}) 实例对象
-     * @return 实例对象
+     * @param $!tool.firstLowerCase($!{tableInfo.name}) Instance object
+     * @return Instance object
      */
     @Override
     public $!{tableInfo.name} update($!{tableInfo.name} $!tool.firstLowerCase($!{tableInfo.name})) {
@@ -81,10 +81,10 @@ public class $!{tableName} implements $!{tableInfo.name}Service {
     }
 
     /**
-     * 通过主键删除数据
+     * Delete data by primary key
      *
-     * @param $!pk.name 主键
-     * @return 是否成功
+     * @param $!pk.name Primary key
+     * @return Whether succeed
      */
     @Override
     public boolean deleteById($!pk.shortType $!pk.name) {

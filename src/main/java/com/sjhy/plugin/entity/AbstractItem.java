@@ -3,24 +3,24 @@ package com.sjhy.plugin.entity;
 import com.sjhy.plugin.tool.CloneUtils;
 
 /**
- * 抽象的项
+ * Abstract item
  *
  * @author makejava
  * @version 1.0.0
- * @date 2021/08/11 09:47
+ * @since 2021/08/11 09:47
  */
 public interface AbstractItem<T extends AbstractItem> {
     /**
-     * 默认值
+     * Defaults
      *
      * @return {@link T}
      */
     T defaultVal();
 
     /**
-     * 克隆对象
+     * Clone object
      *
-     * @return 克隆结果
+     * @return Cloning results
      */
     @SuppressWarnings("unchecked")
     default T cloneObj() {

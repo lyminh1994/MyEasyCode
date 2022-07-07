@@ -4,7 +4,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
- * 添加字符串工具类，为了兼容JB的各种产品，尽量不要用第三方工具包
+ * Add a string tool class, in order to be compatible with various JB products, try not to use third-party toolkits
  *
  * @author makejava
  * @version 1.0.0
@@ -13,8 +13,11 @@ import java.util.function.Function;
 @SuppressWarnings("WeakerAccess")
 public class StringUtils {
 
+    private StringUtils() {
+    }
+
     /**
-     * 首字母处理方法
+     * Initial letter processing method
      */
     private static final BiFunction<String, Function<Integer, Integer>, String> FIRST_CHAR_HANDLER_FUN = (str, firstCharFun) -> {
         int strLen;
@@ -44,28 +47,30 @@ public class StringUtils {
     };
 
     /**
-     * 判断是空字符串
+     * Judgment is an empty string
      *
-     * @param cs 字符串
-     * @return 是否为空
+     * @param cs String
+     * @return Is empty
      */
     public static boolean isEmpty(final CharSequence cs) {
         return cs == null || cs.length() == 0;
     }
 
     /**
-     * 首字母大写方法
-     * @param str 字符串
-     * @return 首字母大写结果
+     * Capitalization method
+     *
+     * @param str String
+     * @return Capitalize results
      */
     public static String capitalize(final String str) {
         return FIRST_CHAR_HANDLER_FUN.apply(str, Character::toTitleCase);
     }
 
     /**
-     * 首字母小写方法
-     * @param str 字符串
-     * @return 首字母小写结果
+     * First letter lowercase method
+     *
+     * @param str String
+     * @return Lowercase result
      */
     public static String uncapitalize(final String str) {
         return FIRST_CHAR_HANDLER_FUN.apply(str, Character::toLowerCase);

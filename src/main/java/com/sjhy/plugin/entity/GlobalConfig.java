@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 全局配置实体类
+ * Global configuration entity class
  *
  * @author makejava
  * @version 1.0.0
@@ -16,11 +16,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GlobalConfig implements AbstractEditorItem<GlobalConfig> {
     /**
-     * 名称
+     * Name
      */
     private String name;
     /**
-     * 值
+     * Value
      */
     private String value;
 

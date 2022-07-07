@@ -15,7 +15,7 @@ import java.util.Objects;
 /**
  * @author makejava
  * @version 1.0.0
- * @date 2021/08/14 15:20
+ * @since 2021/08/14 15:20
  */
 @State(name = "EasyCodeTableSetting", storages = @Storage("easyCodeTableSetting.xml"))
 public class TableInfoSettingsServiceImpl implements TableInfoSettingsService {
@@ -34,9 +34,9 @@ public class TableInfoSettingsServiceImpl implements TableInfoSettingsService {
     }
 
     /**
-     * 获取表格信息
+     * Get form information
      *
-     * @param dbTable 数据库表
+     * @param dbTable Database Table
      * @return {@link TableInfo}
      */
     @Override
@@ -45,9 +45,9 @@ public class TableInfoSettingsServiceImpl implements TableInfoSettingsService {
     }
 
     /**
-     * 获取表信息
+     * Get table information
      *
-     * @param psiClass psi类
+     * @param psiClass Psi class
      * @return {@link TableInfo}
      */
     @Override
@@ -56,9 +56,9 @@ public class TableInfoSettingsServiceImpl implements TableInfoSettingsService {
     }
 
     /**
-     * 保存表信息
+     * Save table information
      *
-     * @param tableInfo 表信息
+     * @param tableInfo Table information
      */
     @Override
     public void saveTableInfo(TableInfo tableInfo) {
@@ -66,9 +66,9 @@ public class TableInfoSettingsServiceImpl implements TableInfoSettingsService {
     }
 
     /**
-     * 重置表信息
+     * Reset table information
      *
-     * @param dbTable 数据库表
+     * @param dbTable Database Table
      */
     @Override
     public void resetTableInfo(DbTable dbTable) {

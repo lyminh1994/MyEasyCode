@@ -18,33 +18,33 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * 模板选择组件
+ * Template selection component
  *
  * @author makejava
  * @version 1.0.0
- * @date 2021/08/16 16:18
+ * @since 2021/08/16 16:18
  */
 public class TemplateSelectComponent {
     @Getter
     private JPanel mainPanel;
 
     /**
-     * 分组
+     * Grouping
      */
     private ComboBox<String> groupComboBox;
 
     /**
-     * 选中所有复选框
+     * Check all checkboxes
      */
     private JBCheckBox allCheckbox;
 
     /**
-     * 所有复选框
+     * All checkboxes
      */
     private List<JBCheckBox> checkBoxList;
 
     /**
-     * 模板面板
+     * Template panel
      */
     private JPanel templatePanel;
 
@@ -107,7 +107,7 @@ public class TemplateSelectComponent {
         this.mainPanel.updateUI();
     }
 
-    public String getselectedGroupName() {
+    public String getSelectedGroupName() {
         return (String) this.groupComboBox.getSelectedItem();
     }
 

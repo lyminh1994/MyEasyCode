@@ -7,7 +7,7 @@ import lombok.Data;
 import java.util.Map;
 
 /**
- * 列信息
+ * Column information
  *
  * @author makejava
  * @version 1.0.0
@@ -16,32 +16,32 @@ import java.util.Map;
 @Data
 public class ColumnInfo {
     /**
-     * 原始对象
+     * Primitive object
      */
     @JsonIgnore
     private DasColumn obj;
     /**
-     * 名称
+     * Name
      */
     private String name;
     /**
-     * 注释
+     * Notes
      */
     private String comment;
     /**
-     * 全类型
+     * All types
      */
     private String type;
     /**
-     * 短类型
+     * Short type
      */
     private String shortType;
     /**
-     * 标记是否为自定义附加列
+     * Whether the marker is a custom additional column
      */
     private Boolean custom;
     /**
-     * 扩展数据
+     * Extended data
      */
     private Map<String, Object> ext;
 }

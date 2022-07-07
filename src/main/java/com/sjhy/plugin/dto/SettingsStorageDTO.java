@@ -9,6 +9,7 @@ import com.sjhy.plugin.enums.ColumnConfigType;
 import com.sjhy.plugin.tool.CollectionUtil;
 import com.sjhy.plugin.tool.JSON;
 import com.sjhy.plugin.tool.StringUtils;
+import java.util.Objects;
 import lombok.Data;
 
 import java.util.Arrays;
@@ -16,38 +17,38 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 设置储存传输对象
+ * Set storage transfer object
  *
  * @author makejava
  * @version 1.0.0
- * @date 2021/08/07 11:35
+ * @since 2021/08/07 11:35
  */
 @Data
 public class SettingsStorageDTO {
     /**
-     * 返回默认值，不使用静态常量，防止默认值别篡改
+     * Return the default value, do not use static constants, prevent the default value from being tampered with
      *
-     * @return 储存对象
+     * @return Storage object
      */
     public static SettingsStorageDTO defaultVal() {
         try {
-            // 从配置文件中加载配置
-            String json = UrlUtil.loadText(SettingsStorageDTO.class.getResource("/defaultConfig.json"));
+            // Load configuration from configuration file
+            String json = UrlUtil.loadText(Objects.requireNonNull(SettingsStorageDTO.class.getResource("/defaultConfig.json")));
             return JSON.parse(json, SettingsStorageDTO.class);
         } catch (Exception e) {
             ExceptionUtil.rethrow(e);
         }
-        // 配置文件加载失败，直接创建配置
+        // The configuration file failed to load, create the configuration directly
         SettingsStorageDTO storage = new SettingsStorageDTO();
         storage.author = GlobalDict.AUTHOR;
         storage.version = GlobalDict.VERSION;
         storage.userSecure = "";
-        // 默认分组名称
+        // Default group name
         storage.currTypeMapperGroupName = GlobalDict.DEFAULT_GROUP_NAME;
         storage.currTemplateGroupName = GlobalDict.DEFAULT_GROUP_NAME;
         storage.currColumnConfigGroupName = GlobalDict.DEFAULT_GROUP_NAME;
         storage.currGlobalConfigGroupName = GlobalDict.DEFAULT_GROUP_NAME;
-        // 默认配置信息
+        // Default configuration information
         storage.typeMapperGroupMap = new HashMap<>(16);
         TypeMapperGroup typeMapperGroup = new TypeMapperGroup();
         typeMapperGroup.setName(GlobalDict.DEFAULT_GROUP_NAME);
@@ -75,7 +76,7 @@ public class SettingsStorageDTO {
     }
 
     /**
-     * 重置为默认值
+     * Reset to default
      */
     public void resetDefaultVal() {
         SettingsStorageDTO defaultVal = defaultVal();
@@ -89,7 +90,7 @@ public class SettingsStorageDTO {
         this.getGlobalConfigGroupMap().put(GlobalDict.DEFAULT_GROUP_NAME, defaultVal.getGlobalConfigGroupMap().get(GlobalDict.DEFAULT_GROUP_NAME));
         this.setCurrTypeMapperGroupName(GlobalDict.DEFAULT_GROUP_NAME);
         this.getTypeMapperGroupMap().put(GlobalDict.DEFAULT_GROUP_NAME, defaultVal.getTypeMapperGroupMap().get(GlobalDict.DEFAULT_GROUP_NAME));
-        // 恢复已被删除的分组
+        // Restore deleted group
         defaultVal.getTemplateGroupMap().forEach((k, v) -> {
             if (!getTemplateGroupMap().containsKey(k)) {
                 getTemplateGroupMap().put(k,v );
@@ -113,50 +114,50 @@ public class SettingsStorageDTO {
     }
 
     /**
-     * 作者
+     * Author
      */
     private String author;
     /**
-     * 版本号
+     * Version number
      */
     private String version;
     /**
-     * 用户密钥
+     * User key
      */
     private String userSecure;
     /**
-     * 当前类型映射组名
+     * Current type map group name
      */
     private String currTypeMapperGroupName;
     /**
-     * 类型映射组
+     * Type map group
      */
     @JsonProperty("typeMapper")
     private Map<String, TypeMapperGroup> typeMapperGroupMap;
     /**
-     * 当前模板组名
+     * Current template group name
      */
     private String currTemplateGroupName;
     /**
-     * 模板组
+     * Template group
      */
     @JsonProperty("template")
     private Map<String, TemplateGroup> templateGroupMap;
     /**
-     * 当前配置表组名
+     * Current configuration table group name
      */
     private String currColumnConfigGroupName;
     /**
-     * 配置表组
+     * Configure table groups
      */
     @JsonProperty("columnConfig")
     private Map<String, ColumnConfigGroup> columnConfigGroupMap;
     /**
-     * 当前全局配置组名
+     * Current global configuration group name
      */
     private String currGlobalConfigGroupName;
     /**
-     * 全局配置组
+     * Global configuration group
      */
     @JsonProperty("globalConfig")
     private Map<String, GlobalConfigGroup> globalConfigGroupMap;

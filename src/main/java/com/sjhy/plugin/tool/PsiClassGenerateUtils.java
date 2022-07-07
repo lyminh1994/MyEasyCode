@@ -6,7 +6,7 @@ import com.intellij.psi.PsiModifier;
 import com.intellij.psi.PsiModifierList;
 
 /**
- * 从实体类生成代码业务工具类
+ * Generate code business tool classes from entity classes
  *
  * @author Mario Luo
  */
@@ -16,7 +16,7 @@ public final class PsiClassGenerateUtils {
     }
 
     /**
-     * 是否是主键字段
+     * Is it a primary key field
      */
     public static boolean isPkField(PsiField field) {
         if("id".equals(field.getName())) {
@@ -25,14 +25,11 @@ public final class PsiClassGenerateUtils {
         if (existsAnnotation(field, "org.springframework.data.annotation.Id")) {
             return true;
         }
-        if (existsAnnotation(field, "javax.persistence.Id")) {
-            return true;
-        }
-        return false;
+        return existsAnnotation(field, "javax.persistence.Id" );
     }
 
     /**
-     * 是否需要跳过该字段
+     * Whether to skip this field
      */
     public static boolean isSkipField(PsiField field) {
         PsiModifierList modifierList = field.getModifierList();
@@ -42,10 +39,7 @@ public final class PsiClassGenerateUtils {
         if (existsAnnotation(field, "org.springframework.data.annotation.Transient")) {
             return true;
         }
-        if (existsAnnotation(field, "javax.persistence.Transient")) {
-            return true;
-        }
-        return false;
+        return existsAnnotation(field, "javax.persistence.Transient");
     }
 
     private static boolean existsAnnotation(PsiField field, String clsName) {

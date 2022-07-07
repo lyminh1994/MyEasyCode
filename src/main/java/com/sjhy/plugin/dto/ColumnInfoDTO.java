@@ -15,11 +15,11 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
- * 列信息传输对象
+ * Column Information Transfer Object
  *
  * @author makejava
  * @version 1.0.0
- * @date 2021/08/14 17:29
+ * @since 2021/08/14 17:29
  */
 @Data
 @NoArgsConstructor
@@ -48,7 +48,7 @@ public class ColumnInfoDTO {
                     return typeMapper.getJavaType();
                 }
             } else {
-                // 不区分大小写的正则匹配模式
+                // Case-insensitive regex pattern
                 if (Pattern.compile(typeMapper.getColumnType(), Pattern.CASE_INSENSITIVE).matcher(dbType).matches()) {
                     return typeMapper.getJavaType();
                 }
@@ -58,23 +58,23 @@ public class ColumnInfoDTO {
     }
 
     /**
-     * 名称
+     * Name
      */
     private String name;
     /**
-     * 注释
+     * Notes
      */
     private String comment;
     /**
-     * 全类型
+     * All types
      */
     private String type;
     /**
-     * 标记是否为自定义附加列
+     * Whether the marker is a custom additional column
      */
     private Boolean custom;
     /**
-     * 扩展数据
+     * Extended data
      */
     private Map<String, Object> ext;
 }

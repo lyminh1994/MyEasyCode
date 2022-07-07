@@ -1,5 +1,5 @@
 /**
- * 包含所有的动作事件
+ * Contains all action events
  *
  * @author makejava
  * @version 1.0.0

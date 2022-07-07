@@ -31,23 +31,23 @@ import java.util.stream.Collectors;
  */
 public class CodeGenerateServiceImpl implements CodeGenerateService {
     /**
-     * 项目对象
+     * Project object
      */
     private Project project;
     /**
-     * 模型管理
+     * Model management
      */
     private ModuleManager moduleManager;
     /**
-     * 表信息服务
+     * Table Information Services
      */
     private TableInfoSettingsService tableInfoService;
     /**
-     * 缓存数据工具
+     * Cache data tool
      */
     private CacheDataUtils cacheDataUtils;
     /**
-     * 导入包时过滤的包前缀
+     * Package prefix to filter when importing packages
      */
     private static final String FILTER_PACKAGE_NAME = "java.lang";
 
@@ -59,14 +59,14 @@ public class CodeGenerateServiceImpl implements CodeGenerateService {
     }
 
     /**
-     * 生成
+     * Generate
      *
-     * @param templates       模板
-     * @param generateOptions 生成选项
+     * @param templates       Template
+     * @param generateOptions Build options
      */
     @Override
     public void generate(Collection<Template> templates, GenerateOptions generateOptions) {
-        // 获取选中表信息
+        // Get selected table information
         TableInfo selectedTableInfo;
         List<TableInfo> tableInfoList;
         if (Boolean.TRUE.equals(generateOptions.getEntityModel())) {
@@ -76,19 +76,19 @@ public class CodeGenerateServiceImpl implements CodeGenerateService {
             selectedTableInfo = tableInfoService.getTableInfo(cacheDataUtils.getSelectDbTable());
             tableInfoList = cacheDataUtils.getDbTableList().stream().map(item -> tableInfoService.getTableInfo(item)).collect(Collectors.toList());
         }
-        // 校验选中表的保存路径是否正确
+        // Verify that the save path of the selected table is correct
         if (StringUtils.isEmpty(selectedTableInfo.getSavePath())) {
             if (selectedTableInfo.getObj() != null) {
-                Messages.showInfoMessage(selectedTableInfo.getObj().getName() + "表配置信息不正确，请尝试重新配置", GlobalDict.TITLE_INFO);
+                Messages.showInfoMessage(selectedTableInfo.getObj().getName() + " table configuration information is incorrect, please try again", GlobalDict.TITLE_INFO);
             } else if (selectedTableInfo.getPsiClassObj() != null) {
                 PsiClass psiClassObj = (PsiClass) selectedTableInfo.getPsiClassObj();
-                Messages.showInfoMessage(psiClassObj.getName() + "类配置信息不正确，请尝试重新配置", GlobalDict.TITLE_INFO);
+                Messages.showInfoMessage(psiClassObj.getName() + " the class configuration information is incorrect, please try again", GlobalDict.TITLE_INFO);
             } else {
-                Messages.showInfoMessage("配置信息不正确，请尝试重新配置", GlobalDict.TITLE_INFO);
+                Messages.showInfoMessage("The configuration information is incorrect, please try again", GlobalDict.TITLE_INFO);
             }
             return;
         }
-        // 将未配置的表进行配置覆盖
+        // Override un-configured tables
         TableInfo finalSelectedTableInfo = selectedTableInfo;
         tableInfoList.forEach(tableInfo -> {
             if (StringUtils.isEmpty(tableInfo.getSavePath())) {
@@ -99,7 +99,7 @@ public class CodeGenerateServiceImpl implements CodeGenerateService {
                 tableInfoService.saveTableInfo(tableInfo);
             }
         });
-        // 如果使用统一配置，直接全部覆盖
+        // If you use a unified configuration, directly overwrite all
         if (Boolean.TRUE.equals(generateOptions.getUnifiedConfig())) {
             tableInfoList.forEach(tableInfo -> {
                 tableInfo.setSaveModelName(finalSelectedTableInfo.getSaveModelName());
@@ -109,63 +109,63 @@ public class CodeGenerateServiceImpl implements CodeGenerateService {
             });
         }
 
-        // 生成代码
+        // Generate code
         generate(templates, tableInfoList, generateOptions, null);
     }
 
     /**
-     * 生成代码，并自动保存到对应位置
+     * Generate code and automatically save it to the corresponding location
      *
-     * @param templates       模板
-     * @param tableInfoList   表信息对象
-     * @param generateOptions 生成配置
-     * @param otherParam      其他参数
+     * @param templates       Template
+     * @param tableInfoList   Table info object
+     * @param generateOptions Build configuration
+     * @param otherParam      Other parameters
      */
     public void generate(Collection<Template> templates, Collection<TableInfo> tableInfoList, GenerateOptions generateOptions, Map<String, Object> otherParam) {
         if (CollectionUtil.isEmpty(templates) || CollectionUtil.isEmpty(tableInfoList)) {
             return;
         }
-        // 处理模板，注入全局变量（克隆一份，防止篡改）
+        // Process templates and inject global variables (clone a copy to prevent tampering)
         templates = CloneUtils.cloneByJson(templates, new TypeReference<ArrayList<Template>>() {
         });
         TemplateUtils.addGlobalConfig(templates);
-        // 生成代码
+        // Generate code
         for (TableInfo tableInfo : tableInfoList) {
-            // 表名去除前缀
+            // Remove prefix from table name
             if (!StringUtils.isEmpty(tableInfo.getPreName()) && tableInfo.getObj().getName().startsWith(tableInfo.getPreName())) {
                 String newName = tableInfo.getObj().getName().substring(tableInfo.getPreName().length());
                 tableInfo.setName(NameUtils.getInstance().getClassName(newName));
             }
-            // 构建参数
+            // Build parameters
             Map<String, Object> param = getDefaultParam();
-            // 其他参数
+            // Other parameters
             if (otherParam != null) {
                 param.putAll(otherParam);
             }
-            // 所有表信息对象
+            // All table info objects
             param.put("tableInfoList", tableInfoList);
-            // 表信息对象
+            // Table info object
             param.put("tableInfo", tableInfo);
-            // 设置模型路径与导包列表
+            // Set model path and import package list
             setModulePathAndImportList(param, tableInfo);
-            // 设置额外代码生成服务
+            // Setting up additional code generation services
             param.put("generateService", new ExtraCodeGenerateUtils(this, tableInfo, generateOptions));
             for (Template template : templates) {
                 Callback callback = new Callback();
                 callback.setWriteFile(true);
                 callback.setReformat(generateOptions.getReFormat());
-                // 默认名称
+                // Default name
                 callback.setFileName(tableInfo.getName() + "Default.java");
-                // 默认路径
+                // Default path
                 callback.setSavePath(tableInfo.getSavePath());
-                // 设置回调对象
+                // Set callback object
                 param.put("callback", callback);
-                // 开始生成
+                // Start generating
                 String code = VelocityUtils.generate(template.getCode(), param);
-                // 设置一个默认保存路径与默认文件名
+                // Set a default save path and default filename
                 String path = callback.getSavePath();
                 path = path.replace("\\", "/");
-                // 针对相对路径进行处理
+                // Handling relative paths
                 if (path.startsWith(".")) {
                     path = project.getBasePath() + path.substring(1);
                 }
@@ -176,30 +176,30 @@ public class CodeGenerateServiceImpl implements CodeGenerateService {
     }
 
     /**
-     * 生成代码
+     * Generate code
      *
-     * @param template  模板
-     * @param tableInfo 表信息对象
-     * @return 生成好的代码
+     * @param template  Template
+     * @param tableInfo Table info object
+     * @return Generated code
      */
     @Override
     public String generate(Template template, TableInfo tableInfo) {
-        // 获取默认参数
+        // Get default parameters
         Map<String, Object> param = getDefaultParam();
-        // 表信息对象，进行克隆，防止篡改
+        // Table information object, clone, prevent tampering
         param.put("tableInfo", tableInfo);
-        // 设置模型路径与导包列表
+        // Set model path and import package list
         setModulePathAndImportList(param, tableInfo);
-        // 处理模板，注入全局变量
+        // Process templates, inject global variables
         TemplateUtils.addGlobalConfig(template);
         return VelocityUtils.generate(template.getCode(), param);
     }
 
     /**
-     * 设置模型路径与导包列表
+     * Set model path and import package list
      *
-     * @param param     参数
-     * @param tableInfo 表信息对象
+     * @param param     Parameter
+     * @param tableInfo Table info object
      */
     private void setModulePathAndImportList(Map<String, Object> param, TableInfo tableInfo) {
         Module module = null;
@@ -207,43 +207,43 @@ public class CodeGenerateServiceImpl implements CodeGenerateService {
             module = this.moduleManager.findModuleByName(tableInfo.getSaveModelName());
         }
         if (module != null) {
-            // 设置modulePath
+            // Set modulePath
             param.put("modulePath", ModuleUtils.getModuleDir(module).getPath());
         }
-        // 设置要导入的包
+        // Set packages to import
         param.put("importList", getImportList(tableInfo));
     }
 
     /**
-     * 获取默认参数
+     * Get default parameters
      *
-     * @return 参数
+     * @return Parameter
      */
     private Map<String, Object> getDefaultParam() {
-        // 系统设置
+        // System settings
         SettingsStorageDTO settings = SettingsStorageService.getSettingsStorage();
         Map<String, Object> param = new HashMap<>(20);
-        // 作者
+        // Author
         param.put("author", settings.getAuthor());
-        //工具类
+        //Tools
         param.put("tool", GlobalTool.getInstance());
         param.put("time", TimeUtils.getInstance());
-        // 项目路径
+        // Project path
         param.put("projectPath", project.getBasePath());
-        // Database数据库工具
+        // DatabaseDatabase Tools
         param.put("dbUtil", ReflectionUtil.newInstance(DbUtil.class));
         param.put("dasUtil", ReflectionUtil.newInstance(DasUtil.class));
         return param;
     }
 
     /**
-     * 获取导入列表
+     * Get import list
      *
-     * @param tableInfo 表信息对象
-     * @return 导入列表
+     * @param tableInfo Table info object
+     * @return Import list
      */
     private Set<String> getImportList(TableInfo tableInfo) {
-        // 创建一个自带排序的集合
+        // Create a self-sorted collection
         Set<String> result = new TreeSet<>();
         tableInfo.getFullColumn().forEach(columnInfo -> {
             if (!columnInfo.getType().startsWith(FILTER_PACKAGE_NAME)) {

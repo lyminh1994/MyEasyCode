@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * 模板分组类
+ * Template grouping class
  *
  * @author makejava
  * @version 1.0.0
@@ -14,11 +14,11 @@ import java.util.List;
 @Data
 public class TemplateGroup implements AbstractGroup<TemplateGroup, Template> {
     /**
-     * 分组名称
+     * Group Name
      */
     private String name;
     /**
-     * 元素对象
+     * Element object
      */
     private List<Template> elementList;
 }

@@ -23,24 +23,24 @@ import java.util.function.Consumer;
 /**
  * @author makejava
  * @version 1.0.0
- * @date 2021/08/07 15:33
+ * @since 2021/08/07 15:33
  */
 public class TypeMapperSettingForm implements BaseSettings {
     private JPanel mainPanel;
     /**
-     * 类型映射配置
+     * Type map configuration
      */
     private Map<String, TypeMapperGroup> typeMapperGroupMap;
     /**
-     * 当前分组名
+     * Current group name
      */
     private TypeMapperGroup currTypeMapperGroup;
     /**
-     * 表格组件
+     * Form component
      */
     private TableComponent<TypeMapper> tableComponent;
     /**
-     * 分组操作组件
+     * Group Action Components
      */
     private GroupNameComponent<TypeMapper, TypeMapperGroup> groupNameComponent;
 
@@ -49,27 +49,27 @@ public class TypeMapperSettingForm implements BaseSettings {
     }
 
     private void initTable() {
-        // 第一列仅适用下拉框
+        // The first column only works with dropdown boxes
         TableCellEditor matchTypeEditor = CellEditorFactory.createComboBoxEditor(false, MatchType.class);
         TableComponent.Column<TypeMapper> matchTypeColumn = new TableComponent.Column<>("matchType",
                 item -> item.getMatchType() != null ? item.getMatchType().name() : MatchType.REGEX.name(),
                 (entity, val) -> entity.setMatchType(MatchType.valueOf(val)),
                 matchTypeEditor
         );
-        // 第二列监听输入状态，及时修改属性值
+        // The second column monitors the input state and modifies the attribute value in time
         TableCellEditor columnTypeEditor = CellEditorFactory.createTextFieldEditor();
         TableComponent.Column<TypeMapper> columnTypeColumn = new TableComponent.Column<>("columnType", TypeMapper::getColumnType, TypeMapper::setColumnType, columnTypeEditor);
-        // 第三列支持下拉框
+        // The third column supports drop-down boxes
         TableCellEditor javaTypeEditor = CellEditorFactory.createComboBoxEditor(true, GlobalDict.DEFAULT_JAVA_TYPE_LIST);
         TableComponent.Column<TypeMapper> javaTypeColumn = new TableComponent.Column<>("javaType", TypeMapper::getJavaType, TypeMapper::setJavaType, javaTypeEditor);
         List<TableComponent.Column<TypeMapper>> columns = Arrays.asList(matchTypeColumn, columnTypeColumn, javaTypeColumn);
-        // 表格初始化
+        // Form initialization
         this.tableComponent = new TableComponent<>(columns, this.currTypeMapperGroup.getElementList(), TypeMapper.class);
         this.mainPanel.add(this.tableComponent.createPanel(), BorderLayout.CENTER);
     }
 
     private void initGroupName() {
-        // 切换分组操作
+        // Toggle group operation
         Consumer<TypeMapperGroup> switchGroupOperator = typeMapperGroupMap -> {
             this.currTypeMapperGroup = typeMapperGroupMap;
             refreshUiVal();
@@ -80,7 +80,7 @@ public class TypeMapperSettingForm implements BaseSettings {
 
     private void initPanel() {
         this.loadSettingsStore(getSettingsStorage());
-        // 初始化表格
+        // Initialize the form
         this.initTable();
         this.initGroupName();
     }
@@ -106,18 +106,18 @@ public class TypeMapperSettingForm implements BaseSettings {
     public void apply() {
         getSettingsStorage().setTypeMapperGroupMap(this.typeMapperGroupMap);
         getSettingsStorage().setCurrTypeMapperGroupName(this.currTypeMapperGroup.getName());
-        // 保存包后重新加载配置
+        // Reload configuration after saving package
         this.loadSettingsStore(getSettingsStorage());
     }
 
     /**
-     * 加载配置信息
+     * Load configuration information
      *
-     * @param settingsStorage 配置信息
+     * @param settingsStorage Configuration information
      */
     @Override
     public void loadSettingsStore(SettingsStorageDTO settingsStorage) {
-        // 复制配置，防止篡改
+        // Copy configuration to prevent tampering
         this.typeMapperGroupMap = CloneUtils.cloneByJson(settingsStorage.getTypeMapperGroupMap(), new TypeReference<Map<String, TypeMapperGroup>>() {
         });
         this.currTypeMapperGroup = this.typeMapperGroupMap.get(settingsStorage.getCurrTypeMapperGroupName());

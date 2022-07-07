@@ -28,28 +28,28 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 /**
- * 本地文件导入导出设置服务实现
+ * Local file import and export settings service implementation
  *
  * @author makejava
  * @version 1.0.0
- * @date 2021/08/11 17:28
+ * @since 2021/08/11 17:28
  */
 public class LocalFileExportImportSettingsServiceImpl implements ExportImportSettingsService {
     /**
-     * 导出设置
+     * Export settings
      *
-     * @param settingsStorage 要导出的设置
+     * @param settingsStorage Settings to export
      */
     @Override
     public void exportConfig(SettingsStorageDTO settingsStorage) {
-        // 1.选择储存位置
+        // 1.Choose a storage location
         FileSaverDialog saveFileDialog = FileChooserFactory.getInstance().createSaveFileDialog(new FileSaverDescriptor("Save Config As Json", "Save to"), ProjectUtils.getCurrProject());
         VirtualFileWrapper saveFile = saveFileDialog.save((VirtualFile) null, "EasyCodeConfig.json");
         if (saveFile == null) {
             return;
         }
         File file = saveFile.getFile();
-        // 2.执行导出
+        // 2.Perform export
         FileUtil.createIfDoesntExist(file);
         WriteCommandAction.runWriteCommandAction(ProjectUtils.getCurrProject(), () -> {
             try {
@@ -60,7 +60,7 @@ public class LocalFileExportImportSettingsServiceImpl implements ExportImportSet
                     FileDocumentManager.getInstance().reloadFiles(virtualFile);
                 }
 
-                // 发起通知
+                // Initiate notification
                 Notification notification = new Notification(
                         Notifications.SYSTEM_MESSAGES_GROUP_ID,
                         "Easy code notify",
@@ -69,7 +69,7 @@ public class LocalFileExportImportSettingsServiceImpl implements ExportImportSet
                 notification.addAction(new AnAction(file.getName()) {
                     @Override
                     public void actionPerformed(@NotNull AnActionEvent e) {
-                        // 打开文件
+                        // Open a file
                         if (virtualFile != null) {
                             OpenFileAction.openFile(virtualFile, ProjectUtils.getCurrProject());
                         }
@@ -83,15 +83,15 @@ public class LocalFileExportImportSettingsServiceImpl implements ExportImportSet
     }
 
     /**
-     * 导入设置
+     * Import settings
      *
-     * @return 设置信息
+     * @return Setup information
      */
     @Override
     public SettingsStorageDTO importConfig() {
         VirtualFile virtualFile = FileChooser.chooseFile(FileChooserDescriptorFactory.createSingleFileDescriptor("json"), ProjectUtils.getCurrProject(), null);
         if (virtualFile == null) {
-            Messages.showWarningDialog("config file not found！", GlobalDict.TITLE_INFO);
+            Messages.showWarningDialog("Config file not found！", GlobalDict.TITLE_INFO);
             return null;
         }
         String json = LoadTextUtil.loadText(virtualFile).toString();

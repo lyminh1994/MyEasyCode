@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * 从Java类生成代码菜单
+ * Generate code menu from Java class
  *
  * @author Mario Luo
  */
@@ -36,7 +36,7 @@ public class EasyCodeEntityAction extends AnAction {
             return;
         }
 
-        // 过滤选择Java文件
+        // Filter to select Java files
         VirtualFile[] psiFiles = event.getData(CommonDataKeys.VIRTUAL_FILE_ARRAY);
         if (psiFiles == null) {
             return;
@@ -51,20 +51,20 @@ public class EasyCodeEntityAction extends AnAction {
             return;
         }
 
-        // 获取选中的类
+        // Get selected class
         List<PsiClass> psiClassList = resolvePsiClassByFile(psiJavaFiles);
         if (psiClassList.size() == 0) {
             return;
         }
 
-        // 缓存选中值
+        // Cache selected value
         cacheDataUtils.setSelectPsiClass(psiClassList.get(0));
         cacheDataUtils.setPsiClassList(psiClassList);
         new SelectSavePath(project, true).show();
     }
 
     /**
-     * 解析类
+     * Parsing class
      */
     private List<PsiClass> resolvePsiClassByFile(List<PsiJavaFile> psiJavaFiles) {
         List<PsiClass> psiClassList = Lists.newArrayListWithCapacity(psiJavaFiles.size());
@@ -78,7 +78,7 @@ public class EasyCodeEntityAction extends AnAction {
 
     @Override
     public void update(@NotNull AnActionEvent event) {
-        // 不存在模块不展示：选择多个模块
+        // No module does not show: select multiple modules
         Project project = event.getData(CommonDataKeys.PROJECT);
         Module module = event.getData(LangDataKeys.MODULE);
         if (project == null || module == null) {
@@ -86,11 +86,10 @@ public class EasyCodeEntityAction extends AnAction {
             return;
         }
 
-        // 非java的文件不显示
+        // Non-java files are not displayed
         VirtualFile file = event.getDataContext().getData(CommonDataKeys.VIRTUAL_FILE);
         if (file != null && !file.isDirectory() && !"java".equals(file.getExtension())) {
             event.getPresentation().setVisible(false);
-            return;
         }
     }
 

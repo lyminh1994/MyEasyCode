@@ -4,7 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * 命名工具类
+ * Naming tool class
  *
  * @author makejava
  * @version 1.0.0
@@ -14,7 +14,7 @@ public class NameUtils {
     private volatile static NameUtils nameUtils;
 
     /**
-     * 单例模式
+     * Singleton pattern
      */
     public static NameUtils getInstance() {
         if (nameUtils == null) {
@@ -28,42 +28,42 @@ public class NameUtils {
     }
 
     /**
-     * 私有构造方法
+     * Private constructor
      */
     NameUtils() {
     }
 
     /**
-     * 转驼峰命名正则匹配规则
+     * Convert CamelCase to Regular Matching Rules
      */
     private static final Pattern TO_HUMP_PATTERN = Pattern.compile("[-_]([a-z0-9])");
     private static final Pattern TO_LINE_PATTERN = Pattern.compile("[A-Z]+");
 
     /**
-     * 首字母大写方法
+     * Capitalization method
      *
-     * @param name 名称
-     * @return 结果
+     * @param name Name
+     * @return Result
      */
     public String firstUpperCase(String name) {
         return StringUtils.capitalize(name);
     }
 
     /**
-     * 首字母小写方法
+     * First letter lowercase method
      *
-     * @param name 名称
-     * @return 结果
+     * @param name Name
+     * @return Result
      */
     public String firstLowerCase(String name) {
         return StringUtils.uncapitalize(name);
     }
 
     /**
-     * 驼峰转下划线，全小写
+     * CamelCase to underscore, all lowercase
      *
-     * @param str 驼峰字符串
-     * @return 下划线字符串
+     * @param str Camel case string
+     * @return Underscore string
      */
     public String hump2Underline(String str) {
         if (StringUtils.isEmpty(str)) {
@@ -83,10 +83,10 @@ public class NameUtils {
     }
 
     /**
-     * 通过java全名获取类名
+     * Get class name by java full name
      *
-     * @param fullName 全名
-     * @return 类名
+     * @param fullName Full name
+     * @return Class name
      */
     public String getClsNameByFullName(String fullName) {
         int genericIdx = fullName.indexOf('<');
@@ -98,10 +98,10 @@ public class NameUtils {
     }
 
     /**
-     * 通过java全名获取类名
+     * Get class name by java full name
      *
-     * @param fullName 全名
-     * @return 类名
+     * @param fullName Full name
+     * @return Class name
      */
     public String getClsFullNameRemoveGeneric(String fullName) {
         int genericIdx = fullName.indexOf('<');
@@ -112,16 +112,16 @@ public class NameUtils {
     }
 
     /**
-     * 下划线中横线命名转驼峰命名（属性名）
+     * Underscore and horizontal line name to camel case name (attribute name)
      *
-     * @param name 名称
-     * @return 结果
+     * @param name Name
+     * @return Result
      */
     public String getJavaName(String name) {
         if (StringUtils.isEmpty(name)) {
             return name;
         }
-        // 强转全小写
+        // Force all lowercase
         name = name.toLowerCase();
         Matcher matcher = TO_HUMP_PATTERN.matcher(name.toLowerCase());
         StringBuffer buffer = new StringBuffer();
@@ -133,20 +133,20 @@ public class NameUtils {
     }
 
     /**
-     * 下划线中横线命名转驼峰命名（类名）
+     * Underscore and horizontal line name turn camel case name (class name)
      *
-     * @param name 名称
-     * @return 结果
+     * @param name Name
+     * @return Result
      */
     public String getClassName(String name) {
         return firstUpperCase(getJavaName(name));
     }
 
     /**
-     * 任意对象合并工具类
+     * Arbitrary object merge utility class
      *
-     * @param objects 任意对象
-     * @return 合并后的字符串结果
+     * @param objects Any object
+     * @return Merged string result
      */
     public String append(Object... objects) {
 

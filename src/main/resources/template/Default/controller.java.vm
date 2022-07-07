@@ -1,9 +1,9 @@
-##定义初始变量
+##Define initial variables
 #set($tableName = $tool.append($tableInfo.name, "Controller"))
-##设置回调
+##Set callback
 $!callback.setFileName($tool.append($tableName, ".java"))
 $!callback.setSavePath($tool.append($tableInfo.savePath, "/controller"))
-##拿到主键
+##Get the primary key
 #if(!$tableInfo.pkColumn.isEmpty())
     #set($pk = $tableInfo.pkColumn.get(0))
 #end
@@ -12,34 +12,33 @@ $!callback.setSavePath($tool.append($tableInfo.savePath, "/controller"))
 
 import $!{tableInfo.savePackageName}.entity.$!{tableInfo.name};
 import $!{tableInfo.savePackageName}.service.$!{tableInfo.name}Service;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
-
 /**
- * $!{tableInfo.comment}($!{tableInfo.name})表控制层
+ * $!{tableInfo.comment}($!{tableInfo.name}) table control layer
  *
  * @author $!author
  * @since $!time.currTime()
  */
 @RestController
 @RequestMapping("$!tool.firstLowerCase($tableInfo.name)")
+@RequiredArgsConstructor
 public class $!{tableName} {
     /**
-     * 服务对象
+     * Service object
      */
-    @Resource
-    private $!{tableInfo.name}Service $!tool.firstLowerCase($tableInfo.name)Service;
+    private final $!{tableInfo.name}Service $!tool.firstLowerCase($tableInfo.name)Service;
 
     /**
-     * 分页查询
+     * Paging query
      *
-     * @param $!{tool.firstLowerCase($tableInfo.name)} 筛选条件
-     * @param pageRequest      分页对象
-     * @return 查询结果
+     * @param $!{tool.firstLowerCase($tableInfo.name)}Filter
+     * @param pageRequest Paging object
+     * @return Query results
      */
     @GetMapping
     public ResponseEntity<Page<$!{tableInfo.name}>> queryByPage($!{tableInfo.name} $!{tool.firstLowerCase($tableInfo.name)}, PageRequest pageRequest) {
@@ -47,10 +46,10 @@ public class $!{tableName} {
     }
 
     /**
-     * 通过主键查询单条数据
+     * Query a single piece of data by primary key
      *
-     * @param id 主键
-     * @return 单条数据
+     * @param id Primary key
+     * @return Single result
      */
     @GetMapping("{id}")
     public ResponseEntity<$!{tableInfo.name}> queryById(@PathVariable("id") $!pk.shortType id) {
@@ -58,10 +57,10 @@ public class $!{tableName} {
     }
 
     /**
-     * 新增数据
+     * Add data
      *
-     * @param $!{tool.firstLowerCase($tableInfo.name)} 实体
-     * @return 新增结果
+     * @param $!{tool.firstLowerCase($tableInfo.name)} Entity
+     * @return New result
      */
     @PostMapping
     public ResponseEntity<$!{tableInfo.name}> add($!{tableInfo.name} $!{tool.firstLowerCase($tableInfo.name)}) {
@@ -69,10 +68,10 @@ public class $!{tableName} {
     }
 
     /**
-     * 编辑数据
+     * Edit data
      *
-     * @param $!{tool.firstLowerCase($tableInfo.name)} 实体
-     * @return 编辑结果
+     * @param $!{tool.firstLowerCase($tableInfo.name)} Entity
+     * @return Edit result
      */
     @PutMapping
     public ResponseEntity<$!{tableInfo.name}> edit($!{tableInfo.name} $!{tool.firstLowerCase($tableInfo.name)}) {
@@ -80,14 +79,13 @@ public class $!{tableName} {
     }
 
     /**
-     * 删除数据
+     * Delete data
      *
-     * @param id 主键
-     * @return 删除是否成功
+     * @param id Primary key
+     * @return Whether the deletion was successful
      */
     @DeleteMapping
     public ResponseEntity<Boolean> deleteById($!pk.shortType id) {
         return ResponseEntity.ok(this.$!{tool.firstLowerCase($tableInfo.name)}Service.deleteById(id));
     }
-
 }

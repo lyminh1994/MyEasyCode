@@ -1,18 +1,18 @@
-##引入宏定义
+##Import macro definition
 $!{define.vm}
 
-##使用宏定义设置回调（保存位置与文件后缀）
+##Use macro definition to set callback (save location and file suffix)
 #save("/entity", ".java")
 
-##使用宏定义设置包后缀
+##Set package suffix using macro definition
 #setPackageSuffix("entity")
 
-##使用全局变量实现默认包导入
+##Implementing default package imports using global variables
 $!{autoImport.vm}
 import java.io.Serializable;
 
-##使用宏定义实现类注释信息
-#tableComment("实体类")
+##Implement class annotation information using macro definitions
+#tableComment("Entity class")
 public class $!{tableInfo.name} implements Serializable {
     private static final long serialVersionUID = $!tool.serial();
 #foreach($column in $tableInfo.fullColumn)
@@ -24,8 +24,7 @@ public class $!{tableInfo.name} implements Serializable {
 #end
 
 #foreach($column in $tableInfo.fullColumn)
-##使用宏定义实现get,set方法
+##Use macro definitions to implement get, set methods
 #getSetMethod($column)
 #end
-
 }

@@ -1,14 +1,14 @@
-##导入宏定义、设置包名、类名、文件名##导入宏定义
+##Import macro definition, set package name, class name, file name
 $!{define.vm}
 #setPackageSuffix("repository")
 #setTableSuffix("Repository")
 #save("/repository", "Repository.java")
 
-##拿到主键
+##Get the primary key
 #if(!$tableInfo.pkColumn.isEmpty())
     #set($pk = $tableInfo.pkColumn.get(0))
 #end
-##实体类名、主键类名
+##Entity class name, primary key class name
 #set($entityShortType = $!tableInfo.name)
 #set($entityType = $!tableInfo.psiClassObj.getQualifiedName())
 #set($pkShortType = $!pk.shortType)
@@ -20,11 +20,10 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 
 /**
- * $!{tableInfo.comment}持久层
+ * $!{tableInfo.comment} Persistence layer
  *
  * @author $!author
  * @since $!time.currTime()
  */
 public interface $!{tableName} extends MongoRepository<$entityShortType, $pkShortType> {
-
 }

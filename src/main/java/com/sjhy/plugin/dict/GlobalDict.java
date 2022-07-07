@@ -1,31 +1,31 @@
 package com.sjhy.plugin.dict;
 
 /**
- * 全局字典
+ * Global dictionary
  *
  * @author makejava
  * @version 1.0.0
- * @date 2021/08/07 11:41
+ * @since 2021/08/07 11:41
  */
 public interface GlobalDict {
     /**
-     * 提示信息
+     * Tips
      */
     String TITLE_INFO = "EasyCode Title Info";
     /**
-     * 版本号
+     * Version number
      */
     String VERSION = "1.2.6";
     /**
-     * 作者名称
+     * Author name
      */
-    String AUTHOR = "makejava";
+    String AUTHOR = "";
     /**
-     * 默认分组名称
+     * Default group name
      */
     String DEFAULT_GROUP_NAME = "Default";
     /**
-     * 默认的Java类型列表
+     * List of default Java types
      */
     String[] DEFAULT_JAVA_TYPE_LIST = new String[]{
             "java.lang.String",

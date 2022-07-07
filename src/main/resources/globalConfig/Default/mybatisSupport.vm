@@ -1,6 +1,6 @@
-##针对Mybatis 进行支持，主要用于生成xml文件
+##Support for Mybatis, mainly used to generate xml files
 #foreach($column in $tableInfo.fullColumn)
-    ##储存列类型
+    ##Storage row type
     $tool.call($column.ext.put("sqlType", $tool.getField($column.obj.dataType, "typeName")))
     #if($tool.newHashSet("java.lang.String").contains($column.type))
         #set($jdbcType="VARCHAR")
@@ -19,11 +19,11 @@
     #elseif($tool.newHashSet("java.sql.Date", "java.time.LocalDate").contains($column.type))
         #set($jdbcType="TIMESTAMP")
     #else
-        ##其他类型
+        ##Other types
         #set($jdbcType="VARCHAR")
     #end
     $tool.call($column.ext.put("jdbcType", $jdbcType))
 #end
 
-##定义宏，查询所有列
+##Define a macro to query all columns
 #macro(allSqlColumn)#foreach($column in $tableInfo.fullColumn)$column.obj.name#if($velocityHasNext), #end#end#end

@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 类型隐射信息
+ * Type Implicit Information
  *
  * @author makejava
  * @version 1.0.0
@@ -15,15 +15,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TypeMapper implements AbstractItem<TypeMapper> {
     /**
-     * 匹配类型
+     * Match type
      */
     private MatchType matchType;
     /**
-     * 列类型
+     * Column type
      */
     private String columnType;
     /**
-     * java类型
+     * Java type
      */
     private String javaType;
 

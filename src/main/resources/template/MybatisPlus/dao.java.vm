@@ -1,20 +1,19 @@
-##导入宏定义
+##Import macro definition
 $!{define.vm}
 
-##设置表后缀（宏定义）
+##Set table suffix (macro definition)
 #setTableSuffix("Dao")
 
-##保存文件（宏定义）
+##Save file (macro definition)
 #save("/dao", "Dao.java")
 
-##包路径（宏定义）
+##Package path (macro definition)
 #setPackageSuffix("dao")
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import $!{tableInfo.savePackageName}.entity.$!tableInfo.name;
 
-##表注释（宏定义）
-#tableComment("表数据库访问层")
+##Table Comments (Macro Definitions)
+#tableComment("Table database access layer")
 public interface $!{tableName} extends BaseMapper<$!tableInfo.name> {
-
 }

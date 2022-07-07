@@ -12,9 +12,9 @@ import org.jetbrains.annotations.Nullable;
  */
 public interface BaseSettings extends Configurable {
     /**
-     * 帮助提示信息
+     * Help prompt information
      *
-     * @return 提示信息
+     * @return Tips
      */
     @Nullable
     @Override
@@ -23,7 +23,7 @@ public interface BaseSettings extends Configurable {
     }
 
     /**
-     * 重置设置
+     * Reset settings
      */
     @Override
     default void reset() {
@@ -31,25 +31,25 @@ public interface BaseSettings extends Configurable {
     }
 
     /**
-     * 获取设置信息
+     * Get setting information
      *
-     * @return 获取设置信息
+     * @return Get setting information
      */
     default SettingsStorageDTO getSettingsStorage() {
         return SettingsStorageService.getSettingsStorage();
     }
 
     /**
-     * 加载配置信息
+     * Load configuration information
      */
     default void loadSettingsStore() {
         this.loadSettingsStore(getSettingsStorage());
     }
 
     /**
-     * 加载配置信息
+     * Load configuration information
      *
-     * @param settingsStorage 配置信息
+     * @param settingsStorage configuration information
      */
     void loadSettingsStore(SettingsStorageDTO settingsStorage);
 

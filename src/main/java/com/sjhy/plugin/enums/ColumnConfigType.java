@@ -1,17 +1,17 @@
 package com.sjhy.plugin.enums;
 
 /**
- *  列配置类型
+ *  Column configuration type
  *
  * @author makejava
  * @version 1.0.0
  * @since 2018/07/17 13:10
  */
 public enum ColumnConfigType {
-    // 文本类型
+    // Text type
     TEXT,
-    // 下拉框类型
+    // Dropdown box type
     SELECT,
-    // 选中框类型
+    // Check box type
     BOOLEAN
 }

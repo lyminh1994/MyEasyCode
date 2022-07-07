@@ -1,11 +1,10 @@
 package com.sjhy.plugin.entity;
 
+import java.util.List;
 import lombok.Data;
 
-import java.util.List;
-
 /**
- * 类型映射分组
+ * Typemap grouping
  *
  * @author makejava
  * @version 1.0.0
@@ -14,11 +13,11 @@ import java.util.List;
 @Data
 public class TypeMapperGroup implements AbstractGroup<TypeMapperGroup, TypeMapper> {
     /**
-     * 分组名称
+     * Group Name
      */
     private String name;
     /**
-     * 元素对象
+     * Element object
      */
     private List<TypeMapper> elementList;
 }

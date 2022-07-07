@@ -1,11 +1,11 @@
-##引入mybatis支持
+##Introduce mybatis support
 $!{mybatisSupport.vm}
 
-##设置保存名称与保存位置
+##Set save name and save location
 $!callback.setFileName($tool.append($!{tableInfo.name}, "Dao.xml"))
 $!callback.setSavePath($tool.append($modulePath, "/src/main/resources/mapper"))
 
-##拿到主键
+##Get the primary key
 #if(!$tableInfo.pkColumn.isEmpty())
     #set($pk = $tableInfo.pkColumn.get(0))
 #end
@@ -20,7 +20,7 @@ $!callback.setSavePath($tool.append($modulePath, "/src/main/resources/mapper"))
 #end
     </resultMap>
 
-    <!-- 批量插入 -->
+    <!-- Bulk insert -->
     <insert id="insertBatch" keyProperty="$!pk.name" useGeneratedKeys="true">
         insert into $!{tableInfo.obj.parent.name}.$!{tableInfo.obj.name}(#foreach($column in $tableInfo.otherColumn)$!column.obj.name#if($velocityHasNext), #end#end)
         values
@@ -28,7 +28,7 @@ $!callback.setSavePath($tool.append($modulePath, "/src/main/resources/mapper"))
         (#foreach($column in $tableInfo.otherColumn)#{entity.$!{column.name}}#if($velocityHasNext), #end#end)
         </foreach>
     </insert>
-    <!-- 批量插入或按主键更新 -->
+    <!-- Bulk insert or update by primary key -->
     <insert id="insertOrUpdateBatch" keyProperty="$!pk.name" useGeneratedKeys="true">
         insert into $!{tableInfo.obj.parent.name}.$!{tableInfo.obj.name}(#foreach($column in $tableInfo.otherColumn)$!column.obj.name#if($velocityHasNext), #end#end)
         values

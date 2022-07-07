@@ -13,18 +13,21 @@ import java.awt.event.FocusListener;
 import java.util.stream.Stream;
 
 /**
- * 表格编辑器构建工厂类
+ * Form editor build factory class
  *
  * @author makejava
  * @version 1.0.0
- * @date 2021/08/10 13:38
+ * @since 2021/08/10 13:38
  */
 public class CellEditorFactory {
 
+    private CellEditorFactory() {
+    }
+
     /**
-     * 创建下拉框编辑器
+     * Create dropdown editor
      *
-     * @param editable 可编辑的
+     * @param editable Editable
      * @return {@link TableCellEditor}
      */
     public static TableCellEditor createComboBoxEditor(boolean editable, Class<? extends Enum> enumCls) {
@@ -33,16 +36,16 @@ public class CellEditorFactory {
     }
 
     /**
-     * 创建下拉框编辑器
+     * Create dropdown editor
      *
-     * @param editable 可编辑的
-     * @param items    选项
+     * @param editable Editable
+     * @param items    Options
      * @return {@link TableCellEditor}
      */
     public static TableCellEditor createComboBoxEditor(boolean editable, String... items) {
         ComboBox<String> comboBox = new ComboBox<>(items);
         comboBox.setEditable(editable);
-        // 配色
+        // Color matching
         if (comboBox.getPopup() != null) {
             comboBox.getPopup().getList().setBackground(JBColor.WHITE);
             comboBox.getPopup().getList().setForeground(JBColor.GREEN);
@@ -58,7 +61,7 @@ public class CellEditorFactory {
     }
 
     /**
-     * 创建文本框编辑器
+     * Create text box editor
      *
      * @return {@link TableCellEditor}
      */
@@ -69,20 +72,20 @@ public class CellEditorFactory {
     }
 
     /**
-     * 传递失去焦点事件
+     * Pass lost focus event
      *
-     * @param component 组件
+     * @param component Components
      */
     private static void transmitFocusEvent(JComponent component) {
         component.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-
+                // document why this method is empty
             }
 
             @Override
             public void focusLost(FocusEvent e) {
-                // 失去焦点时向上层发起事件通知，使table的值能够正常回写
+                // When the focus is lost, an event notification is sent to the upper layer, so that the value of the table can be written back normally
                 ActionListener[] actionListeners = component.getListeners(ActionListener.class);
                 if (actionListeners == null) {
                     return;

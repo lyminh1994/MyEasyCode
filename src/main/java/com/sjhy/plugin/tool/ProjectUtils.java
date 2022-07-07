@@ -12,7 +12,7 @@ import com.intellij.openapi.wm.WindowManager;
 import java.awt.*;
 
 /**
- * IDEA项目相关工具
+ * IDEA project related tools
  *
  * @author tangcent
  * @version 1.0.0
@@ -20,23 +20,26 @@ import java.awt.*;
  */
 public class ProjectUtils {
 
+    private ProjectUtils() {
+    }
+
     /**
-     * 获取当前项目对象
+     * Get the current item object
      *
-     * @return 当前项目对象
+     * @return Current project object
      */
     public static Project getCurrProject() {
         ProjectManager projectManager = ProjectManager.getInstance();
         Project[] openProjects = projectManager.getOpenProjects();
         if (openProjects.length == 0) {
-            // 在未打开任何项目，进入到设置页面时会出现
+            // When no project is opened, it will appear when entering the settings page
             return projectManager.getDefaultProject();
         } else if (openProjects.length == 1) {
-            // 只存在一个打开的项目则使用打开的项目
+            // If there is only one open project, use the open project
             return openProjects[0];
         }
 
-        //如果有项目窗口处于激活状态
+        // If a project window is active
         try {
             WindowManager wm = WindowManager.getInstance();
             for (Project project : openProjects) {
@@ -46,17 +49,18 @@ public class ProjectUtils {
                 }
             }
         } catch (Exception ignored) {
+            // ignored
         }
 
-        //否则使用默认项目
+        // Otherwise, use the default project
         return projectManager.getDefaultProject();
     }
 
     /**
-     * 进行旧版本兼容，该方法已经存在 @see {@link com.intellij.openapi.project.ProjectUtil#guessProjectDir(Project)}
+     * For legacy compatibility, the method already exists @see {@link com.intellij.openapi.project.ProjectUtil#guessProjectDir(Project)}
      *
-     * @param project 项目对象
-     * @return 基本目录
+     * @param project Project object
+     * @return Base directory
      */
     public static VirtualFile getBaseDir(Project project) {
         if (project.isDefault()) {

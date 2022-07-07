@@ -24,24 +24,24 @@ import java.util.function.Consumer;
 /**
  * @author makejava
  * @version 1.0.0
- * @date 2021/08/10 13:27
+ * @since 2021/08/10 13:27
  */
 public class ColumnConfigSettingForm implements Configurable, BaseSettings {
     private JPanel mainPanel;
     /**
-     * 列配置
+     * Column configuration
      */
     private Map<String, ColumnConfigGroup> columnConfigGroupMap;
     /**
-     * 当前分组名
+     * Current group name
      */
     private ColumnConfigGroup currColumnConfigGroup;
     /**
-     * 表格组件
+     * Form component
      */
     private TableComponent<ColumnConfig> tableComponent;
     /**
-     * 分组操作组件
+     * Group Action Components
      */
     private GroupNameComponent<ColumnConfig, ColumnConfigGroup> groupNameComponent;
 
@@ -50,25 +50,25 @@ public class ColumnConfigSettingForm implements Configurable, BaseSettings {
     }
 
     private void initTable() {
-        // 第一列，类型
+        // First column, type
         TableCellEditor typeEditor = CellEditorFactory.createComboBoxEditor(false, ColumnConfigType.class);
         TableComponent.Column<ColumnConfig> typeColumn = new TableComponent.Column<>("type", item -> item.getType().name(), (entity, val) -> entity.setType(ColumnConfigType.valueOf(val)), typeEditor);
-        // 第二列标题
+        // Second column header
         TableCellEditor titleEditor = CellEditorFactory.createTextFieldEditor();
         TableComponent.Column<ColumnConfig> titleColumn = new TableComponent.Column<>("title", ColumnConfig::getTitle, ColumnConfig::setTitle, titleEditor);
-        // 第三列选项
+        // Third column options
         TableCellEditor selectValueEditor = CellEditorFactory.createTextFieldEditor();
         TableComponent.Column<ColumnConfig> selectValueColumn = new TableComponent.Column<>("selectValue", ColumnConfig::getSelectValue, ColumnConfig::setSelectValue, selectValueEditor);
         List<TableComponent.Column<ColumnConfig>> columns = Arrays.asList(typeColumn, titleColumn, selectValueColumn);
 
-        // 表格初始化
+        // Form initialization
         this.tableComponent = new TableComponent<>(columns, this.currColumnConfigGroup.getElementList(), ColumnConfig.class);
         this.mainPanel.add(this.tableComponent.createPanel(), BorderLayout.CENTER);
     }
 
     private void initGroupName() {
 
-        // 切换分组操作
+        // Toggle group operation
         Consumer<ColumnConfigGroup> switchGroupOperator = typeColumnConfigGroupMap -> {
             this.currColumnConfigGroup = typeColumnConfigGroupMap;
             refreshUiVal();
@@ -80,7 +80,7 @@ public class ColumnConfigSettingForm implements Configurable, BaseSettings {
 
     private void initPanel() {
         this.loadSettingsStore(getSettingsStorage());
-        // 初始化表格
+        // Initialize the form
         this.initTable();
         this.initGroupName();
     }
@@ -112,18 +112,18 @@ public class ColumnConfigSettingForm implements Configurable, BaseSettings {
     public void apply() {
         getSettingsStorage().setColumnConfigGroupMap(this.columnConfigGroupMap);
         getSettingsStorage().setCurrColumnConfigGroupName(this.currColumnConfigGroup.getName());
-        // 保存包后重新加载配置
+        // Reload configuration after saving package
         this.loadSettingsStore(getSettingsStorage());
     }
 
     /**
-     * 加载配置信息
+     * Load configuration information
      *
-     * @param settingsStorage 配置信息
+     * @param settingsStorage Configuration information
      */
     @Override
     public void loadSettingsStore(SettingsStorageDTO settingsStorage) {
-        // 复制配置，防止篡改
+        // Copy configuration to prevent tampering
         this.columnConfigGroupMap = CloneUtils.cloneByJson(settingsStorage.getColumnConfigGroupMap(), new TypeReference<Map<String, ColumnConfigGroup>>() {
         });
         this.currColumnConfigGroup = this.columnConfigGroupMap.get(settingsStorage.getCurrColumnConfigGroupName());

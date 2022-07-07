@@ -26,30 +26,30 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * 编辑器组件
+ * Editor component
  *
  * @author makejava
  * @version 1.0.0
- * @date 2021/08/11 13:16
+ * @since 2021/08/11 13:16
  */
-public class EditorComponent<T extends AbstractEditorItem> {
+public class EditorComponent<T extends AbstractEditorItem<?>> {
     /**
-     * 主面板
+     * Main panel
      */
     @Getter
     private JPanel mainPanel;
     /**
-     * 被编辑的文件
+     * Edited file
      */
     @Getter
     private T file;
     /**
-     * 描述信息
+     * Description
      */
     private String remark;
 
     /**
-     * 编辑器组件
+     * Editor component
      */
     private Editor editor;
 
@@ -65,13 +65,13 @@ public class EditorComponent<T extends AbstractEditorItem> {
         Document document = editorFactory.createDocument("");
         this.editor = editorFactory.createEditor(document);
         this.refreshUI();
-        // 初始默认设置
+        // Initial default settings
         EditorSettingsInit.init(this.editor);
-        // 添加监控事件
+        // Add monitoring events
         this.editor.getDocument().addDocumentListener(new DocumentListener() {
             @Override
-            public void beforeDocumentChange(DocumentEvent event) {
-
+            public void beforeDocumentChange(@NotNull DocumentEvent event) {
+                // document why this method is empty
             }
 
             @Override
@@ -81,22 +81,22 @@ public class EditorComponent<T extends AbstractEditorItem> {
                 }
             }
         });
-        // 初始化描述面板
+        // Initialize the description panel
         this.initRemarkPanel();
     }
 
     private void initRemarkPanel() {
-        // 描述信息
+        // Description
         JEditorPane editorPane = new JEditorPane();
-        // html形式展示
+        // Html form display
         editorPane.setEditorKit(UIUtil.getHTMLEditorKit());
-        // 仅查看
+        // View only
         editorPane.setEditable(false);
         editorPane.setText(remark);
-        // 添加浏览器链接监听事件
+        // Add browser link listener event
         editorPane.addHyperlinkListener(new BrowserHyperlinkListener());
 
-        // 描述面板
+        // Description panel
         JPanel descriptionPanel = new JPanel(new GridBagLayout());
         descriptionPanel.add(SeparatorFactory.createSeparator(IdeBundle.message("label.description"), null),
                 new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
@@ -105,7 +105,7 @@ public class EditorComponent<T extends AbstractEditorItem> {
                 new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                         JBUI.insetsTop(2), 0, 0));
 
-        // 分割器
+        // Splitter
         Splitter splitter = new Splitter(true, 0.6F);
         splitter.setFirstComponent(editor.getComponent());
         splitter.setSecondComponent(descriptionPanel);
@@ -122,12 +122,12 @@ public class EditorComponent<T extends AbstractEditorItem> {
     private void refreshUI() {
         if (this.file == null) {
             ((EditorImpl)this.editor).setViewer(true);
-            // 重置文本内容
+            // Reset text content
             WriteCommandAction.runWriteCommandAction(ProjectUtils.getCurrProject(), () -> this.editor.getDocument().setText(""));
             ((EditorEx)editor).setHighlighter(EditorHighlighterFactory.getInstance().createEditorHighlighter(null, "demo.java.vm"));
         } else {
             ((EditorImpl)this.editor).setViewer(false);
-            // 重置文本内容
+            // Reset text content
             WriteCommandAction.runWriteCommandAction(ProjectUtils.getCurrProject(), () -> this.editor.getDocument().setText(this.file.fileContent()));
             ((EditorEx)editor).setHighlighter(EditorHighlighterFactory.getInstance().createEditorHighlighter(ProjectUtils.getCurrProject(), this.file.fileName()));
         }

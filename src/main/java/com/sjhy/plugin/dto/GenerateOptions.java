@@ -4,33 +4,33 @@ import lombok.Builder;
 import lombok.Data;
 
 /**
- * 生成选项
+ * Build options
  *
  * @author makejava
  * @version 1.0.0
- * @date 2021/08/17 09:08
+ * @since 2021/08/17 09:08
  */
 @Data
 @Builder
 public class GenerateOptions {
     /**
-     * 实体类模式
+     * Entity class pattern
      */
     private Boolean entityModel;
     /**
-     * 统一配置
+     * Unified configuration
      */
     private Boolean unifiedConfig;
     /**
-     * 重新格式化代码
+     * Reformat code
      */
     private Boolean reFormat;
     /**
-     * 提示选是
+     * Prompt to select yes
      */
     private Boolean titleSure;
     /**
-     * 提示选否
+     * Prompt to choose no
      */
     private Boolean titleRefuse;
 }

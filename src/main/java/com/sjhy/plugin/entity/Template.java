@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 模板信息类
+ * Template info class
  *
  * @author makejava
  * @version 1.0.0
@@ -16,11 +16,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Template implements AbstractEditorItem<Template> {
     /**
-     * 模板名称
+     * Template name
      */
     private String name;
     /**
-     * 模板代码
+     * Template code
      */
     private String code;
 

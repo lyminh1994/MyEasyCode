@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * 列表单选组件
+ * List radio component
  *
  * @author makejava
  * @version 1.0.0
@@ -19,23 +19,23 @@ import java.util.List;
  */
 public class ListRadioComponent extends JPanel {
     /**
-     * 标题
+     * Title
      */
     private String title;
     /**
-     * 原属列表
+     * List of origins
      */
     private Collection<String> items;
     /**
-     * 复选框列表
+     * Checkbox List
      */
     private List<JBRadioButton> radioList;
 
     /**
-     * 默认构造方法
+     * Default constructor
      */
     public ListRadioComponent(String title, Collection<String> items) {
-        // 使用垂直流式布局
+        // Use a vertical flow layout
         super(new VerticalFlowLayout());
         this.title = title;
         this.items = items;
@@ -43,7 +43,7 @@ public class ListRadioComponent extends JPanel {
     }
 
     /**
-     * 初始化操作
+     * Initialization operation
      */
     private void init() {
         JTextPane textPane = new JTextPane();
@@ -63,14 +63,14 @@ public class ListRadioComponent extends JPanel {
             buttonGroup.add(radioButton);
         }
         add(radioPanel);
-        // 默认选中第一个
+        // The first one is selected by default
         this.radioList.get(0).setSelected(true);
     }
 
     /**
-     * 获取已选中的元素
+     * Get the selected element
      *
-     * @return 已选中的元素
+     * @return Selected element
      */
     public String getSelectedItem() {
         if (CollectionUtil.isEmpty(this.radioList)) {

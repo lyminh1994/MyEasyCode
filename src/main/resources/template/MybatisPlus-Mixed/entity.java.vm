@@ -1,19 +1,19 @@
-##导入宏定义
+##Import macro definition
 $!{define.vm}
 
-##保存文件（宏定义）
+##Save file (macro definition)
 #save("/entity", ".java")
 
-##包路径（宏定义）
+##Package path (macro definition)
 #setPackageSuffix("entity")
 
-##自动导入包（全局变量）
+##Automatically import packages (global variables)
 $!autoImport
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import java.io.Serializable;
 
-##表注释（宏定义）
-#tableComment("表实体类")
+##Table Comments (Macro Definitions)
+#tableComment("Table entity class")
 @SuppressWarnings("serial")
 public class $!{tableInfo.name} extends Model<$!{tableInfo.name}> {
 #foreach($column in $tableInfo.fullColumn)
@@ -28,9 +28,9 @@ public class $!{tableInfo.name} extends Model<$!{tableInfo.name}> {
 
 #foreach($column in $tableInfo.pkColumn)
     /**
-     * 获取主键值
+     * Get primary key value
      *
-     * @return 主键值
+     * @return Primary key value
      */
     @Override
     protected Serializable pkVal() {

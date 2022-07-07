@@ -1,20 +1,19 @@
-##导入宏定义
+##Import macro definition
 $!{define.vm}
 
-##设置表后缀（宏定义）
+##Set table suffix (macro definition)
 #setTableSuffix("Service")
 
-##保存文件（宏定义）
+##Save file (macro definition)
 #save("/service", "Service.java")
 
-##包路径（宏定义）
+##Package path (macro definition)
 #setPackageSuffix("service")
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import $!{tableInfo.savePackageName}.entity.$!tableInfo.name;
 
-##表注释（宏定义）
-#tableComment("表服务接口")
+##Table Comments (Macro Definitions)
+#tableComment("Table service interface")
 public interface $!{tableName} extends IService<$!tableInfo.name> {
-
 }

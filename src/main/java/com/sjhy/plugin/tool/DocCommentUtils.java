@@ -8,30 +8,33 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 
 /**
- * 文档注释工具类
+ * Documentation annotation tool class
  *
  * @author makejava
  * @version 1.0.0
- * @date 2021/08/16 17:37
+ * @since 2021/08/16 17:37
  */
 public class DocCommentUtils {
 
+    private DocCommentUtils() {
+    }
+
     /**
-     * 获取注释信息，获取第一条文本类型注释内容，不存在则返回null
+     * Get the annotation information, get the first text type annotation content, if it does not exist, return null
      *
-     * @param docComment 文档注释
-     * @return 注释内容
+     * @param docComment Documentation Notes
+     * @return Comment content
      */
     public static String getComment(@Nullable PsiDocComment docComment) {
         if (docComment == null) {
             return null;
         }
         return Arrays.stream(docComment.getDescriptionElements())
-                .filter(o -> o instanceof PsiDocToken)
-                .map(PsiElement::getText)
-                .findFirst()
-                .map(String::trim)
-                .orElse(null);
+            .filter(PsiDocToken.class::isInstance)
+            .map(PsiElement::getText)
+            .findFirst()
+            .map(String::trim)
+            .orElse(null);
     }
 
 }

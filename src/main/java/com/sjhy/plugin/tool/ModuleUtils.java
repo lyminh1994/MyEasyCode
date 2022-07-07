@@ -14,7 +14,7 @@ import org.jetbrains.jps.model.java.JavaSourceRootType;
 import java.util.List;
 
 /**
- * 模块工具类
+ * Module tool class
  *
  * @author makejava
  * @version 1.0.0
@@ -22,23 +22,23 @@ import java.util.List;
  */
 public final class ModuleUtils {
     /**
-     * 禁用构造方法
+     * Disable constructor
      */
     private ModuleUtils() {
         throw new UnsupportedOperationException();
     }
 
     /**
-     * 获取module路径
+     * Get the module path
      *
-     * @param module 模块
-     * @return 路径
+     * @param module Module
+     * @return Path
      */
     public static VirtualFile getModuleDir(@NotNull Module module) {
         String modulePath = ModuleUtil.getModuleDirPath(module);
-        // 统一路径分割符号
+        // Uniform Path Splitting Symbol
         modulePath = modulePath.replace("\\", "/");
-        // 尝试消除不正确的路径
+        // Try to eliminate incorrect paths
         if (modulePath.contains(".idea/modules/")) {
             modulePath = modulePath.replace(".idea/modules/","");
         }
@@ -50,22 +50,22 @@ public final class ModuleUtils {
         }
         VirtualFile dir = VirtualFileManager.getInstance().findFileByUrl(String.format("file://%s", modulePath));
         if (dir == null) {
-            Messages.showInfoMessage("无法获取Module路径, path=" + modulePath, GlobalDict.TITLE_INFO);
+            Messages.showInfoMessage("Unable to get Module path, path=" + modulePath, GlobalDict.TITLE_INFO);
         }
         return dir;
     }
 
     /**
-     * 获取模块的源代码文件夹，不存在
+     * Get the source code folder of the module, does not exist
      *
-     * @param module 模块对象
-     * @return 文件夹路径
+     * @param module Module object
+     * @return Folder path
      */
     public static VirtualFile getSourcePath(@NotNull Module module) {
         List<VirtualFile> virtualFileList = ModuleRootManager.getInstance(module).getSourceRoots(JavaSourceRootType.SOURCE);
         if (CollectionUtil.isEmpty(virtualFileList)) {
             VirtualFile modulePath = getModuleDir(module);
-            // 尝试智能识别源代码路径(通过上面的方式，IDEA不能百分百拿到源代码路径)
+            // Try to intelligently identify the source code path (through the above method, IDEA cannot get the source code path 100%)
             VirtualFile srcDir = VfsUtil.findRelativeFile(modulePath, "src", "main", "java");
             if (srcDir != null && srcDir.isDirectory()) {
                 return srcDir;
@@ -84,10 +84,10 @@ public final class ModuleUtils {
     }
 
     /**
-     * 判断模块是否存在源代码文件夹
+     * Determine if a module exists in a source code folder
      *
-     * @param module 模块对象
-     * @return 是否存在
+     * @param module Module object
+     * @return Does it exist
      */
     public static boolean existsSourcePath(Module module) {
         return !CollectionUtil.isEmpty(ModuleRootManager.getInstance(module).getSourceRoots(JavaSourceRootType.SOURCE));

@@ -36,94 +36,95 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * 选择保存路径
+ * Choose a save path
  *
  * @author makejava
  * @version 1.0.0
  * @since 2018/07/17 13:10
  */
 public class SelectSavePath extends DialogWrapper {
+
     /**
-     * 主面板
+     * Main panel
      */
     private JPanel contentPane;
     /**
-     * 模型下拉框
+     * Model drop-down box
      */
     private JComboBox<String> moduleComboBox;
     /**
-     * 包字段
+     * Packet field
      */
     private JTextField packageField;
     /**
-     * 路径字段
+     * Path field
      */
     private JTextField pathField;
     /**
-     * 前缀字段
+     * Prefix field
      */
     private JTextField preField;
     /**
-     * 包选择按钮
+     * Package selection button
      */
     private JButton packageChooseButton;
     /**
-     * 路径选择按钮
+     * Path selection button
      */
     private JButton pathChooseButton;
     /**
-     * 模板面板
+     * Template panel
      */
     private JPanel templatePanel;
     /**
-     * 统一配置复选框
+     * Unified configuration checkbox
      */
     private JCheckBox unifiedConfigCheckBox;
     /**
-     * 弹框选是复选框
+     * Pop-up check box
      */
     private JCheckBox titleSureCheckBox;
     /**
-     * 格式化代码复选框
+     * Format code checkbox
      */
     private JCheckBox reFormatCheckBox;
     /**
-     * 弹框全否复选框
+     * No pop-up check box
      */
     private JCheckBox titleRefuseCheckBox;
     /**
-     * 数据缓存工具类
+     * Data caching tool class
      */
     private CacheDataUtils cacheDataUtils = CacheDataUtils.getInstance();
     /**
-     * 表信息服务
+     * Table Information Services
      */
     private TableInfoSettingsService tableInfoService;
     /**
-     * 项目对象
+     * Project object
      */
     private Project project;
     /**
-     * 代码生成服务
+     * Code generation service
      */
     private CodeGenerateService codeGenerateService;
     /**
-     * 当前项目中的module
+     * Modules in the current project
      */
     private List<Module> moduleList;
 
     /**
-     * 实体模式生成代码
+     * Entity schema generation code
      */
     private boolean entityMode;
 
     /**
-     * 模板选择组件
+     * Template selection component
      */
     private TemplateSelectComponent templateSelectComponent;
 
     /**
-     * 构造方法
+     * Construction method
      */
     public SelectSavePath(Project project) {
         this(project, false);
@@ -135,7 +136,7 @@ public class SelectSavePath extends DialogWrapper {
     }
 
     /**
-     * 构造方法
+     * Construction method
      */
     public SelectSavePath(Project project, boolean entityMode) {
         super(project);
@@ -143,10 +144,10 @@ public class SelectSavePath extends DialogWrapper {
         this.project = project;
         this.tableInfoService = TableInfoSettingsService.getInstance();
         this.codeGenerateService = CodeGenerateService.getInstance(project);
-        // 初始化module，存在资源路径的排前面
+        // Initialize the module, which exists at the front of the resource path
         this.moduleList = new LinkedList<>();
         for (Module module : ModuleManager.getInstance(project).getModules()) {
-            // 存在源代码文件夹放前面，否则放后面
+            // The existing source code folder is placed in the front, otherwise it is placed in the back
             if (ModuleUtils.existsSourcePath(module)) {
                 this.moduleList.add(0, module);
             } else {
@@ -158,35 +159,35 @@ public class SelectSavePath extends DialogWrapper {
         this.initEvent();
         init();
         setTitle(GlobalDict.TITLE_INFO);
-        //初始化路径
+        //Initialization path
         refreshPath();
     }
 
     private void initEvent() {
-        //监听module选择事件
-        moduleComboBox.addActionListener(e -> {
-            // 刷新路径
-            refreshPath();
-        });
+        //Listen to the module selection event
+        moduleComboBox.addActionListener(e ->
+            // Refresh path
+            refreshPath()
+        );
 
         try {
             Class<?> cls = Class.forName("com.intellij.ide.util.PackageChooserDialog");
-            //添加包选择事件
+            //Add package selection event
             packageChooseButton.addActionListener(e -> {
                 try {
                     Constructor<?> constructor = cls.getConstructor(String.class, Project.class);
-                    Object dialog = constructor.newInstance("Package Chooser", project);
-                    // 显示窗口
+                    Object dialog = constructor.newInstance("Choose Package", project);
+                    // Display window
                     Method showMethod = cls.getMethod("show");
                     showMethod.invoke(dialog);
-                    // 获取选中的包名
+                    // Get the selected package name
                     Method getSelectedPackageMethod = cls.getMethod("getSelectedPackage");
                     Object psiPackage = getSelectedPackageMethod.invoke(dialog);
                     if (psiPackage != null) {
                         Method getQualifiedNameMethod = psiPackage.getClass().getMethod("getQualifiedName");
                         String packageName = (String) getQualifiedNameMethod.invoke(psiPackage);
                         packageField.setText(packageName);
-                        // 刷新路径
+                        // Refresh path
                         refreshPath();
                     }
                 } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e1) {
@@ -194,23 +195,23 @@ public class SelectSavePath extends DialogWrapper {
                 }
             });
 
-            // 添加包编辑框失去焦点事件
+            // Add package edit box lose focus event
             packageField.addFocusListener(new FocusAdapter() {
                 @Override
                 public void focusLost(FocusEvent e) {
-                    // 刷新路径
+                    // Refresh path
                     refreshPath();
                 }
             });
         } catch (ClassNotFoundException e) {
-            // 没有PackageChooserDialog，并非支持Java的IDE，禁用相关UI组件
+            // No PackageChooserDialog, not an IDE that supports Java, disable related UI components
             packageField.setEnabled(false);
             packageChooseButton.setEnabled(false);
         }
 
-        //选择路径
+        //Choose a path
         pathChooseButton.addActionListener(e -> {
-            //将当前选中的model设置为基础路径
+            //Set the currently selected model as the base path
             VirtualFile path = ProjectUtils.getBaseDir(project);
             Module module = getSelectModule();
             if (module != null) {
@@ -224,15 +225,15 @@ public class SelectSavePath extends DialogWrapper {
     }
 
     private void refreshData() {
-        // 获取选中的表信息（鼠标右键的那张表），并提示未知类型
+        // Get the selected table information (the table with the right mouse button), and prompt for unknown type
         TableInfo tableInfo;
-        if(entityMode) {
+        if (entityMode) {
             tableInfo = tableInfoService.getTableInfo(cacheDataUtils.getSelectPsiClass());
         } else {
             tableInfo = tableInfoService.getTableInfo(cacheDataUtils.getSelectDbTable());
         }
 
-        // 设置默认配置信息
+        // Set default configuration information
         if (!StringUtils.isEmpty(tableInfo.getSaveModelName())) {
             moduleComboBox.setSelectedItem(tableInfo.getSaveModelName());
         }
@@ -244,15 +245,14 @@ public class SelectSavePath extends DialogWrapper {
         }
         SettingsStorageDTO settings = SettingsStorageService.getSettingsStorage();
         String groupName = settings.getCurrTemplateGroupName();
-        if (!StringUtils.isEmpty(tableInfo.getTemplateGroupName())) {
-            if (settings.getTemplateGroupMap().containsKey(tableInfo.getTemplateGroupName())) {
-                groupName = tableInfo.getTemplateGroupName();
-            }
+        if (!StringUtils.isEmpty(tableInfo.getTemplateGroupName()) && settings.getTemplateGroupMap().containsKey(tableInfo.getTemplateGroupName())) {
+            groupName = tableInfo.getTemplateGroupName();
+
         }
         templateSelectComponent.setSelectedGroupName(groupName);
         String savePath = tableInfo.getSavePath();
         if (!StringUtils.isEmpty(savePath)) {
-            // 判断是否需要拼接项目路径
+            // Determine if you need to splice the project path
             if (savePath.startsWith(StrState.RELATIVE_PATH)) {
                 String projectPath = project.getBasePath();
                 savePath = projectPath + savePath.substring(1);
@@ -268,23 +268,23 @@ public class SelectSavePath extends DialogWrapper {
     }
 
     /**
-     * 确认按钮回调事件
+     * Confirm button callback event
      */
     private void onOK() {
         List<Template> selectTemplateList = templateSelectComponent.getAllSelectedTemplate();
-        // 如果选择的模板是空的
+        // If the selected template is empty
         if (selectTemplateList.isEmpty()) {
-            Messages.showWarningDialog("Can't Select Template!", GlobalDict.TITLE_INFO);
+            Messages.showWarningDialog("Can't select template!", GlobalDict.TITLE_INFO);
             return;
         }
         String savePath = pathField.getText();
         if (StringUtils.isEmpty(savePath)) {
-            Messages.showWarningDialog("Can't Select Save Path!", GlobalDict.TITLE_INFO);
+            Messages.showWarningDialog("Can't select save path!", GlobalDict.TITLE_INFO);
             return;
         }
-        // 针对Linux系统路径做处理
+        // Do processing for Linux system paths
         savePath = savePath.replace("\\", "/");
-        // 保存路径使用相对路径
+        // Save the path using a relative path
         String basePath = project.getBasePath();
         if (!StringUtils.isEmpty(basePath) && savePath.startsWith(basePath)) {
             if (savePath.length() > basePath.length()) {
@@ -295,9 +295,9 @@ public class SelectSavePath extends DialogWrapper {
                 savePath = savePath.replace(basePath, ".");
             }
         }
-        // 保存配置
+        // Save configuration
         TableInfo tableInfo;
-        if(!entityMode) {
+        if (!entityMode) {
             tableInfo = tableInfoService.getTableInfo(cacheDataUtils.getSelectDbTable());
         } else {
             tableInfo = tableInfoService.getTableInfo(cacheDataUtils.getSelectPsiClass());
@@ -305,34 +305,34 @@ public class SelectSavePath extends DialogWrapper {
         tableInfo.setSavePath(savePath);
         tableInfo.setSavePackageName(packageField.getText());
         tableInfo.setPreName(preField.getText());
-        tableInfo.setTemplateGroupName(templateSelectComponent.getselectedGroupName());
+        tableInfo.setTemplateGroupName(templateSelectComponent.getSelectedGroupName());
         Module module = getSelectModule();
         if (module != null) {
             tableInfo.setSaveModelName(module.getName());
         }
-        // 保存配置
+        // Save configuration
         tableInfoService.saveTableInfo(tableInfo);
 
-        // 生成代码
+        // Generate code
         codeGenerateService.generate(selectTemplateList, getGenerateOptions());
     }
 
     /**
-     * 初始化方法
+     * Initialization method
      */
     private void initPanel() {
-        // 初始化模板组
+        // Initialize template group
         this.templateSelectComponent = new TemplateSelectComponent();
         templatePanel.add(this.templateSelectComponent.getMainPanel(), BorderLayout.CENTER);
 
-        //初始化Module选择
+        //Initialize Module selection
         for (Module module : this.moduleList) {
             moduleComboBox.addItem(module.getName());
         }
     }
 
     /**
-     * 获取生成选项
+     * Get build options
      *
      * @return {@link GenerateOptions}
      */
@@ -347,9 +347,9 @@ public class SelectSavePath extends DialogWrapper {
     }
 
     /**
-     * 获取选中的Module
+     * Get the selected Module
      *
-     * @return 选中的Module
+     * @return Selected Module
      */
     private Module getSelectModule() {
         String name = (String) moduleComboBox.getSelectedItem();
@@ -360,15 +360,15 @@ public class SelectSavePath extends DialogWrapper {
     }
 
     /**
-     * 获取基本路径
+     * Get base path
      *
-     * @return 基本路径
+     * @return Base path
      */
     private String getBasePath() {
         Module module = getSelectModule();
         VirtualFile baseVirtualFile = ProjectUtils.getBaseDir(project);
         if (baseVirtualFile == null) {
-            Messages.showWarningDialog("无法获取到项目基本路径！", GlobalDict.TITLE_INFO);
+            Messages.showWarningDialog("Unable to get the project base path!", GlobalDict.TITLE_INFO);
             return "";
         }
         String baseDir = baseVirtualFile.getPath();
@@ -382,15 +382,15 @@ public class SelectSavePath extends DialogWrapper {
     }
 
     /**
-     * 刷新目录
+     * Refresh directory
      */
     private void refreshPath() {
         String packageName = packageField.getText();
-        // 获取基本路径
+        // Get base path
         String path = getBasePath();
-        // 兼容Linux路径
+        // Compatible Linux path
         path = path.replace("\\", "/");
-        // 如果存在包路径，添加包路径
+        // If package path exists, add package path
         if (!StringUtils.isEmpty(packageName)) {
             path += "/" + packageName.replace(".", "/");
         }

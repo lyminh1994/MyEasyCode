@@ -23,11 +23,11 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
- * 编辑列表组件
+ * Edit list component
  *
  * @author makejava
  * @version 1.0.0
- * @date 2021/08/10 16:57
+ * @since 2021/08/10 16:57
  */
 public class EditListComponent<E extends AbstractEditorItem<E>> {
     @Getter
@@ -35,7 +35,7 @@ public class EditListComponent<E extends AbstractEditorItem<E>> {
 
     private Consumer<E> switchItemFun;
     /**
-     * 当前选中项
+     * Currently selected item
      */
     private String currentItem;
 
@@ -46,7 +46,7 @@ public class EditListComponent<E extends AbstractEditorItem<E>> {
     private Class<E> cls;
 
     /**
-     * 分组Map
+     * Group Map
      */
     private List<E> elementList;
 
@@ -63,9 +63,9 @@ public class EditListComponent<E extends AbstractEditorItem<E>> {
     private void init() {
         this.mainPanel = new JPanel(new BorderLayout());
         this.mainPanel.setBorder(new CustomLineBorder(1, 1, 1, 1));
-        // 上边是操作项
+        // Above is the action item
         this.initAction();
-        // 下边是列表
+        // Below is the list
         this.initList();
     }
 
@@ -176,15 +176,15 @@ public class EditListComponent<E extends AbstractEditorItem<E>> {
 
     private void initAction() {
         DefaultActionGroup actionGroup = new DefaultActionGroup();
-        // 复制操作
+        // Copy operation
         actionGroup.add(createCopyAction());
-        // 新增操作
+        // Add action
         actionGroup.add(createAddAction());
-        // 删除动作
+        // delete action
         actionGroup.add(createRemoveAction());
-        // 向上移动
+        // Move up
         actionGroup.add(createMoveUpAction());
-        // 向下移动
+        // Move Downward
         actionGroup.add(createMoveDownAction());
         ActionToolbar actionToolbar = ActionManager.getInstance().createActionToolbar("Item Toolbar", actionGroup, true);
         this.mainPanel.add(actionToolbar.getComponent(), BorderLayout.NORTH);
@@ -225,7 +225,7 @@ public class EditListComponent<E extends AbstractEditorItem<E>> {
         } finally {
             this.refresh = false;
         }
-        if (StringUtils.isEmpty(this.currentItem) && elementList != null && elementList.size() > 0) {
+        if (StringUtils.isEmpty(this.currentItem) && elementList != null && !elementList.isEmpty()) {
             setCurrentItem(elementList.get(0).fileName());
             switchItemFun.accept(findByName(this.currentItem));
         }

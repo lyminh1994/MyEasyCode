@@ -26,7 +26,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * 文件工具类
+ * File tools
  *
  * @author makejava
  * @version 1.0.0
@@ -37,7 +37,7 @@ public class FileUtils {
     private static volatile FileUtils fileUtils;
 
     /**
-     * 单例模式
+     * Singleton pattern
      */
     public static FileUtils getInstance() {
         if (fileUtils == null) {
@@ -54,31 +54,31 @@ public class FileUtils {
     }
 
     /**
-     * 创建子目录
+     * Create subdirectories
      *
-     * @param project 文件对象
-     * @param parent  父级目录
-     * @param dirName 子目录
-     * @return 目录对象
+     * @param project File object
+     * @param parent  Parent directory
+     * @param dirName Subdirectory
+     * @return Directory object
      */
     public VirtualFile createChildDirectory(Project project, VirtualFile parent, String dirName) {
         return WriteCommandAction.runWriteCommandAction(project, (Computable<VirtualFile>) () -> {
             try {
                 return VfsUtil.createDirectoryIfMissing(parent, dirName);
             } catch (IOException e) {
-                Messages.showWarningDialog("目录创建失败：" + dirName, GlobalDict.TITLE_INFO);
+                Messages.showWarningDialog("Directory creation failed：" + dirName, GlobalDict.TITLE_INFO);
                 return null;
             }
         });
     }
 
     /**
-     * 创建子文件
+     * Create sub file
      *
-     * @param project  项目对象
-     * @param parent   父级目录
-     * @param fileName 子文件名
-     * @return 文件对象
+     * @param project  Project object
+     * @param parent   Parent directory
+     * @param fileName Sub file name
+     * @return File object
      */
     public VirtualFile createChildFile(Project project, VirtualFile parent, String fileName) {
         return WriteCommandAction.runWriteCommandAction(project, (Computable<VirtualFile>) () -> {
@@ -91,19 +91,19 @@ public class FileUtils {
                 }
                 return parent.createChildData(new Object(), fileName);
             } catch (IOException e) {
-                Messages.showWarningDialog("文件创建失败：" + fileName, GlobalDict.TITLE_INFO);
+                Messages.showWarningDialog("File creation failed：" + fileName, GlobalDict.TITLE_INFO);
                 return null;
             }
         });
     }
 
     /**
-     * 设置文件内容
+     * Set file content
      *
-     * @param project 项目对象
-     * @param file    文件
-     * @param text    文件内容
-     * @return 覆盖后的文档对象
+     * @param project Project object
+     * @param file    Document
+     * @param text    Document content
+     * @return The overwritten document object
      */
     public Document writeFileContent(Project project, VirtualFile file, String fileName, String text) {
         FileDocumentManager fileDocumentManager = FileDocumentManager.getInstance();
@@ -113,23 +113,23 @@ public class FileUtils {
                 try {
                     file.setBinaryContent(text.getBytes());
                 } catch (IOException e) {
-                    throw new IllegalStateException("二进制文件写入失败，fileName：" + fileName);
+                    throw new IllegalStateException("Binary file write failed, fileName：" + fileName);
                 }
             });
             return fileDocumentManager.getDocument(file);
         }
         WriteCommandAction.runWriteCommandAction(project, () -> document.setText(text));
         PsiDocumentManager psiDocumentManager = PsiDocumentManager.getInstance(project);
-        // 提交改动，并非VCS中的提交文件
+        // Commit changes, not commit files in VCS
         psiDocumentManager.commitDocument(document);
         return document;
     }
 
     /**
-     * 格式化虚拟文件
+     * Format virtual file
      *
-     * @param project     项目对象
-     * @param virtualFile 虚拟文件
+     * @param project     Project object
+     * @param virtualFile Dummy file
      */
     public void reformatFile(Project project, VirtualFile virtualFile) {
         PsiFile psiFile = PsiManager.getInstance(project).findFile(virtualFile);
@@ -140,35 +140,31 @@ public class FileUtils {
     }
 
     /**
-     * 执行格式化
+     * Perform formatting
      *
-     * @param project     项目对象
-     * @param psiFileList 文件列表
+     * @param project     Project object
+     * @param psiFileList File List
      */
     @SuppressWarnings("unchecked")
     public void reformatFile(Project project, List<PsiFile> psiFileList) {
         if (CollectionUtil.isEmpty(psiFileList)) {
             return;
         }
-        // 尝试对文件进行格式化处理
+        // Attempt to format the file
         AbstractLayoutCodeProcessor processor = new ReformatCodeProcessor(project, psiFileList.toArray(new PsiFile[0]), null, false);
-        // 优化导入，有时候会出现莫名其妙的问题，暂时关闭
-//        processor = new OptimizeImportsProcessor(processor);
-        // 重新编排代码（会将代码中的属性与方法的顺序进行重新调整）
-//            processor = new RearrangeCodeProcessor(processor);
 
-        // 清理代码，进行旧版本兼容，旧版本的IDEA尚未提供该处理器
+        // Clean up the code for compatibility with older versions, the processor is not yet available in older versions of IDEA
         try {
             Class<AbstractLayoutCodeProcessor> codeCleanupCodeProcessorCls = (Class<AbstractLayoutCodeProcessor>) Class.forName("com.intellij.codeInsight.actions.CodeCleanupCodeProcessor");
             Constructor<AbstractLayoutCodeProcessor> constructor = codeCleanupCodeProcessorCls.getConstructor(AbstractLayoutCodeProcessor.class);
             processor = constructor.newInstance(processor);
         } catch (ClassNotFoundException ignored) {
-            // 类不存在直接忽略
+            // Class does not exist directly ignore
         } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
-            // 抛出未知异常
+            // Throw unknown exception
             ExceptionUtil.rethrow(e);
         }
-        // 执行处理
+        // Execute processing
         processor.run();
     }
 }

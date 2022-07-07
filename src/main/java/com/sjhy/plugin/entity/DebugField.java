@@ -3,7 +3,7 @@ package com.sjhy.plugin.entity;
 import lombok.Data;
 
 /**
- * 调试字段实体类
+ * Debug field entity class
  *
  * @author makejava
  * @version 1.0.0
@@ -12,15 +12,15 @@ import lombok.Data;
 @Data
 public class DebugField {
     /**
-     * 字段名
+     * Field name
      */
     private String name;
     /**
-     * 字段类型
+     * Field Type
      */
     private Class<?> type;
     /**
-     * 字段值
+     * Field value
      */
     private String value;
 }

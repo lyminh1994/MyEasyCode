@@ -4,16 +4,15 @@ import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.sjhy.plugin.dto.SettingsStorageDTO;
 import com.sjhy.plugin.service.SettingsStorageService;
-import lombok.Data;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * 设置储存服务实现
+ * Set up storage service implementation
  *
  * @author makejava
  * @version 1.0.0
- * @date 2021/08/07 11:32
+ * @since 2021/08/07 11:32
  */
 @State(name = "EasyCodeSetting", storages = @Storage("easy-code-setting.xml"))
 public class SettingsStorageServiceImpl implements SettingsStorageService {
@@ -21,9 +20,9 @@ public class SettingsStorageServiceImpl implements SettingsStorageService {
     private SettingsStorageDTO settingsStorage = SettingsStorageDTO.defaultVal();
 
     /**
-     * 获取配置
+     * Get configuration
      *
-     * @return 配置对象
+     * @return Configuration object
      */
     @Nullable
     @Override
@@ -32,13 +31,13 @@ public class SettingsStorageServiceImpl implements SettingsStorageService {
     }
 
     /**
-     * 加载配置
+     * Load configuration
      *
-     * @param state 配置对象
+     * @param state Configuration object
      */
     @Override
     public void loadState(@NotNull SettingsStorageDTO state) {
-        // 加载配置后填充默认值，避免版本升级导致的配置信息不完善问题
+        // Fill in the default values after loading the configuration to avoid the problem of incomplete configuration information caused by version upgrades
         state.fillDefaultVal();
         this.settingsStorage = state;
     }

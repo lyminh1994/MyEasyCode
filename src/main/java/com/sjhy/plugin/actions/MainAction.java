@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 /**
- * 代码生成菜单
+ * Code generation menu
  *
  * @author makejava
  * @version 1.0.0
@@ -38,18 +38,18 @@ import java.util.regex.PatternSyntaxException;
  */
 public class MainAction extends AnAction {
     /**
-     * 构造方法
+     * Construction method
      *
-     * @param text 菜单名称
+     * @param text Menu name
      */
     MainAction(@Nullable String text) {
         super(text);
     }
 
     /**
-     * 处理方法
+     * Approach
      *
-     * @param event 事件对象
+     * @param event Event object
      */
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
@@ -58,28 +58,28 @@ public class MainAction extends AnAction {
             return;
         }
 
-        // 校验类型映射
+        // Check Type Mapping
         if (!typeValidator(project, CacheDataUtils.getInstance().getSelectDbTable())) {
-            // 没通过不打开窗口
+            // Failed to open the window
             return;
         }
-        //开始处理
+        //Start processing
         new SelectSavePath(event.getProject()).show();
     }
 
 
     /**
-     * 类型校验，如果存在未知类型则引导用于去条件类型
+     * Type checking, if there is an unknown type, it is used to de-condition the type
      *
-     * @param dbTable 原始表对象
-     * @return 是否验证通过
+     * @param dbTable Raw table object
+     * @return Is it verified
      */
     private boolean typeValidator(Project project, DbTable dbTable) {
-        // 处理所有列
+        // Process all columns
         JBIterable<? extends DasColumn> columns = DasUtil.getColumns(dbTable);
         List<TypeMapper> typeMapperList = CurrGroupUtils.getCurrTypeMapperGroup().getElementList();
 
-        // 简单的记录报错弹窗次数，避免重复报错
+        // Simply record the number of error pop-ups to avoid repeated errors
         Set<String> errorCount = new HashSet<>();
 
         FLAG:
@@ -92,7 +92,7 @@ public class MainAction extends AnAction {
                             continue FLAG;
                         }
                     } else {
-                        // 不区分大小写的正则匹配模式
+                        // Case-insensitive regex pattern
                         if (Pattern.compile(typeMapper.getColumnType(), Pattern.CASE_INSENSITIVE).matcher(typeName).matches()) {
                             continue FLAG;
                         }
@@ -100,13 +100,13 @@ public class MainAction extends AnAction {
                 } catch (PatternSyntaxException e) {
                     if (!errorCount.contains(typeMapper.getColumnType())) {
                         Messages.showWarningDialog(
-                                "类型映射《" + typeMapper.getColumnType() + "》存在语法错误，请及时修正。报错信息:" + e.getMessage(),
+                                "Type map \"" + typeMapper.getColumnType() + "\" there are grammatical errors, please correct them in time. Error message: " + e.getMessage(),
                                 GlobalDict.TITLE_INFO);
                         errorCount.add(typeMapper.getColumnType());
                     }
                 }
             }
-            // 没找到类型，提示用户选择输入类型
+            // Type not found, prompt user to select input type
             new Dialog(project, typeName).showAndGet();
         }
         return true;
@@ -128,7 +128,7 @@ public class MainAction extends AnAction {
 
         private void initPanel() {
             setTitle(GlobalDict.TITLE_INFO);
-            String msg = String.format("数据库类型%s，没有找到映射关系，请输入想转换的类型？", typeName);
+            String msg = String.format("Database type %s, no mapping relationship found, please enter the type you want to convert?", typeName);
             JLabel label = new JLabel(msg);
             this.mainPanel = new JPanel(new BorderLayout());
             this.mainPanel.setBorder(JBUI.Borders.empty(5, 10, 7, 10));

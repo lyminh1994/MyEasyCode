@@ -22,9 +22,10 @@ import lombok.NonNull;
 import java.io.File;
 
 /**
- * 需要保存的文件
+ * File to save
  * <p>
- * 如果文件保存在项目路径下，则使用idea提供的psi对象操作。如果文件保存在非项目路径下，则使用java原始IO流操作。
+ * If the file is saved in the project path, use the psi object provided by idea to operate. If the file is saved in a
+ * non-project path, use java raw IO stream operations.
  *
  * @author makejava
  * @version 1.0.0
@@ -32,35 +33,36 @@ import java.io.File;
  */
 @Data
 public class SaveFile {
+
     private static final Logger LOG = Logger.getInstance(SaveFile.class);
     /**
-     * 所属项目
+     * View project
      */
     private Project project;
     /**
-     * 文件内容
+     * Document content
      */
     private String content;
     /**
-     * 文件工具类
+     * File tools
      */
     private FileUtils fileUtils = FileUtils.getInstance();
     /**
-     * 回调对象
+     * Callback object
      */
     private Callback callback;
     /**
-     * 生成配置
+     * Build configuration
      */
     private GenerateOptions generateOptions;
 
     /**
-     * 保存文件
+     * Save document
      *
-     * @param project         项目
-     * @param content         内容
-     * @param callback        回调
-     * @param generateOptions 生成选项
+     * @param project         Project
+     * @param content         Content
+     * @param callback        Callback
+     * @param generateOptions Build options
      */
     public SaveFile(@NonNull Project project, @NonNull String content, @NonNull Callback callback, @NonNull GenerateOptions generateOptions) {
         this.project = project;
@@ -70,17 +72,17 @@ public class SaveFile {
     }
 
     /**
-     * 文件是否为项目文件
+     * Is the file a project file
      *
-     * @return 是否为项目文件
+     * @return Is it a project file
      */
     private boolean isProjectFile() {
         VirtualFile baseDir = ProjectUtils.getBaseDir(project);
-        // 无法获取到项目基本目录，可能是Default项目，直接返回非项目文件
+        // The project base directory cannot be obtained, it may be the Default project, and the non-project file is returned directly
         if (baseDir == null) {
             return false;
         }
-        // 路径对比，判断项目路径是否为文件保存路径的子路径
+        // Path comparison, to determine whether the project path is a sub-path of the file save path
         String projectPath = handlerPath(baseDir.getPath());
         String tmpFilePath = handlerPath(callback.getSavePath());
         if (tmpFilePath.length() > projectPath.length()) {
@@ -92,91 +94,91 @@ public class SaveFile {
     }
 
     /**
-     * 处理路径，统一分割符并转小写
+     * Process paths, unify separators and convert to lowercase
      *
-     * @param path 路径
-     * @return 处理后的路径
+     * @param path Path
+     * @return Processed path
      */
     private String handlerPath(String path) {
         return handlerPath(path, true);
     }
 
     /**
-     * 处理路径，统一分割符并转小写
+     * Process paths, unify separators and convert to lowercase
      *
-     * @param path      路径
-     * @param lowerCase 是否转小写
-     * @return 处理后的路径
+     * @param path      Path
+     * @param lowerCase Whether to lowercase
+     * @return Processed path
      */
     private String handlerPath(String path, boolean lowerCase) {
-        // 统一分割符
+        // Uniform Separator
         path = path.replace("\\", "/");
-        // 避免重复分割符
+        // Avoid repeating delimiters
         path = path.replace("//", "/");
-        // 统一小写
+        // Uniform lowercase
         return lowerCase ? path.toLowerCase() : path;
     }
 
     /**
-     * 通过IDEA自带的Psi文件方式写入
+     * Write through the Psi file that comes with IDEA
      */
     public void write() {
         if (!Boolean.TRUE.equals(callback.getWriteFile())) {
             return;
         }
-        // 判断目录是否存在
+        // Check if a directory exists
         VirtualFile baseDir = ProjectUtils.getBaseDir(project);
         if (baseDir == null) {
-            throw new IllegalStateException("项目基本路径不存在");
+            throw new IllegalStateException("Project base path does not exist");
         }
-        // 处理保存路径
+        // Handling save paths
         String savePath = handlerPath(callback.getSavePath(), false);
         if (isProjectFile()) {
-            // 删除保存路径的前面部分
+            // Remove the previous part of the save path
             savePath = savePath.substring(handlerPath(baseDir.getPath()).length());
         } else {
             baseDir = null;
         }
-        // 删除开头与结尾的/符号
+        // Delete beginning and end/符号
         while (savePath.startsWith("/")) {
             savePath = savePath.substring(1);
         }
         while (savePath.endsWith("/")) {
             savePath = savePath.substring(0, savePath.length() - 1);
         }
-        // 查找保存目录是否存在
+        // Find out if the save directory exists
         VirtualFile saveDir;
         if (baseDir == null) {
             saveDir = VfsUtil.findFileByIoFile(new File(savePath), false);
         } else {
             saveDir = VfsUtil.findRelativeFile(baseDir, savePath.split("/"));
         }
-        // 提示创建目录
+        // Prompt to create a directory
         VirtualFile directory = titleCreateDir(saveDir, baseDir, savePath);
         if (directory == null) {
             return;
         }
         VirtualFile psiFile = directory.findChild(callback.getFileName());
-        // 保存或覆盖
+        // Save or overwrite
         saveOrReplaceFile(psiFile, directory);
     }
 
     /**
-     * 提示创建目录
+     * Prompt to create a directory
      *
-     * @param saveDir 保存路径
-     * @return 是否放弃执行
+     * @param saveDir Save route
+     * @return Whether to give up execution
      */
     private VirtualFile titleCreateDir(VirtualFile saveDir, VirtualFile baseDir, String savePath) {
         if (saveDir != null) {
             return saveDir;
         }
-        // 尝试创建目录
+        // Try to create directory
         String msg = String.format("Directory %s Not Found, Confirm Create?", callback.getSavePath());
-        if (generateOptions.getTitleSure()) {
+        if (Boolean.TRUE.equals(generateOptions.getTitleSure())) {
             saveDir = fileUtils.createChildDirectory(project, baseDir, savePath);
             return saveDir;
-        } else if (generateOptions.getTitleRefuse()) {
+        } else if (Boolean.TRUE.equals(generateOptions.getTitleRefuse())) {
             return null;
         } else {
             if (MessageDialogUtils.yesNo(project, msg)) {
@@ -188,15 +190,15 @@ public class SaveFile {
     }
 
     /**
-     * 保存或替换文件
+     * Save or replace file
      *
-     * @param file      文件
-     * @param directory 目录
+     * @param file      Document
+     * @param directory Content
      */
     private void saveOrReplaceFile(VirtualFile file, VirtualFile directory) {
         PsiDocumentManager psiDocumentManager = PsiDocumentManager.getInstance(project);
         Document document;
-        // 文件不存在直接创建
+        // The file does not exist and create it directly
         if (file == null) {
             file = fileUtils.createChildFile(project, directory, callback.getFileName());
             if (file == null) {
@@ -204,35 +206,35 @@ public class SaveFile {
             }
             document = coverFile(file);
         } else {
-            // 提示覆盖文件
-            if (generateOptions.getTitleSure()) {
-                // 默认选是
+            // Prompt to overwrite files
+            if (Boolean.TRUE.equals(generateOptions.getTitleSure())) {
+                // Default is
                 document = coverFile(file);
-            } else if (generateOptions.getTitleRefuse()) {
-                // 默认选否
+            } else if (Boolean.TRUE.equals(generateOptions.getTitleRefuse())) {
+                // No by default
                 return;
             } else {
                 String msg = String.format("File %s Exists, Select Operate Mode?", file.getPath());
                 int result = MessageDialogUtils.yesNoCancel(project, msg, "Convert", "Compare", "Cancel");
                 switch (result) {
                     case Messages.YES:
-                        // 覆盖文件
+                        // Overwrite file
                         document = coverFile(file);
                         break;
                     case Messages.NO:
-                        // 对比代码时也格式化代码
+                        // Also format code when comparing code
                         String newText = content;
                         if (Boolean.TRUE.equals(callback.getReformat())) {
-                            // 保留旧文件内容，用新文件覆盖旧文件执行格式化，然后再还原旧文件内容
+                            // Keep the old file content, overwrite the old file with the new file to perform formatting, and then restore the old file content
                             String oldText = getFileText(file);
                             Document tmpDoc = coverFile(file);
-                            // 格式化代码
+                            // Format code
                             FileUtils.getInstance().reformatFile(project, file);
-                            // 提交文档改动，并非VCS中的提交文件
+                            // Commit document changes, not commit files in VCS
                             psiDocumentManager.commitDocument(tmpDoc);
-                            // 获取新的文件内容
+                            // Get new file content
                             newText = getFileText(file);
-                            // 还原旧文件
+                            // Restore old files
                             coverFile(file, oldText);
                         }
                         FileType fileType = FileTypeManager.getInstance().getFileTypeByFileName(callback.getFileName());
@@ -244,11 +246,11 @@ public class SaveFile {
                 }
             }
         }
-        // 执行代码格式化操作
+        // Perform code formatting operations
         if (Boolean.TRUE.equals(callback.getReformat())) {
             FileUtils.getInstance().reformatFile(project, file);
         }
-        // 提交文档改动，并非VCS中的提交文件
+        // Commit document changes, not commit files in VCS
         if (document != null) {
             psiDocumentManager.commitDocument(document);
         }
@@ -264,21 +266,21 @@ public class SaveFile {
     }
 
     /**
-     * 覆盖文件
+     * Overwrite file
      *
-     * @param file 文件
-     * @return 覆盖后的文档对象
+     * @param file Document
+     * @return The overwritten document object
      */
     private Document coverFile(VirtualFile file) {
         return coverFile(file, content);
     }
 
     /**
-     * 覆盖文件
+     * Overwrite file
      *
-     * @param file 文件
-     * @param text 文件内容
-     * @return 覆盖后的文档对象
+     * @param file Document
+     * @param text Document content
+     * @return The overwritten document object
      */
     private Document coverFile(VirtualFile file, String text) {
         return FileUtils.getInstance().writeFileContent(project, file, callback.getFileName(), text);

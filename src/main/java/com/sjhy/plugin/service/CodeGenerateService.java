@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 
 /**
- * 代码生成服务，Project级别Service
+ * Code generation service, Project level Service
  *
  * @author makejava
  * @version 1.0.0
@@ -18,29 +18,29 @@ import java.util.Collection;
  */
 public interface CodeGenerateService {
     /**
-     * 获取实例对象
+     * Get instance object
      *
-     * @param project 项目对象
-     * @return 实例对象
+     * @param project Project object
+     * @return Instance object
      */
     static CodeGenerateService getInstance(@NotNull Project project) {
         return ServiceManager.getService(project, CodeGenerateService.class);
     }
 
     /**
-     * 生成
+     * Generate
      *
-     * @param templates       模板
-     * @param generateOptions 生成选项
+     * @param templates       Template
+     * @param generateOptions Build options
      */
     void generate(Collection<Template> templates, GenerateOptions generateOptions);
 
     /**
-     * 生成代码
+     * Generate code
      *
-     * @param template  模板
-     * @param tableInfo 表信息对象
-     * @return 生成好的代码
+     * @param template  Template
+     * @param tableInfo Table info object
+     * @return Generated code
      */
     String generate(Template template, TableInfo tableInfo);
 }

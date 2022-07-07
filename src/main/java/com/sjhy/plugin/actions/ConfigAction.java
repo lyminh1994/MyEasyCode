@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * 表配置菜单
+ * Table Configuration Menu
  *
  * @author makejava
  * @version 1.0.0
@@ -16,18 +16,18 @@ import org.jetbrains.annotations.Nullable;
  */
 public class ConfigAction extends AnAction {
     /**
-     * 构造方法
+     * Construction method
      *
-     * @param text 菜单名称
+     * @param text Menu name
      */
     ConfigAction(@Nullable String text) {
         super(text);
     }
 
     /**
-     * 处理方法
+     * Approach
      *
-     * @param event 事件对象
+     * @param event Event object
      */
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {

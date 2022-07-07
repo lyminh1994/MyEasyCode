@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.Map;
 
 /**
- * 集合工具类
+ * Collection tool class
  *
  * @author makejava
  * @version 1.0.0
@@ -12,21 +12,24 @@ import java.util.Map;
  */
 public class CollectionUtil {
 
+    private CollectionUtil() {
+    }
+
     /**
-     * 判断集合是否为空的
+     * Check if a collection is empty
      *
-     * @param collection 集合对象
-     * @return 是否为空
+     * @param collection Collection object
+     * @return Is empty
      */
     public static boolean isEmpty(Collection<?> collection) {
         return collection == null || collection.isEmpty();
     }
 
     /**
-     * 判断map是否为空的
+     * Check if map is empty
      *
-     * @param map map对象
-     * @return 是否为空
+     * @param map Map object
+     * @return Is empty
      */
     public static boolean isEmpty(Map<?, ?> map) {
         return map == null || map.isEmpty();

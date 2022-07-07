@@ -8,32 +8,32 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * 左右组件
+ * Left and right components
  *
  * @author makejava
  * @version 1.0.0
- * @date 2021/08/10 16:49
+ * @since 2021/08/10 16:49
  */
 public class LeftRightComponent {
     /**
-     * 主面板
+     * Main panel
      */
     @Getter
     private JPanel mainPanel;
     /**
-     * 左边面板
+     * Left panel
      */
     private JPanel leftPanel;
     /**
-     * 右边面板
+     * Right panel
      */
     private JPanel rightPanel;
     /**
-     * 分割比例
+     * Split ratio
      */
     private float proportion;
     /**
-     * 预设值窗口大小
+     * Default window size
      */
     private Dimension preferredSize;
 

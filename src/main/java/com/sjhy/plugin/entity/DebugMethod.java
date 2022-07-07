@@ -3,7 +3,7 @@ package com.sjhy.plugin.entity;
 import lombok.Data;
 
 /**
- * 调试方法实体类
+ * Debug method entity class
  *
  * @author makejava
  * @version 1.0.0
@@ -12,15 +12,15 @@ import lombok.Data;
 @Data
 public class DebugMethod {
     /**
-     * 方法名
+     * Method name
      */
     private String name;
     /**
-     * 方法描述
+     * Method description
      */
     private String desc;
     /**
-     * 执行方法得到的值
+     * The value obtained by executing the method
      */
     private Object value;
 }

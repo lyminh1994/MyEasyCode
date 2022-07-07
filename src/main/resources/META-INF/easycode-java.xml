@@ -1,7 +1,7 @@
 <idea-plugin>
 
     <actions>
-        <!-- 实体类生成代码 -->
+        <!-- Entity class generation code -->
         <action id="com.sjhy.plugin.actions.EasyCodeEntityAction"
                 class="com.sjhy.plugin.actions.EasyCodeEntityAction" text="EasyCode...">
             <add-to-group group-id="GenerateGroup" anchor="last"/>

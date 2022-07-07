@@ -28,28 +28,28 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * 导出导入组件
+ * Export import component
  *
  * @author makejava
  * @version 1.0.0
- * @date 2021/08/12 10:35
+ * @since 2021/08/12 10:35
  */
 public class ExportImportComponent {
     /**
-     * 导出按钮
+     * Export button
      */
     private JButton exportBtn;
     /**
-     * 导入按钮
+     * Import button
      */
     private JButton importBtn;
     /**
-     * 导出导入服务
+     * Export import service
      */
     private ExportImportSettingsService service;
 
     /**
-     * 导入成功回调
+     * Import success callback
      */
     private Runnable callback;
 
@@ -77,12 +77,12 @@ public class ExportImportComponent {
     }
 
     /**
-     * 处理导出动作
+     * Handling export actions
      */
     private void handlerExportAction() {
-        // 复制一份，避免篡改
+        // Make a copy to avoid tampering
         SettingsStorageDTO settingsStorage = CloneUtils.cloneByJson(SettingsStorageService.getSettingsStorage());
-        // 创建一行四列的主面板
+        // Create a main panel with one row and four columns
         JPanel mainPanel = new JPanel(new GridLayout(1, 4));
         // Type Mapper
         ListCheckboxComponent typeMapperPanel = new ListCheckboxComponent("Type Mapper", settingsStorage.getTypeMapperGroupMap().keySet());
@@ -96,37 +96,37 @@ public class ExportImportComponent {
         // GlobalConfig
         ListCheckboxComponent globalConfigPanel = new ListCheckboxComponent("Global Config", settingsStorage.getGlobalConfigGroupMap().keySet());
         mainPanel.add(globalConfigPanel);
-        // 构建dialog
+        // Build dialog
         DialogBuilder dialogBuilder = new DialogBuilder(ProjectUtils.getCurrProject());
         dialogBuilder.setTitle(GlobalDict.TITLE_INFO);
-        dialogBuilder.setNorthPanel(new MultiLineLabel("请选择要导出的配置分组："));
+        dialogBuilder.setNorthPanel(new MultiLineLabel("Please select a configuration group to export："));
         dialogBuilder.setCenterPanel(mainPanel);
         dialogBuilder.addActionDescriptor(dialogWrapper -> new AbstractAction("OK") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (!isSelected(typeMapperPanel, templatePanel, columnConfigPanel, globalConfigPanel)) {
-                    Messages.showWarningDialog("至少选择一个模板组！", GlobalDict.TITLE_INFO);
+                    Messages.showWarningDialog("Choose at least one template group!", GlobalDict.TITLE_INFO);
                     return;
                 }
-                // 过滤数据
+                // Filter data
                 filterSelected(typeMapperPanel, settingsStorage.getTypeMapperGroupMap());
                 filterSelected(templatePanel, settingsStorage.getTemplateGroupMap());
                 filterSelected(columnConfigPanel, settingsStorage.getColumnConfigGroupMap());
                 filterSelected(globalConfigPanel, settingsStorage.getGlobalConfigGroupMap());
-                // 关闭并退出
+                // Close and exit
                 dialogWrapper.close(DialogWrapper.OK_EXIT_CODE);
                 service.exportConfig(settingsStorage);
             }
         });
-        // 显示窗口
+        // Display window
         dialogBuilder.show();
     }
 
     /**
-     * 判断是否选中
+     * Determine whether to select
      *
-     * @param checkboxPanels 复选框面板
-     * @return 是否选中
+     * @param checkboxPanels Checkbox panel
+     * @return Is it selected
      */
     private boolean isSelected(@NotNull ListCheckboxComponent... checkboxPanels) {
         for (ListCheckboxComponent checkboxPanel : checkboxPanels) {
@@ -138,10 +138,10 @@ public class ExportImportComponent {
     }
 
     /**
-     * 过滤选中数据
+     * Filter selected data
      *
-     * @param checkboxPanel 选中面板
-     * @param map           需要过滤的map
+     * @param checkboxPanel Selected panel
+     * @param map           Map to filter
      */
     private void filterSelected(ListCheckboxComponent checkboxPanel, Map<String, ?> map) {
         List<String> selectedItems = checkboxPanel.getSelectedItems();
@@ -154,8 +154,8 @@ public class ExportImportComponent {
         if (remoteSettings == null) {
             return;
         }
-        // 对同名分组进行覆盖、放弃、改名操作
-        // 创建主面板
+        // Overwrite, abandon, and rename groups with the same name
+        // Create the main panel
         JPanel mainPanel = new JPanel(new VerticalFlowLayout());
         List<Handler> allHandlerList = new ArrayList<>();
         addRadioComponent(allHandlerList, "TypeMapper", localSettings.getTypeMapperGroupMap(), remoteSettings.getTypeMapperGroupMap());
@@ -167,41 +167,41 @@ public class ExportImportComponent {
                 mainPanel.add(handler.getRadioComponent());
             }
         }
-        // 没有需要选择处理的分组则不构建Dialog
+        // If there is no grouping that needs to be selected, the Dialog will not be built
         boolean anyMatch = allHandlerList.stream().anyMatch(item -> item.getRadioComponent() != null);
         if (!anyMatch) {
-            // 执行每个处理器
+            // Execute per processor
             for (Handler handler : allHandlerList) {
                 handler.execute();
             }
-            // 执行回调
+            // Execute callback
             if (callback != null) {
                 callback.run();
             }
             return;
         }
-        // 构建dialog
+        // Build dialog
         DialogBuilder dialogBuilder = new DialogBuilder(ProjectUtils.getCurrProject());
         dialogBuilder.setTitle(GlobalDict.TITLE_INFO);
-        dialogBuilder.setNorthPanel(new MultiLineLabel("请选择重复配置的处理方式："));
+        dialogBuilder.setNorthPanel(new MultiLineLabel("Please select how to handle duplicate configurations: "));
         dialogBuilder.setCenterPanel(mainPanel);
         dialogBuilder.addActionDescriptor(dialogWrapper -> new AbstractAction("OK") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // 执行每个处理器
+                // Execute per processor
                 for (Handler handler : allHandlerList) {
                     handler.execute();
                 }
-                // 执行回调
+                // Execute callback
                 if (callback != null) {
                     callback.run();
                 }
-                // 关闭并退出
+                // Close and exit
                 dialogWrapper.close(DialogWrapper.OK_EXIT_CODE);
-                Messages.showInfoMessage("导入完成", GlobalDict.TITLE_INFO);
+                Messages.showInfoMessage("Import completed!", GlobalDict.TITLE_INFO);
             }
         });
-        // 显示窗口
+        // Display window
         dialogBuilder.show();
     }
 
@@ -257,8 +257,6 @@ public class ExportImportComponent {
                     item.setName(newName);
                     localMap.put(newName, item);
                     break;
-                case DISCARD:
-                    break;
                 default:
                     break;
             }
@@ -267,15 +265,15 @@ public class ExportImportComponent {
 
     public enum Operator {
         /**
-         * 覆盖
+         * Cover
          */
         COVER,
         /**
-         * 重命名
+         * Rename
          */
         RENAME,
         /**
-         * 丢弃
+         * Throw away
          */
         DISCARD
     }

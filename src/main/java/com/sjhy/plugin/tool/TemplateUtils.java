@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 /**
- * 模板工具，主要用于对模板进行预处理
+ * Template tools, mainly used to preprocess templates
  *
  * @author makejava
  * @version 1.0.0
@@ -15,18 +15,18 @@ import java.util.Collections;
  */
 public final class TemplateUtils {
     /**
-     * 不允许创建实例对象
+     * Instance object creation is not allowed
      */
     private TemplateUtils() {
         throw new UnsupportedOperationException();
     }
 
     /**
-     * 向模板中注入全局变量
+     * Inject global variables into templates
      *
-     * @param template      模板
-     * @param globalConfigs 全局变量
-     * @return 处理好的模板
+     * @param template      Template
+     * @param globalConfigs Global variable
+     * @return Processed template
      */
     public static String addGlobalConfig(String template, Collection<GlobalConfig> globalConfigs) {
         if (CollectionUtil.isEmpty(globalConfigs)) {
@@ -34,36 +34,36 @@ public final class TemplateUtils {
         }
         for (GlobalConfig globalConfig : globalConfigs) {
             String name = globalConfig.getName();
-            // 正则被替换字符转义处理
-            String value = globalConfig.getValue().replace("\\", "\\\\").replace("$", "\\$");
+            // Regular replacement character escape processing
+            String value = globalConfig.getValue().replace("$", "\\$" );
 
             // 将不带{}的变量加上{}
             template = template.replaceAll("\\$!?" + name + "(\\W)", "\\$!{" + name + "}$1");
-            // 统一替换
+            // Uniform replacement
             template = template.replaceAll("\\$!?\\{" + name + "}", value);
         }
         return template;
     }
 
     /**
-     * 向模板中注入全局变量
+     * Inject global variables into templates
      *
-     * @param template      模板对象
-     * @param globalConfigs 全局变量
+     * @param template      Template object
+     * @param globalConfigs Global variable
      */
     public static void addGlobalConfig(Template template, Collection<GlobalConfig> globalConfigs) {
         if (template == null || StringUtils.isEmpty(template.getCode())) {
             return;
         }
-        // 模板后面添加换行符号，防止在模板末尾添加全局变量导致无法匹配问题
+        // Add a newline symbol after the template to prevent adding global variables at the end of the template to cause unmatched problems
         template.setCode(addGlobalConfig(template.getCode() + "\n", globalConfigs));
     }
 
     /**
-     * 向模板中注入全局变量
+     * Inject global variables into templates
      *
-     * @param templates     多个模板
-     * @param globalConfigs 全局变量
+     * @param templates     Multiple templates
+     * @param globalConfigs Global variable
      */
     public static void addGlobalConfig(Collection<Template> templates, Collection<GlobalConfig> globalConfigs) {
         if (CollectionUtil.isEmpty(templates)) {
@@ -73,18 +73,18 @@ public final class TemplateUtils {
     }
 
     /**
-     * 向模板中注入全局变量
+     * Inject global variables into templates
      *
-     * @param templates 多个模板
+     * @param templates Multiple templates
      */
     public static void addGlobalConfig(Collection<Template> templates) {
         addGlobalConfig(templates, CurrGroupUtils.getCurrGlobalConfigGroup().getElementList());
     }
 
     /**
-     * 向模板中注入全局变量
+     * Inject global variables into templates
      *
-     * @param template 单个模板
+     * @param template Single template
      */
     public static void addGlobalConfig(Template template) {
         if (template != null) {

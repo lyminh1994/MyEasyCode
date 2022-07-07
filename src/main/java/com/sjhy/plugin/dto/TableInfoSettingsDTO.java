@@ -12,16 +12,15 @@ import lombok.Data;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * 表格信息设置传输对象
+ * Form information set transfer object
  *
  * @author makejava
  * @version 1.0.0
- * @date 2021/08/14 17:40
+ * @since 2021/08/14 17:40
  */
 @Data
 public class TableInfoSettingsDTO {
@@ -32,13 +31,13 @@ public class TableInfoSettingsDTO {
     }
 
     private String generateKey(DbTable dbTable) {
-        // 递归添加3层名称作为key，第一层为表名、第二层为名命空间名称、第三层为数据库名
+        // Recursively add three layers of names as keys, the first layer is the table name, the second layer is the namespace name, and the third layer is the database name
         StringBuilder builder = new StringBuilder();
         DbElement element = dbTable;
         for (int i = 0; i < 3; i++) {
             String name = element.getName();
             if (builder.length() > 0) {
-                // 添加分割符
+                // Add separator
                 builder.insert(0, ".");
             }
             builder.insert(0, name);
@@ -51,7 +50,7 @@ public class TableInfoSettingsDTO {
             } catch (IllegalAccessException | InvocationTargetException e) {
                 break;
             }
-            // 未必所有的数据库都是存在三层，例如MySQL就只有两层。如果上次层不是Namespace，则不再继续获取
+            // Not all databases have three layers. For example, MySQL has only two layers. If the last layer is not a Namespace, do not continue to get
             if (!(element instanceof DasNamespace)) {
                 break;
             }
@@ -63,9 +62,9 @@ public class TableInfoSettingsDTO {
         return psiClass.getQualifiedName();
     }
     /**
-     * 读表信息
+     * Meter reading information
      *
-     * @param psiClass psi类
+     * @param psiClass Psi class
      * @return {@link TableInfo}
      */
     @SuppressWarnings("Duplicates")
@@ -78,25 +77,24 @@ public class TableInfoSettingsDTO {
     }
 
     /**
-     * 读表信息
+     * Meter reading information
      *
-     * @param dbTable 数据库表
+     * @param dbTable Database Table
      * @return {@link TableInfo}
      */
     @SuppressWarnings("Duplicates")
     public TableInfo readTableInfo(DbTable dbTable) {
         String key = generateKey(dbTable);
         TableInfoDTO dto = this.tableInfoMap.get(key);
-        // 表可能新增了字段，需要重新合并保存
         dto = new TableInfoDTO(dto, dbTable);
         this.tableInfoMap.put(key, dto);
         return dto.toTableInfo(dbTable);
     }
 
     /**
-     * 保存表信息
+     * Save table information
      *
-     * @param tableInfo 表信息
+     * @param tableInfo Table information
      */
     public void saveTableInfo(TableInfo tableInfo) {
         if (tableInfo == null) {
@@ -116,9 +114,9 @@ public class TableInfoSettingsDTO {
     }
 
     /**
-     * 重置表信息
+     * Reset table information
      *
-     * @param dbTable 数据库表
+     * @param dbTable Database Table
      */
     public void resetTableInfo(DbTable dbTable) {
         String key = generateKey(dbTable);

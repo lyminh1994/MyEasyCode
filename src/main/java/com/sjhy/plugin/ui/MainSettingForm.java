@@ -18,7 +18,7 @@ import java.util.Objects;
 /**
  * @author makejava
  * @version 1.0.0
- * @date 2021/08/07 09:22
+ * @since 2021/08/07 09:22
  */
 public class MainSettingForm implements Configurable, Configurable.Composite, BaseSettings {
     private JLabel versionLabel;
@@ -38,11 +38,12 @@ public class MainSettingForm implements Configurable, Configurable.Composite, Ba
     private JLabel userSecureTitle;
 
     /**
-     * 子配置
+     * Sub configuration
      */
     private Configurable[] childConfigurableArray;
 
     public MainSettingForm() {
+        // document why this constructor is empty
     }
 
     private void initLocalExportEvent() {
@@ -53,9 +54,9 @@ public class MainSettingForm implements Configurable, Configurable.Composite, Ba
 
     private void initEvent() {
         this.resetBtn.addActionListener(e -> {
-            boolean result = MessageDialogUtils.yesNo("确认恢复默认设置，所有Default分组配置将被重置，并且已删除的默认分组将被还原。确认继续？");
+            boolean result = MessageDialogUtils.yesNo("Confirm to restore default settings. All your custom settings will be lost. Are you sure to continue?");
             if (result) {
-                // 重置默认值后重新加载配置
+                // Reload configuration after resetting defaults
                 getSettingsStorage().resetDefaultVal();
                 this.loadSettingsStore();
                 this.loadChildSettingsStore();
@@ -98,7 +99,7 @@ public class MainSettingForm implements Configurable, Configurable.Composite, Ba
     }
 
     private void loadChildSettingsStore() {
-        // 初始装置配置信息
+        // Initial device configuration information
         for (Configurable configurable : this.childConfigurableArray) {
             if (configurable instanceof BaseSettings) {
                 ((BaseSettings) configurable).loadSettingsStore();
@@ -108,15 +109,15 @@ public class MainSettingForm implements Configurable, Configurable.Composite, Ba
 
     @Override
     public @Nullable JComponent createComponent() {
-        // TODO 临时隐藏未开发完毕的UI组件
+        // TODO: Temporarily hide undeveloped UI components
         this.pushBtn.setVisible(false);
         this.pullBtn.setVisible(false);
         this.userSecureEditor.setVisible(false);
         this.userSecureTitle.setVisible(false);
         this.userSecureLabel.setVisible(false);
-        // 加载储存数据
+        // load storage data
         this.loadSettingsStore();
-        // 初始化事件
+        // initialization event
         this.initEvent();
         this.initLocalExportEvent();
         return mainPanel;
@@ -127,17 +128,14 @@ public class MainSettingForm implements Configurable, Configurable.Composite, Ba
         if (!Objects.equals(this.authorEditor.getText(), getSettingsStorage().getAuthor())) {
             return true;
         }
-        if (!Objects.equals(this.userSecureEditor.getText(), getSettingsStorage().getUserSecure())) {
-            return true;
-        }
-        return false;
+        return !Objects.equals(this.userSecureEditor.getText(), getSettingsStorage().getUserSecure());
     }
 
     @Override
     public void apply() throws ConfigurationException {
         String author = this.authorEditor.getText();
         if (StringUtils.isEmpty(author)) {
-            throw new ConfigurationException("作者名称不能为空");
+            throw new ConfigurationException("Author name can't empty!");
         }
         getSettingsStorage().setAuthor(author);
         String userSecure = this.userSecureEditor.getText();
@@ -145,9 +143,9 @@ public class MainSettingForm implements Configurable, Configurable.Composite, Ba
     }
 
     /**
-     * 加载配置信息
+     * Load configuration information
      *
-     * @param settingsStorage 配置信息
+     * @param settingsStorage Configuration information
      */
     @Override
     public void loadSettingsStore(SettingsStorageDTO settingsStorage) {

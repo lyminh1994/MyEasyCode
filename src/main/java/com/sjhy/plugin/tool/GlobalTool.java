@@ -12,7 +12,7 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 /**
- * 全局工具类
+ * Global tool class
  *
  * @author makejava
  * @version 1.0.0
@@ -23,13 +23,13 @@ public class GlobalTool extends NameUtils {
     private static volatile GlobalTool globalTool;
 
     /**
-     * 私有构造方法
+     * Private constructor
      */
     private GlobalTool() {
     }
 
     /**
-     * 单例模式
+     * Singleton pattern
      */
     public static GlobalTool getInstance() {
         if (globalTool == null) {
@@ -43,49 +43,49 @@ public class GlobalTool extends NameUtils {
     }
 
     /**
-     * 创建集合
+     * Create a collection
      *
-     * @param items 初始元素
-     * @return 集合对象
+     * @param items Initial element
+     * @return Collection object
      */
     public Set<?> newHashSet(Object... items) {
         return items == null ? new HashSet<>() : new HashSet<>(Arrays.asList(items));
     }
 
     /**
-     * 创建列表
+     * Create a list
      *
-     * @param items 初始元素
-     * @return 列表对象
+     * @param items Initial element
+     * @return List object
      */
     public List<?> newArrayList(Object... items) {
         return items == null ? new ArrayList<>() : new ArrayList<>(Arrays.asList(items));
     }
 
     /**
-     * 创建有序Map
+     * Create an ordered Map
      *
-     * @return map对象
+     * @return Map object
      */
     public Map<?, ?> newLinkedHashMap() {
         return new LinkedHashMap<>();
     }
 
     /**
-     * 创建无序Map
+     * Create an unordered Map
      *
-     * @return map对象
+     * @return Map object
      */
     public Map<?, ?> newHashMap() {
         return new HashMap<>(16);
     }
 
     /**
-     * 获取字段，私有属性一样强制访问
+     * Get fields, mandatory access like private properties
      *
-     * @param obj       对象
-     * @param fieldName 字段名
-     * @return 字段值
+     * @param obj       Object
+     * @param fieldName Field name
+     * @return Field value
      */
     public Object getField(Object obj, String fieldName) {
         if (obj == null) {
@@ -96,19 +96,19 @@ public class GlobalTool extends NameUtils {
     }
 
     /**
-     * 无返回执行，用于消除返回值
+     * No-return execution, used to eliminate the return value
      *
-     * @param obj 接收执行返回值
+     * @param obj Receive execution return value
      */
     public void call(Object... obj) {
-
+        // document why this method is empty
     }
 
     /**
-     * 获取某个类的所有字段
+     * Get all fields of a class
      *
-     * @param cls 类
-     * @return 所有字段
+     * @param cls Kind
+     * @return All fields
      */
     private List<Field> getAllFieldByClass(Class<?> cls) {
         List<Field> result = new ArrayList<>();
@@ -120,23 +120,23 @@ public class GlobalTool extends NameUtils {
     }
 
     /**
-     * 调式对象
+     * Mode object
      *
-     * @param obj 对象
-     * @return 调式JSON结果
+     * @param obj Object
+     * @return Debug JSON result
      */
     public String debug(Object obj) {
         Map<String, Object> result = new LinkedHashMap<>();
         if (obj == null) {
-            result.put("title", "调试对象为null");
+            result.put("title", "Debug object is null");
             return JSON.toJsonByFormat(result);
         }
-        // 获取类
+        // Get class
         Class<?> cls = obj.getClass();
         result.put("title", String.format("调试：%s", cls.getName()));
-        // 方法列表
+        // Method list
         List<DebugMethod> debugMethodList = new ArrayList<>();
-        // 排除方法
+        // Method of exclusion
         List<String> filterMethodName = Arrays.asList("hashCode", "toString", "equals", "getClass", "clone", "notify", "notifyAll", "wait", "finalize");
         for (Method method : cls.getMethods()) {
             if (filterMethodName.contains(method.getName())) {
@@ -146,7 +146,7 @@ public class GlobalTool extends NameUtils {
             String methodName = method.getName();
             debugMethod.setName(methodName);
             debugMethod.setDesc(method.toGenericString());
-            // 针对get，is开头的无参方法进行调用并取值。
+            // Call and get the value for the no-argument method starting with get and is.
             if ((methodName.startsWith("get") || methodName.startsWith("is"))) {
                 if (method.getParameterCount() == 0) {
                     try {
@@ -159,13 +159,13 @@ public class GlobalTool extends NameUtils {
                     }
                 }
             }
-            // 添加至列表
+            // Add to list
             debugMethodList.add(debugMethod);
         }
         result.put("methodList", debugMethodList);
-        // 添加一条分割先
-        result.put("----", "-----------------我是一条华丽的分割线-----------------");
-        // 字段列表
+        // Add a split first
+        result.put("----", "-----------------I am a gorgeous dividing line-----------------");
+        // Field list
         List<Field> fieldList = getAllFieldByClass(cls);
         List<DebugField> debugFieldList = new ArrayList<>();
         fieldList.forEach(field -> {
@@ -173,7 +173,7 @@ public class GlobalTool extends NameUtils {
             debugField.setName(field.getName());
             debugField.setType(field.getType());
             try {
-                // 设置允许方法
+                // Set allow method
                 field.setAccessible(true);
                 Object val = field.get(obj);
                 if (val == null) {
@@ -193,37 +193,37 @@ public class GlobalTool extends NameUtils {
     private static final long MAX = 100000000000000000L;
 
     /**
-     * 生成长度为18位的序列号，保持代码美观
+     * Generate serial numbers with length 18 digits, keeping the code beautiful
      *
-     * @return 序列化
+     * @return Serialization
      */
     public String serial() {
         Random random = new Random();
         StringBuilder builder = new StringBuilder();
-        // 正负号生成
+        // Sign generation
         if (random.nextFloat() > 0.5F) {
             builder.append("-");
         }
-        // 首位不能为0
+        // The first position cannot be 0
         builder.append(random.nextInt(9) + 1);
-        // 生成剩余位数
+        // Generate remaining digits
         do {
             builder.append(random.nextInt(10));
         } while (builder.length() < 18);
-        // 加上结束符号
+        // Add end symbol
         builder.append("L");
         return builder.toString();
     }
 
     /**
-     * 将json转map
+     * Convert json to map
      *
-     * @param json json字符串
-     * @return map对象
+     * @param json Json string
+     * @return Map object
      */
-    public Map<?,?> parseJson(String json) {
+    public Map parseJson(String json) {
         if (StringUtils.isEmpty(json)) {
-            return null;
+            return Collections.emptyMap();
         }
         try {
             return JSON.parse(json, Map.class);
@@ -233,21 +233,21 @@ public class GlobalTool extends NameUtils {
     }
 
     /**
-     * 将对象转json字符串
+     * Convert object to json string
      *
-     * @param obj 对象
-     * @return json字符串
+     * @param obj Object
+     * @return Json string
      */
     public String toJson(Object obj) {
         return toJson(obj, false);
     }
 
     /**
-     * 将对象转json字符串
+     * Convert object to json string
      *
-     * @param obj 对象
-     * @param format 是否格式化json
-     * @return json字符串
+     * @param obj    Object
+     * @param format Whether to format json
+     * @return Json string
      */
     public String toJson(Object obj, Boolean format) {
         if (obj == null) {
@@ -256,7 +256,7 @@ public class GlobalTool extends NameUtils {
         if (format == null) {
             format = false;
         }
-        // 是否格式化输出json
+        // Whether to format the output json
         if (format) {
             return JSON.toJsonByFormat(obj);
         } else {
@@ -265,24 +265,26 @@ public class GlobalTool extends NameUtils {
     }
 
     /**
-     * 中文及中文符号正则表达式
+     * Chinese and Chinese symbols regular expressions
      */
     public static final String CHINESE_REGEX = "[\u4e00-\u9fa5–—‘’“”…、。〈〉《》「」『』【】〔〕！（），．：；？]";
 
     /**
-     * 字符串转unicode编码（默认只转换CHINESE_REGEX匹配到的字符）
-     * @param str 字符串
-     * @return 转码后的字符串
+     * String to unicode encoding (by default, only characters matched by CHINESE_REGEX are converted)
+     *
+     * @param str String
+     * @return Transcode string
      */
     public String toUnicode(String str) {
         return toUnicode(str, false);
     }
 
     /**
-     * 字符串转unicode编码
-     * @param str 字符串
-     * @param transAll true转换所有字符，false只转换CHINESE_REGEX匹配到的字符
-     * @return 转码后的字符串
+     * String to unicode encoding
+     *
+     * @param str      String
+     * @param transAll True converts all characters, false converts only characters matched by CHINESE_REGEX
+     * @return Transcode string
      */
     public String toUnicode(String str, Boolean transAll) {
         if (null == str) {
@@ -302,7 +304,7 @@ public class GlobalTool extends NameUtils {
             }
         } else {
             for (char c : str.toCharArray()) {
-                // 中文范围
+                // Chinese range
                 if (String.valueOf(c).matches(CHINESE_REGEX)) {
                     sb.append(String.format("\\u%04x", (int) c));
                 } else {
@@ -315,17 +317,17 @@ public class GlobalTool extends NameUtils {
     }
 
     /**
-     * 远程调用服务
+     * Remote call service
      *
-     * @param name  服务名称
-     * @param param 请求参数
-     * @return 结果
+     * @param name  Service name
+     * @param param Request parameter
+     * @return Result
      */
     public Object service(String name, Object... param) {
         if (StringUtils.isEmpty(name)) {
             return null;
         }
-        // 组装参数
+        // Assembly parameters
         Map<String, Object> map = Collections.emptyMap();
         if (param != null && param.length > 0) {
             map = new LinkedHashMap<>(param.length);
@@ -333,22 +335,22 @@ public class GlobalTool extends NameUtils {
                 map.put("param" + i, param[0]);
             }
         }
-        // 发起请求
+        // Make a request
         String result = HttpUtils.postJson(String.format("/service?name=%s", name), map);
         if (result == null) {
             return null;
         }
         try {
-            // 处理结果
+            // Process result
             JsonNode jsonNode = JSON.readTree(result);
             String type = jsonNode.get("type").asText();
             JsonNode data = jsonNode.get("data");
             Class<?> cls = Class.forName(type);
-            // 字符串类型
+            // String type
             if (String.class.equals(cls)) {
                 return data.asText();
             }
-            // 其他类型
+            // Other types
             return JSON.parse(data.toString(), cls);
         } catch (ClassNotFoundException e) {
             return null;

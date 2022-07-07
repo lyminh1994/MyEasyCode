@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.util.Map;
 
 /**
- * Http工具类，按需添加方法
+ * Http tool class, add methods as needed
  *
  * @author makejava
  * @version 1.0.0
@@ -32,44 +32,44 @@ import java.util.Map;
  */
 public final class HttpUtils {
     /**
-     * 用户设备标识
+     * User Equipment Identification
      */
     private static final String USER_AGENT = "EasyCode";
     /**
-     * 内容类型标记
+     * Content type tag
      */
     private static final String CONTENT_TYPE = "application/json;charset=UTF-8";
     /**
-     * 服务器地址
+     * Server address
      */
     private static final String HOST_URL = "http://www.shujuhaiyang.com/easyCode";
     /**
-     * http客户端
+     * Http client
      */
     private static final CloseableHttpClient HTTP_CLIENT = HttpClients.createDefault();
 
     /**
-     * 请求超时时间设置(10秒)
+     * Request timeout setting (10 seconds)
      */
     private static final int TIMEOUT = 10 * 1000;
 
     /**
-     * 状态码
+     * Status code
      */
     private static final String STATE_CODE = "code";
 
     /**
-     * 私有构造方法
+     * Private constructor
      */
     private HttpUtils() {
         throw new UnsupportedOperationException();
     }
 
     /**
-     * get请求
+     * Get request
      *
-     * @param uri 请求地址
-     * @return 返回请求结果
+     * @param uri Request address
+     * @return Return request result
      */
     public static String get(String uri) {
         HttpGet httpGet = new HttpGet(HOST_URL + uri);
@@ -80,18 +80,18 @@ public final class HttpUtils {
     }
 
     /**
-     * post json请求
+     * Post json request
      *
-     * @param uri   地址
-     * @param param 参数
-     * @return 请求返回结果
+     * @param uri   Address
+     * @param param Parameter
+     * @return Request return result
      */
     public static String postJson(String uri, Object param) {
         HttpPost httpPost = new HttpPost(HOST_URL + uri);
         httpPost.setHeader(HttpHeaders.USER_AGENT, USER_AGENT);
         httpPost.setHeader(HttpHeaders.CONTENT_TYPE, CONTENT_TYPE);
         httpPost.setConfig(getDefaultConfig());
-        httpPost.setEntity(new StringEntity(JSON.toJson(param), "utf-8"));
+        httpPost.setEntity(new StringEntity(JSON.toJson(param), "utf-8" ));
         return handlerRequest(httpPost);
     }
 
@@ -100,21 +100,21 @@ public final class HttpUtils {
     }
 
     /**
-     * 统一处理请求
+     * Unified processing of requests
      *
-     * @param request 请求对象
-     * @return 响应字符串
+     * @param request Request object
+     * @return Response string
      */
     private static String handlerRequest(HttpUriRequest request) {
         try {
             CloseableHttpResponse response = HTTP_CLIENT.execute(request);
             String body = EntityUtils.toString(response.getEntity(), "UTF-8");
             if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
-                Messages.showWarningDialog("连接到服务器错误！", GlobalDict.TITLE_INFO);
+                Messages.showWarningDialog("Error connecting to server！", GlobalDict.TITLE_INFO);
                 return null;
             }
             HttpClientUtils.closeQuietly(response);
-            // 解析JSON数据
+            // Parse JSON data
             ObjectMapper objectMapper = JSON.getInstance();
             JsonNode jsonNode = objectMapper.readTree(body);
             if (jsonNode.get(STATE_CODE).asInt() == 0) {
@@ -124,11 +124,11 @@ public final class HttpUtils {
                 }
                 return data.toString();
             }
-            // 获取错误消息
+            // Get error message
             String msg = jsonNode.get("msg").asText();
             Messages.showWarningDialog(msg, GlobalDict.TITLE_INFO);
         } catch (IOException e) {
-            Messages.showWarningDialog("无法连接到服务器！", GlobalDict.TITLE_INFO);
+            Messages.showWarningDialog("Unable to connect to server!", GlobalDict.TITLE_INFO);
             ExceptionUtil.rethrow(e);
         }
         return null;

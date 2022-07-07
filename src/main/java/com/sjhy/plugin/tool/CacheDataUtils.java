@@ -7,7 +7,7 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * 缓存数据工具类
+ * Cache data utility class
  *
  * @author makejava
  * @version 1.0.0
@@ -18,7 +18,7 @@ public class CacheDataUtils {
     private volatile static CacheDataUtils cacheDataUtils;
 
     /**
-     * 单例模式
+     * Singleton pattern
      */
     public static CacheDataUtils getInstance() {
         if (cacheDataUtils == null) {
@@ -35,21 +35,21 @@ public class CacheDataUtils {
     }
 
     /**
-     * 当前选中的表
+     * Currently selected table
      */
     private DbTable selectDbTable;
     /**
-     * 所有选中的表
+     * All selected tables
      */
     private List<DbTable> dbTableList;
 
     /**
-     * 选中的类
+     * Selected class
      */
     private PsiClass selectPsiClass;
 
     /**
-     * 所有选中的表
+     * All selected tables
      */
     private List<PsiClass> psiClassList;
 }

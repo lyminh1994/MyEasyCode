@@ -24,11 +24,11 @@ import java.util.function.Consumer;
 /**
  * @author makejava
  * @version 1.0.0
- * @date 2021/08/10 16:14
+ * @since 2021/08/10 16:14
  */
 public class GlobalConfigSettingForm implements Configurable, BaseSettings {
     /**
-     * 全局变量描述信息，说明文档
+     * Global variable description information, documentation
      */
     private static final String TEMPLATE_DESCRIPTION_INFO;
 
@@ -45,23 +45,23 @@ public class GlobalConfigSettingForm implements Configurable, BaseSettings {
 
     private JPanel mainPanel;
     /**
-     * 类型映射配置
+     * Type map configuration
      */
     private Map<String, GlobalConfigGroup> globalConfigGroupMap;
     /**
-     * 当前分组名
+     * Current group name
      */
     private GlobalConfigGroup currGlobalConfigGroup;
     /**
-     * 编辑框组件
+     * Edit box component
      */
     private EditorComponent<GlobalConfig> editorComponent;
     /**
-     * 分组操作组件
+     * Group Action Components
      */
     private GroupNameComponent<GlobalConfig, GlobalConfigGroup> groupNameComponent;
     /**
-     * 编辑列表框
+     * Edit list box
      */
     private EditListComponent<GlobalConfig> editListComponent;
 
@@ -75,7 +75,7 @@ public class GlobalConfigSettingForm implements Configurable, BaseSettings {
         Consumer<GlobalConfigGroup> switchGroupOperator = globalConfigGroup -> {
             this.currGlobalConfigGroup = globalConfigGroup;
             refreshUiVal();
-            // 切换分组情况编辑框
+            // Toggle grouping edit box
             this.editorComponent.setFile(null);
         };
 
@@ -100,13 +100,13 @@ public class GlobalConfigSettingForm implements Configurable, BaseSettings {
 
     private void initPanel() {
         this.loadSettingsStore(getSettingsStorage());
-        // 初始化表格
+        // Initialize the form
         this.initGroupName();
-        // 初始化编辑列表组件
+        // Initialize the edit list component
         this.initEditList();
-        // 初始化编辑框组件
+        // Initialize the edit box component
         this.initEditor();
-        // 左右组件
+        // Left and right components
         LeftRightComponent leftRightComponent = new LeftRightComponent(editListComponent.getMainPanel(), this.editorComponent.getMainPanel());
         this.mainPanel.add(leftRightComponent.getMainPanel(), BorderLayout.CENTER);
     }
@@ -124,14 +124,14 @@ public class GlobalConfigSettingForm implements Configurable, BaseSettings {
 
     @Override
     public void loadSettingsStore(SettingsStorageDTO settingsStorage) {
-        // 复制配置，防止篡改
+        // Copy configuration to prevent tampering
         this.globalConfigGroupMap = CloneUtils.cloneByJson(settingsStorage.getGlobalConfigGroupMap(), new TypeReference<Map<String, GlobalConfigGroup>>() {
         });
         this.currGlobalConfigGroup = this.globalConfigGroupMap.get(settingsStorage.getCurrGlobalConfigGroupName());
         if (this.currGlobalConfigGroup == null) {
             this.currGlobalConfigGroup = this.globalConfigGroupMap.get(GlobalDict.DEFAULT_GROUP_NAME);
         }
-        // 解决reset后编辑框未清空BUG
+        // Solve the bug that the edit box is not cleared after reset
         if (this.editorComponent != null) {
             this.editorComponent.setFile(null);
         }
@@ -154,7 +154,7 @@ public class GlobalConfigSettingForm implements Configurable, BaseSettings {
     public void apply() {
         getSettingsStorage().setGlobalConfigGroupMap(this.globalConfigGroupMap);
         getSettingsStorage().setCurrGlobalConfigGroupName(this.currGlobalConfigGroup.getName());
-        // 保存包后重新加载配置
+        // Reload configuration after saving package
         this.loadSettingsStore(getSettingsStorage());
     }
 

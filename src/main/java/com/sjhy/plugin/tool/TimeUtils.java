@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * 时间工具类
+ * Time tool
  *
  * @author makejava
  * @version 1.0.0
@@ -14,9 +14,9 @@ public class TimeUtils {
     private static volatile TimeUtils timeUtils;
 
     /**
-     * 单例模式
+     * Singleton pattern
      *
-     * @return 实例对象
+     * @return Instance object
      */
     public static TimeUtils getInstance() {
         if (timeUtils == null) {
@@ -34,19 +34,19 @@ public class TimeUtils {
     }
 
     /**
-     * 获取指定格式的时间字符串
+     * Get the time string in the specified format
      *
-     * @param pattern 格式
-     * @return 时间字符串
+     * @param pattern Format
+     * @return Time string
      */
     public String currTime(String pattern) {
         return new SimpleDateFormat(pattern).format(new Date());
     }
 
     /**
-     * 获取默认格式的时间字符串（yyyy-MM-dd HH:mm:ss）
+     * Get the time string in the default format (yyyy-MM-dd HH:mm:ss）
      *
-     * @return 时间字符串
+     * @return Time string
      */
     public String currTime() {
         return currTime("yyyy-MM-dd HH:mm:ss");

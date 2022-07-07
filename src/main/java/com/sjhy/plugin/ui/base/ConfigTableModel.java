@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 /**
  * @author makejava
  * @version 1.0.0
- * @date 2021/08/14 13:41
+ * @since 2021/08/14 13:41
  */
 public class ConfigTableModel extends DefaultTableModel implements EditableModel {
 
@@ -37,12 +37,12 @@ public class ConfigTableModel extends DefaultTableModel implements EditableModel
     }
 
     private void initTableData() {
-        // 删除所有列
+        // delete all columns
         int size = getRowCount();
         for (int i = 0; i < size; i++) {
             super.removeRow(0);
         }
-        // 渲染列数据
+        // render column data
         for (ColumnInfo columnInfo : this.tableInfo.getFullColumn()) {
             List<Object> values = new ArrayList<>();
             values.add(columnInfo.getName());
@@ -83,7 +83,7 @@ public class ConfigTableModel extends DefaultTableModel implements EditableModel
         columnInfo.setShortType("String");
         columnInfo.setType("java.lang.String");
         this.tableInfo.getFullColumn().add(columnInfo);
-        // 刷新表数据
+        // refresh table data
         this.initTableData();
     }
 
@@ -93,18 +93,18 @@ public class ConfigTableModel extends DefaultTableModel implements EditableModel
         if (columnInfo == null) {
             return;
         }
-        // 非自定义数据不允许修改
-        if (!columnInfo.getCustom() && column <= 2) {
+        // Modification of non-custom data is not allowed
+        if (Boolean.FALSE.equals(columnInfo.getCustom()) && column <= 2) {
             return;
         }
         switch (column) {
             case 0:
                 String name = (String) value;
-                // 列名不允许为空
+                // Column names are not allowed to be empty
                 if (StringUtils.isEmpty(name)) {
                     return;
                 }
-                // 已存在重名不允许修改
+                // Existing duplicate name is not allowed to modify
                 boolean existsName = this.tableInfo.getFullColumn().stream().anyMatch(item -> Objects.equals(item.getName(), name));
                 if (existsName) {
                     return;
@@ -113,7 +113,7 @@ public class ConfigTableModel extends DefaultTableModel implements EditableModel
                 break;
             case 1:
                 String type = (String) value;
-                // 列名不允许为空
+                // Column names are not allowed to be empty
                 if (StringUtils.isEmpty(type)) {
                     return;
                 }
@@ -140,8 +140,8 @@ public class ConfigTableModel extends DefaultTableModel implements EditableModel
         if (columnInfo == null) {
             return;
         }
-        // 非自定义列不允许删除
-        if (!columnInfo.getCustom()) {
+        // Non-custom columns are not allowed to delete
+        if (Boolean.FALSE.equals(columnInfo.getCustom())) {
             return;
         }
         this.tableInfo.getFullColumn().remove(row);

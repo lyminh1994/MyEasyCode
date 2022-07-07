@@ -19,11 +19,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * 表格信息传输对象
+ * Form information transfer object
  *
  * @author makejava
  * @version 1.0.0
- * @date 2021/08/14 17:28
+ * @since 2021/08/14 17:28
  */
 @Data
 @NoArgsConstructor
@@ -62,7 +62,7 @@ public class TableInfoDTO {
         this.savePath = "";
         this.saveModelName = "";
         this.fullColumn = new ArrayList<>();
-        // 处理所有列
+        // Process all columns
         JBIterable<? extends DasColumn> columns = DasUtil.getColumns(dbTable);
         for (DasColumn column : columns) {
             this.fullColumn.add(new ColumnInfoDTO(column));
@@ -70,7 +70,7 @@ public class TableInfoDTO {
     }
 
     private static void merge(TableInfoDTO oldData, TableInfoDTO newData) {
-        if (oldData == null) {
+        if (oldData == null || CollectionUtil.isEmpty(oldData.getFullColumn())) {
             return;
         }
         if (!StringUtils.isEmpty(oldData.getPreName())) {
@@ -91,66 +91,64 @@ public class TableInfoDTO {
         if (CollectionUtil.isEmpty(oldData.getFullColumn())) {
             return;
         }
-        // 补充自定义列
+        // Supplemental custom columns
         for (ColumnInfoDTO oldColumn : oldData.getFullColumn()) {
-            if (!oldColumn.getCustom()) {
+            if (Boolean.FALSE.equals(oldColumn.getCustom())) {
                 continue;
             }
             newData.getFullColumn().add(oldColumn);
         }
-        // 保持旧列的顺序
+        // Keep the order of the old columns
         Map<String, ColumnInfoDTO> map = newData.getFullColumn().stream().collect(Collectors.toMap(ColumnInfoDTO::getName, val -> val));
         List<ColumnInfoDTO> tmpList = new ArrayList<>();
         for (ColumnInfoDTO columnInfo : oldData.getFullColumn()) {
             ColumnInfoDTO newColumn = map.get(columnInfo.getName());
             if (newColumn != null) {
-                // ext属性转移
-                newColumn.setExt(columnInfo.getExt());
                 tmpList.add(newColumn);
             }
         }
-        // 补充剩余列
+        // Supplement remaining columns
         for (ColumnInfoDTO columnInfoDTO : newData.getFullColumn()) {
             if (!tmpList.contains(columnInfoDTO)) {
                 tmpList.add(columnInfoDTO);
             }
         }
-        // list数据替换
+        // List data replacement
         newData.getFullColumn().clear();
         newData.getFullColumn().addAll(tmpList);
     }
 
 
     /**
-     * 表名（首字母大写）
+     * Table name (first letter capitalized)
      */
     private String name;
     /**
-     * 表名前缀
+     * Table name prefix
      */
     private String preName;
     /**
-     * 注释
+     * Notes
      */
     private String comment;
     /**
-     * 模板组名称
+     * Template group name
      */
     private String templateGroupName;
     /**
-     * 所有列
+     * All columns
      */
     private List<ColumnInfoDTO> fullColumn;
     /**
-     * 保存的包名称
+     * Saved package name
      */
     private String savePackageName;
     /**
-     * 保存路径
+     * Save route
      */
     private String savePath;
     /**
-     * 保存的model名称
+     * Saved model name
      */
     private String saveModelName;
 
@@ -211,7 +209,7 @@ public class TableInfoDTO {
             columnInfo.setObj(nameToObj.get(dto.getName()));
             columnInfo.setName(dto.getName());
             columnInfo.setType(dto.getType());
-            // 最后一节为短类型
+            // The last section is the short type
             String[] split = dto.getType().split("\\.");
             columnInfo.setShortType(split[split.length - 1]);
             columnInfo.setComment(dto.getComment());
@@ -237,7 +235,7 @@ public class TableInfoDTO {
         dto.setSavePackageName(tableInfo.getSavePackageName());
         dto.setSaveModelName(tableInfo.getSaveModelName());
         dto.setFullColumn(new ArrayList<>());
-        // 处理列
+        // Process column
         for (ColumnInfo columnInfo : tableInfo.getFullColumn()) {
             ColumnInfoDTO columnInfoDTO = new ColumnInfoDTO();
             columnInfoDTO.setName(columnInfo.getName());

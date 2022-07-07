@@ -127,7 +127,7 @@
             </constraints>
             <properties>
               <text resource-bundle="string" key="label.unified.config"/>
-              <toolTipText value="在多表生成时，每张表会有自己保存的配置信息。&lt;br&gt;勾选统一配置表示所有表都使用当前的配置信息进行生成。&lt;br&gt;否则使用自身保存的配置信息生成代码。"/>
+              <toolTipText value="When multiple tables are generated, each table will have its own saved configuration information. &lt;br&gt; Checking the unified configuration means that all tables are generated using the current configuration information. &lt;br&gt;Otherwise generate code using its own saved configuration information." />
             </properties>
           </component>
           <component id="af94e" class="javax.swing.JCheckBox" binding="titleSureCheckBox">
@@ -135,8 +135,8 @@
               <grid row="5" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="弹框选是"/>
-              <toolTipText value="后续弹出的所有代码覆盖弹框全部选是"/>
+              <text value="Popup box select yes"/>
+              <toolTipText value="Select Yes for all code coverage pop-up boxes that popup later." />
             </properties>
           </component>
           <component id="53e7" class="javax.swing.JCheckBox" binding="reFormatCheckBox">
@@ -144,8 +144,8 @@
               <grid row="7" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="格式化代码"/>
-              <toolTipText value="对生成完毕的代码进行格式化"/>
+              <text value="Format code"/>
+              <toolTipText value="Format the generated code" />
             </properties>
           </component>
           <component id="846f2" class="javax.swing.JCheckBox" binding="titleRefuseCheckBox">
@@ -153,8 +153,8 @@
               <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="弹框选否"/>
-              <toolTipText value="后续弹出的所有代码覆盖弹框全部选否"/>
+              <text value="Popup box"/>
+              <toolTipText value="Select No for all code coverage popup boxes that popup later" />
             </properties>
           </component>
         </children>

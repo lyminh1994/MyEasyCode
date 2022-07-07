@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * 额外的代码生成工具
+ * Additional code generation tools
  *
  * @author makejava
  * @version 1.0.0
@@ -18,15 +18,15 @@ import java.util.Objects;
  */
 public class ExtraCodeGenerateUtils {
     /**
-     * 代码生成服务
+     * Code generation service
      */
     private CodeGenerateServiceImpl codeGenerateService;
     /**
-     * 表信息对象
+     * Table info object
      */
     private TableInfo tableInfo;
     /**
-     * 生成配置
+     * Build configuration
      */
     private GenerateOptions generateOptions;
 
@@ -37,13 +37,13 @@ public class ExtraCodeGenerateUtils {
     }
 
     /**
-     * 生成代码
+     * Generate code
      *
-     * @param templateName 模板名称
-     * @param param        附加参数
+     * @param templateName Template name
+     * @param param        Additional parameters
      */
     public void run(String templateName, Map<String, Object> param) {
-        // 获取到模板
+        // Get the template
         Template currTemplate = null;
         for (Template template : CurrGroupUtils.getCurrTemplateGroup().getElementList()) {
             if (Objects.equals(template.getName(), templateName)) {
@@ -53,7 +53,7 @@ public class ExtraCodeGenerateUtils {
         if (currTemplate == null) {
             return;
         }
-        // 生成代码
+        // Generate code
         codeGenerateService.generate(Collections.singletonList(currTemplate), Collections.singletonList(this.tableInfo), this.generateOptions, param);
     }
 }

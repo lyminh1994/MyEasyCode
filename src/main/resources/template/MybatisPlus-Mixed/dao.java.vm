@@ -1,13 +1,13 @@
-##导入宏定义
+##Import macro definition
 $!{define.vm}
 
-##设置表后缀（宏定义）
+##Set table suffix (macro definition)
 #setTableSuffix("Dao")
 
-##保存文件（宏定义）
+##Save file (macro definition)
 #save("/dao", "Dao.java")
 
-##包路径（宏定义）
+##Package path (macro definition)
 #setPackageSuffix("dao")
 
 import java.util.List;
@@ -16,25 +16,24 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 import $!{tableInfo.savePackageName}.entity.$!tableInfo.name;
 
-##表注释（宏定义）
-#tableComment("表数据库访问层")
+##Table Comments (Macro Definitions)
+#tableComment("Table database access layer")
 public interface $!{tableName} extends BaseMapper<$!tableInfo.name> {
 
 /**
-* 批量新增数据（MyBatis原生foreach方法）
+* Add data in batches (MyBatis native foreach method)
 *
-* @param entities List<$!{tableInfo.name}> 实例对象列表
-* @return 影响行数
+* @param entities List<$!{tableInfo.name}> List of instance objects
+* @return Number of rows affected
 */
 int insertBatch(@Param("entities") List<$!{tableInfo.name}> entities);
 
 /**
-* 批量新增或按主键更新数据（MyBatis原生foreach方法）
+* Batch add or update data by primary key (MyBatis native foreach method)
 *
-* @param entities List<$!{tableInfo.name}> 实例对象列表
-* @return 影响行数
-* @throws org.springframework.jdbc.BadSqlGrammarException 入参是空List的时候会抛SQL语句错误的异常，请自行校验入参
+* @param entities List<$!{tableInfo.name}> List of instance objects
+* @return Number of rows affected
+* @throws org.springframework.jdbc.BadSqlGrammarException When the input parameter is an empty List, an exception to SQL statement error will be thrown, please verify the input parameter by yourself
 */
 int insertOrUpdateBatch(@Param("entities") List<$!{tableInfo.name}> entities);
-
 }

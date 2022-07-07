@@ -41,11 +41,11 @@ import java.util.List;
 import java.util.*;
 
 /**
- * 实时调试组件
+ * Real-time debugging components
  *
  * @author makejava
  * @version 1.0.0
- * @date 2021/08/12 15:54
+ * @since 2021/08/12 15:54
  */
 public class RealtimeDebugComponent {
     @Getter
@@ -54,7 +54,7 @@ public class RealtimeDebugComponent {
     private ComboBox<String> comboBox;
 
     /**
-     * 所有表
+     * All tables
      */
     private Map<String, DasTable> allTables;
 
@@ -68,13 +68,13 @@ public class RealtimeDebugComponent {
     }
 
     private void init() {
-        this.mainPanel.add(new JBLabel("实时调试"));
-        // 支持搜索的下拉框
+        this.mainPanel.add(new JBLabel("Live debugging"));
+        // Drop-down box that supports search
         this.comboBox = new ComboBox<>();
-        // 开启搜索支持
+        // Turn on search support
         this.comboBox.setSwingPopup(false);
         this.mainPanel.add(this.comboBox);
-        // 提交按钮
+        // Submit button
         DefaultActionGroup actionGroup = new DefaultActionGroup();
         actionGroup.add(new AnAction(AllIcons.Debugger.Console) {
             @Override
@@ -93,7 +93,7 @@ public class RealtimeDebugComponent {
     }
 
     private void runDebug() {
-        // 获取选中的表
+        // Get selected table
         String name = (String) comboBox.getSelectedItem();
         DasTable dasTable = this.allTables.get(name);
         if (dasTable == null) {
@@ -101,7 +101,7 @@ public class RealtimeDebugComponent {
         }
         DbTable dbTable = null;
         if (dasTable instanceof DbTable) {
-            // 针对2017.2版本做兼容
+            // Compatible with version 2017.2
             dbTable = (DbTable) dasTable;
         } else {
             Method method = ReflectionUtil.getMethod(DbPsiFacade.class, "findElement", DasObject.class);
@@ -110,31 +110,31 @@ public class RealtimeDebugComponent {
                 return;
             }
             try {
-                // 针对2017.2以上版本做兼容
+                // Compatible with versions above 2017.2
                 dbTable = (DbTable) method.invoke(DbPsiFacade.getInstance(ProjectUtils.getCurrProject()), dasTable);
             } catch (IllegalAccessException | InvocationTargetException e1) {
                 ExceptionUtil.rethrow(e1);
             }
         }
-        // 获取表信息
+        // Get table information
         TableInfo tableInfo = TableInfoSettingsService.getInstance().getTableInfo(dbTable);
-        // 为未配置的表设置一个默认包名
+        // Set a default package name for un-configured tables
         if (tableInfo.getSavePackageName() == null) {
             tableInfo.setSavePackageName("com.companyname.modulename");
         }
-        // 生成代码
+        // Generate code
         String code = CodeGenerateService.getInstance(ProjectUtils.getCurrProject()).generate(new Template("temp", editorComponent.getFile().getCode()), tableInfo);
         String fileName = editorComponent.getFile().getName();
-        // 创建编辑框
+        // Create an edit box
         EditorFactory editorFactory = EditorFactory.getInstance();
         Document document = editorFactory.createDocument(code);
-        // 标识为模板，让velocity跳过语法校验
+        // Identifies it as a template, allowing velocity to skip syntax verification
         document.putUserData(FileTemplateManager.DEFAULT_TEMPLATE_PROPERTIES, FileTemplateManager.getInstance(ProjectUtils.getCurrProject()).getDefaultProperties());
         Editor editor = editorFactory.createViewer(document, ProjectUtils.getCurrProject());
-        // 配置编辑框
+        // Configure edit box
         EditorSettingsInit.init(editor);
         ((EditorEx) editor).setHighlighter(EditorHighlighterFactory.getInstance().createEditorHighlighter(ProjectUtils.getCurrProject(), fileName));
-        // 构建dialog
+        // Build dialog
         DialogBuilder dialogBuilder = new DialogBuilder(ProjectUtils.getCurrProject());
         dialogBuilder.setTitle(GlobalDict.TITLE_INFO);
         JComponent component = editor.getComponent();
@@ -142,7 +142,7 @@ public class RealtimeDebugComponent {
         dialogBuilder.setCenterPanel(component);
         dialogBuilder.addCloseButton();
         dialogBuilder.addDisposable(() -> {
-            //释放掉编辑框
+            //Release the edit box
             editorFactory.releaseEditor(editor);
             dialogBuilder.dispose();
         });
@@ -150,7 +150,7 @@ public class RealtimeDebugComponent {
     }
 
     private void refreshTable() {
-        // 获取当前项目所有数据源
+        // Get all data sources of the current project
         List<DbDataSource> dataSources = DbPsiFacade.getInstance(ProjectUtils.getCurrProject()).getDataSources();
         this.allTables = new HashMap<>(16);
         for (DbDataSource dataSource : dataSources) {
@@ -169,7 +169,7 @@ public class RealtimeDebugComponent {
         if (CollectionUtil.isEmpty(this.allTables)) {
             return Collections.emptyList();
         }
-        // 表排前面，视图排后面
+        // In front of table row, behind view row
         List<String> tableList = new ArrayList<>();
         List<String> viewList = new ArrayList<>();
         for (String name : this.allTables.keySet()) {
@@ -179,7 +179,7 @@ public class RealtimeDebugComponent {
                 viewList.add(name);
             }
         }
-        // 排序后进行拼接
+        // Splicing after sorting
         Collections.sort(tableList);
         Collections.sort(viewList);
         tableList.addAll(viewList);

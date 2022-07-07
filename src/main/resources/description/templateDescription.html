@@ -1,71 +1,71 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <title>模板描述</title>
+    <title>Template description</title>
 </head>
 <body>
-<div>说明文档：</div>
+<div>Documentation:</div>
 <pre>
-    属性
-    $author 设置中的作者 java.lang.String
-    $modulePath 选中的module路径 java.lang.String
-    $projectPath 项目绝对路径 java.lang.String
+    Attributes
+    The author in the $author setting java.lang.String
+    $modulePath selected module path java.lang.String
+    $projectPath Project absolute path java.lang.String
 
-    对象
-    $tableInfo 表对象
-        obj 表原始对象 com.intellij.database.model.DasTable
-        name 表名（转换后的首字母大写）java.lang.String
-        comment 表注释 java.lang.String
-        fullColumn 所有列 java.util.List&lt;ColumnInfo&gt;
-        pkColumn 主键列 java.util.List&lt;ColumnInfo&gt;
-        otherColumn 其他列 java.util.List&lt;ColumnInfo&gt;,除主键以外的列
-        savePackageName 保存的包名 java.lang.String
-        savePath 保存路径 java.lang.String
-        saveModelName 保存的model名称 java.lang.String
-    columnInfo 列对象
-        obj 列原始对象 com.intellij.database.model.DasColumn
-        name 列名（首字母小写） java.lang.String
-        comment 列注释 java.lang.String
-        type 列类型（类型全名） java.lang.String
-        shortType 列类型（短类型） java.lang.String
-        custom 是否附加列 java.lang.Boolean
-        ext 附加字段（Map类型） java.lang.Map&lt;java.lang.String, java.lang.Object&gt;
-    $tableInfoList java.util.List&lt;TableInfo&gt;所有选中的表
-    $importList 所有需要导入的包集合 java.util.Set&lt;java.lang.String&gt;
+    object
+    $tableInfo Table object
+        obj Table primitive object com.intellij.database.model.DasTable
+        name Table name (capitalized after conversion) java.lang.String
+        comment Table comment java.lang.String
+        fullColumn All columns java.util.List&lt;ColumnInfo&gt;
+        pkColumn Primary key column java.util.List&lt;ColumnInfo&gt;
+        otherColumn Other columns java.util.List&lt;ColumnInfo&gt;, columns other than the primary key
+        savePackageName Saves the package name java.lang.String
+        savePath Save path java.lang.String
+        saveModelName Save model name java.lang.String
+    columnInfo Column object
+        obj Column primitive object com.intellij.database.model.DasColumn
+        name Column name (initial lowercase) java.lang.String
+        comment Column comment java.lang.String
+        type Column type (full name of the type) java.lang.String
+        shortType Column type (short type) java.lang.String
+        custom Whether to append the column java.lang.Boolean
+        ext Additional field (Map type) java.lang.Map&lt;java.lang.String, java.lang.Object&gt;
+    $tableInfoList java.util.List&lt;TableInfo&gt;all selected tables
+    $importList A collection of all packages that need to be imported java.util.Set&lt;java.lang.String&gt;
 
-    回调
-    &callback 回调对象
-        setFileName(String) 设置文件储存名字
-        setSavePath(String) 设置文件储存路径，默认使用选中路径
-        setReformat(Boolean) 设置是否重新格式化生成后的代码，默认为界面选定值
-        setWriteFile(Boolean) 设置是否生成文件，默认为true
-    工具
+    Callback
+    &callback Callback object
+        setFileName(String) Set the file storage name
+        setSavePath(String) Set the file storage path, the selected path is used by default
+        setReformat(Boolean) Set whether to reformat the generated code, the default is the interface selected value
+        setWriteFile(Boolean) Set whether to generate a file, the default is true
+    Tool
     $tool
-        firstUpperCase(String name) 首字母大写方法
-        firstLowerCase(String name) 首字母小写方法
-        getClsNameByFullName(String fullName) 通过包全名获取类名
-        getJavaName(String name) 将下划线分割字符串转驼峰命名(属性名)
-        getClassName(String name) 将下划线分割字符串转驼峰命名(类名)
-        hump2Underline(String str) 将驼峰字符串转下划线字符串
-        append(Object... objs) 多个数据进行拼接
-        newHashSet(Object... objs) 创建一个HashSet对象
-        newArrayList(Object... objs) 创建一个ArrayList对象
-        newLinkedHashMap() 创建一个LinkedHashMap()对象
-        newHashMap() 创建一个HashMap()对象
-        getField(Object obj, String fieldName) 获取对象的属性值,可以访问任意修饰符修饰的属性.配合debug方法使用.
-        call(Object... objs) 空白执行方法,用于调用某些方法时消除返回值
-        debug(Object obj) 调式方法,用于查询对象结构.可查看对象所有属性与public方法
-        serial() 随机获取序列化的UID
-        service(String serviceName, Object... param)远程服务调用
-        parseJson(String) 将字符串转Map对象
-        toJson(Object, Boolean) 将对象转json对象，Boolean：是否格式化json，不填时为不格式化。
-        toUnicode(String, Boolean) 将String转换为unicode形式，Boolean：是否转换所有符号，不填时只转换中文及中文符号。
+        firstUpperCase(String name) First letter capitalization method
+        firstLowerCase(String name) First letter lowercase method
+        getClsNameByFullName(String fullName) Get class name by package full name
+        getJavaName(String name) Convert the underscore-separated string to camel case (attribute name)
+        getClassName(String name) Convert the underscore-separated string to camel case (class name)
+        hump2Underline(String str) Convert camel case string to underscore string
+        append(Object... objs) Splicing multiple data
+        newHashSet(Object... objs) Creates a HashSet object
+        newArrayList(Object... objs) Creates an ArrayList object
+        newLinkedHashMap() Creates a LinkedHashMap() object
+        newHashMap() Creates a HashMap() object
+        getField(Object obj, String fieldName) Get the property value of the object, you can access the properties modified by any modifier. Use with the debug method.
+        call(Object... objs) Blank execution method, used to eliminate the return value when calling certain methods
+        debug(Object obj) Debug method, used to query the object structure. You can view all the properties and public methods of the object
+        serial() Randomly get serialized UID
+        service(String serviceName, Object... param) Remote service call
+        parseJson(String) Converts string to Map object
+        toJson(Object, Boolean) Convert the object to a json object, Boolean: whether to format json, if not, it is not formatted.
+        toUnicode(String, Boolean) Convert String to unicode form, Boolean: Whether to convert all symbols, if not filled, only Chinese and Chinese symbols will be converted.
     $time
-        currTime(String format) 获取当前时间，指定时间格式（默认：yyyy-MM-dd HH:mm:ss）
+        currTime(String format) Get the current time and specify the time format (default: yyyy-MM-dd HH:mm:ss)
     $generateService
-        run(String, Map&lt;String,Object&gt;) 代码生成服务，参数1：模板名称，参数2：附加参数。
-    $dasUtil Database提供的工具类，具体可方法请查看源码，适用于高端玩家
-    $dbUtil  Database提供的工具类，具体可方法请查看源码，适用于高端玩家
+        run(String, Map&lt;String,Object&gt;) Code generation service, parameter 1: template name, parameter 2: additional parameters.
+    The tool class provided by $dasUtil Database, Please check the source code for specific methods, suitable for high-end players
+    The tool class provided by $dbUtil Database, Please check the source code for specific methods, suitable for high-end players
 </pre>
 </body>
 </html>

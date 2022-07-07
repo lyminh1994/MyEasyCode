@@ -15,13 +15,16 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 
 /**
- * json工具
+ * Json tools
  *
  * @author makejava
  * @version 1.0.0
- * @date 2021/08/14 10:37
+ * @since 2021/08/14 10:37
  */
 public class JSON {
+
+    private JSON() {
+    }
 
     private static final ObjectMapper INSTANCE;
 
@@ -29,20 +32,20 @@ public class JSON {
 
     static {
         INSTANCE = new ObjectMapper();
-        // 禁止将日期序列化成时间戳
+        // Disable serialization of dates into timestamps
         INSTANCE.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        // 禁止属性不存在时报错
+        // Disable error when forbidden attribute does not exist
         INSTANCE.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-        // 允许字符串转换成数组
+        // Allow strings to be converted to arrays
         INSTANCE.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
-        // 读取到未知的枚举值转换成空
+        // Read to unknown enum value converted to null
         INSTANCE.enable(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_AS_NULL);
-        // 禁用科学计数法
+        // Disable scientific notation
         INSTANCE.enable(DeserializationFeature.USE_BIG_INTEGER_FOR_INTS);
         INSTANCE.enable(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS);
-        // 序列化忽略空值
+        // Serialization ignores null values
         INSTANCE.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        // 配置时间格式
+        // Configure time format
         INSTANCE.setDateFormat(new SimpleDateFormat(DATE_FORMAT));
     }
 
@@ -51,12 +54,12 @@ public class JSON {
     }
 
     /**
-     * 将json字符串转换成java对象
+     * Convert json string to java object
      *
-     * @param json json字符串
-     * @param cls  java对象类型
-     * @param <T>  对象类型
-     * @return 对象
+     * @param json Json string
+     * @param cls  Java object type
+     * @param <T>  Object type
+     * @return Object
      */
     public static <T> T parse(String json, Class<T> cls) {
         try {
@@ -67,12 +70,12 @@ public class JSON {
     }
 
     /**
-     * 将json字符串转换成java对象
+     * Convert json string to java object
      *
-     * @param json json字符串
-     * @param type java对象类型
-     * @param <T>  对象类型
-     * @return 对象
+     * @param json Json string
+     * @param type Java object type
+     * @param <T>  Object type
+     * @return Object
      */
     public static <T> T parse(String json, TypeReference<T> type) {
         try {
@@ -83,10 +86,10 @@ public class JSON {
     }
 
     /**
-     * 将json对象转换成json字符串
+     * Convert json object to json string
      *
-     * @param obj 对象
-     * @return json字符串
+     * @param obj Object
+     * @return Json string
      */
     public static String toJson(Object obj) {
         try {
@@ -97,10 +100,10 @@ public class JSON {
     }
 
     /**
-     * 将json对象转换成json字符串
+     * Convert json object to json string
      *
-     * @param obj 对象
-     * @return json字符串
+     * @param obj Object
+     * @return Json string
      */
     public static String toJsonByFormat(Object obj) {
         try {
@@ -122,10 +125,9 @@ public class JSON {
                 return INSTANCE.readTree((URL) obj);
             } else if (obj instanceof File) {
                 return INSTANCE.readTree((File) obj);
-            } else {
-                // 其他对象，转字符串再转JsonNode
-                return INSTANCE.readTree(toJson(obj));
             }
+            // Other objects, convert to string and then convert to JsonNode
+            return INSTANCE.readTree(toJson(obj));
         } catch (IOException e) {
             throw new IllegalArgumentException(e);
         }

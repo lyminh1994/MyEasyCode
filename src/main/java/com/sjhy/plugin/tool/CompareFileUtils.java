@@ -21,18 +21,21 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class CompareFileUtils {
 
+    private CompareFileUtils() {
+    }
+
     /**
-     * 显示文件对比框
+     * Show file comparison box
      *
-     * @param project   项目
-     * @param leftFile  左边的文件
-     * @param rightFile 右边的文件
+     * @param project   Project
+     * @param leftFile  File on the left
+     * @param rightFile File on the right
      */
     public static void showCompareWindow(Project project, VirtualFile leftFile, VirtualFile rightFile) {
 
         try {
             Class<?> cls = Class.forName("com.intellij.diff.actions.impl.MutableDiffRequestChain");
-            // 新版支持
+            // New version support
             DiffContentFactory contentFactory = DiffContentFactory.getInstance();
             DiffRequestFactory requestFactory = DiffRequestFactory.getInstance();
 
@@ -40,17 +43,17 @@ public class CompareFileUtils {
             DiffContent rightContent = contentFactory.create(project, rightFile);
 
             DiffRequestChain chain = (DiffRequestChain) cls.getConstructor(DiffContent.class, DiffContent.class).newInstance(leftContent, rightContent);
-//            MutableDiffRequestChain chain = new MutableDiffRequestChain(leftContent, rightContent);
+            // MutableDiffRequestChain chain = new MutableDiffRequestChain(leftContent, rightContent);
 
             cls.getMethod("setWindowTitle", String.class).invoke(chain, requestFactory.getTitle(leftFile, rightFile));
             cls.getMethod("setTitle1", String.class).invoke(chain, requestFactory.getContentTitle(leftFile));
             cls.getMethod("setTitle2", String.class).invoke(chain, requestFactory.getContentTitle(rightFile));
-//            chain.setWindowTitle(requestFactory.getTitle(leftFile, rightFile));
-//            chain.setTitle1(requestFactory.getContentTitle(leftFile));
-//            chain.setTitle2(requestFactory.getContentTitle(rightFile));
+            // chain.setWindowTitle(requestFactory.getTitle(leftFile, rightFile));
+            // chain.setTitle1(requestFactory.getContentTitle(leftFile));
+            // chain.setTitle2(requestFactory.getContentTitle(rightFile));
             DiffManager.getInstance().showDiff(project, chain, DiffDialogHints.MODAL);
         } catch (ClassNotFoundException e) {
-            // 旧版兼容
+            // Legacy Compatible
             DiffRequest diffRequest = DiffRequestFactory.getInstance().createFromFiles(project, leftFile, rightFile);
             DiffManager.getInstance().showDiff(project, diffRequest, DiffDialogHints.MODAL);
         } catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {

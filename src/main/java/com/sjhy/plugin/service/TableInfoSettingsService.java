@@ -12,11 +12,11 @@ import com.sjhy.plugin.tool.ProjectUtils;
 /**
  * @author makejava
  * @version 1.0.0
- * @date 2021/08/14 15:16
+ * @since 2021/08/14 15:16
  */
 public interface TableInfoSettingsService extends PersistentStateComponent<TableInfoSettingsDTO> {
     /**
-     * 获取实例
+     * Get instance
      *
      * @return {@link SettingsStorageService}
      */
@@ -25,32 +25,32 @@ public interface TableInfoSettingsService extends PersistentStateComponent<Table
     }
 
     /**
-     * 获取表格信息
+     * Get form information
      *
-     * @param dbTable 数据库表
+     * @param dbTable Database Table
      * @return {@link TableInfo}
      */
     TableInfo getTableInfo(DbTable dbTable);
 
     /**
-     * 获取表信息
+     * Get table information
      *
-     * @param psiClass psi类
+     * @param psiClass Psi class
      * @return {@link TableInfo}
      */
     TableInfo getTableInfo(PsiClass psiClass);
 
     /**
-     * 保存表信息
+     * Save table information
      *
-     * @param tableInfo 表信息
+     * @param tableInfo Table information
      */
     void saveTableInfo(TableInfo tableInfo);
 
     /**
-     * 重置表信息
+     * Reset table information
      *
-     * @param dbTable 数据库表
+     * @param dbTable Database Table
      */
     void resetTableInfo(DbTable dbTable);
 

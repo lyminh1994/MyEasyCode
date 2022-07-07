@@ -21,11 +21,11 @@ import java.util.function.Consumer;
 /**
  * @author makejava
  * @version 1.0.0
- * @date 2021/08/10 16:14
+ * @since 2021/08/10 16:14
  */
 public class TemplateSettingForm implements Configurable, BaseSettings {
     /**
-     * 模板描述信息，说明文档
+     * Template description information, documentation
      */
     private static final String TEMPLATE_DESCRIPTION_INFO;
 
@@ -42,23 +42,23 @@ public class TemplateSettingForm implements Configurable, BaseSettings {
 
     private JPanel mainPanel;
     /**
-     * 类型映射配置
+     * Type map configuration
      */
     private Map<String, TemplateGroup> templateGroupMap;
     /**
-     * 当前分组名
+     * Current group name
      */
     private TemplateGroup currTemplateGroup;
     /**
-     * 编辑框组件
+     * Edit box component
      */
     private EditorComponent<Template> editorComponent;
     /**
-     * 分组操作组件
+     * Group Action Components
      */
     private GroupNameComponent<Template, TemplateGroup> groupNameComponent;
     /**
-     * 编辑列表框
+     * Edit list box
      */
     private EditListComponent<Template> editListComponent;
 
@@ -72,7 +72,7 @@ public class TemplateSettingForm implements Configurable, BaseSettings {
         Consumer<TemplateGroup> switchGroupOperator = templateGroup -> {
             this.currTemplateGroup = templateGroup;
             refreshUiVal();
-            // 切换分组情况编辑框
+            // Toggle grouping edit box
             this.editorComponent.setFile(null);
         };
 
@@ -97,15 +97,15 @@ public class TemplateSettingForm implements Configurable, BaseSettings {
 
     private void initPanel() {
         this.loadSettingsStore(getSettingsStorage());
-        // 初始化表格
+        // Initialize the form
         this.initGroupName();
-        // 初始化编辑列表组件
+        // Initialize the edit list component
         this.initEditList();
-        // 初始化编辑框组件
+        // Initialize the edit box component
         this.initEditor();
-        // 初始化实时调试
+        // Initialize live debugging
         this.initRealtimeDebug();
-        // 左右组件
+        // Left and right components
         LeftRightComponent leftRightComponent = new LeftRightComponent(editListComponent.getMainPanel(), this.editorComponent.getMainPanel());
         this.mainPanel.add(leftRightComponent.getMainPanel(), BorderLayout.CENTER);
     }
@@ -128,14 +128,14 @@ public class TemplateSettingForm implements Configurable, BaseSettings {
 
     @Override
     public void loadSettingsStore(SettingsStorageDTO settingsStorage) {
-        // 复制配置，防止篡改
+        // Copy configuration to prevent tampering
         this.templateGroupMap = CloneUtils.cloneByJson(settingsStorage.getTemplateGroupMap(), new TypeReference<Map<String, TemplateGroup>>() {
         });
         this.currTemplateGroup = this.templateGroupMap.get(settingsStorage.getCurrTemplateGroupName());
         if (this.currTemplateGroup == null) {
             this.currTemplateGroup = this.templateGroupMap.get(GlobalDict.DEFAULT_GROUP_NAME);
         }
-        // 解决reset后编辑框未清空BUG
+        // Solve the bug that the edit box is not cleared after reset
         if (this.editorComponent != null) {
             this.editorComponent.setFile(null);
         }
@@ -158,7 +158,7 @@ public class TemplateSettingForm implements Configurable, BaseSettings {
     public void apply() {
         getSettingsStorage().setTemplateGroupMap(this.templateGroupMap);
         getSettingsStorage().setCurrTemplateGroupName(this.currTemplateGroup.getName());
-        // 保存包后重新加载配置
+        // Reload configuration after saving package
         this.loadSettingsStore(getSettingsStorage());
     }
 

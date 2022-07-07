@@ -1,14 +1,14 @@
-##导入宏定义、设置包名、类名、文件名##导入宏定义
+##Import macro definition, set package name, class name, file name
 $!{define.vm}
 #setPackageSuffix("controller")
 #setTableSuffix("Controller")
 #save("/controller", "Controller.java")
 
-##拿到主键
+##Get the primary key
 #if(!$tableInfo.pkColumn.isEmpty())
     #set($pk = $tableInfo.pkColumn.get(0))
 #end
-##定义服务名
+##Define service name
 #set($serviceSortType = $!tool.append($!tableInfo.name, "Service"))
 #set($serviceType = $!tool.append($!tableInfo.savePackageName, ".service.", $serviceSortType))
 #set($serviceVarName = $!tool.firstLowerCase($serviceSortType))
@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 /**
- * $!{tableInfo.comment}控制层
+ * $!{tableInfo.comment}Control layer
  *
  * @author $!author
  * @since $!time.currTime()
@@ -45,7 +45,7 @@ public class $!{tableName} {
 	private $serviceSortType $serviceVarName;
 
 	/**
-	 * 获取$!{tableInfo.comment}列表(分页)
+	 * Obtain $!{tableInfo.comment} List (Pagination)
 	 */
 	@GetMapping("/list")
 	public Page<$entityShortType> list(Pageable page) {
@@ -53,7 +53,7 @@ public class $!{tableName} {
 	}
 
 	/**
-	 * 获取$!{tableInfo.comment}
+	 * Obtain $!{tableInfo.comment}
 	 */
 	@GetMapping("/get")
 	public $entityShortType get($!pk.shortType id) {
@@ -61,7 +61,7 @@ public class $!{tableName} {
 	}
 
 	/**
-	 * 添加$!{tableInfo.comment}
+	 * Add to $!{tableInfo.comment}
 	 */
 	@PostMapping("/add")
 	public void add(@RequestBody $entityShortType $entityVarName) {
@@ -70,7 +70,7 @@ public class $!{tableName} {
 
 
 	/**
-	 * 修改$!{tableInfo.comment}
+	 * Revise $!{tableInfo.comment}
 	 */
 	@PostMapping("/update")
 	public void update(@RequestBody $entityShortType $entityVarName) {
@@ -78,11 +78,10 @@ public class $!{tableName} {
 	}
 
 	/**
-	 * 删除$!{tableInfo.comment}
+	 * Delete $!{tableInfo.comment}
 	 */
 	@PostMapping("/delete")
 	public void delete($!pk.shortType id) {
 		${serviceVarName}.deleteById(id);
 	}
-
 }

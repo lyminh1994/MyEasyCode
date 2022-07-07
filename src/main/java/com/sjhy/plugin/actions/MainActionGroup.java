@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 操作按钮分组
+ * Action button grouping
  *
  * @author makejava
  * @version 1.0.0
@@ -23,19 +23,19 @@ import java.util.List;
  */
 public class MainActionGroup extends ActionGroup {
     /**
-     * 缓存数据工具类
+     * Cache data utility class
      */
-    private CacheDataUtils cacheDataUtils = CacheDataUtils.getInstance();
+    private final CacheDataUtils cacheDataUtils = CacheDataUtils.getInstance();
 
     /**
-     * 是否不存在子菜单
+     * Whether there is no submenu
      */
     private boolean notExistsChildren;
 
     /**
-     * 是否分组按钮
+     * Whether to group buttons
      *
-     * @return 是否隐藏
+     * @return Whether to hide
      */
     @Override
     public boolean hideIfNoVisibleChildren() {
@@ -44,22 +44,22 @@ public class MainActionGroup extends ActionGroup {
 
 
     /**
-     * 根据右键在不同的选项上展示不同的子菜单
+     * Display different submenus on different options according to the right button
      *
-     * @param event 事件对象
-     * @return 动作组
+     * @param event Event object
+     * @return Action group
      */
     @NotNull
     @Override
-    public AnAction[] getChildren(@Nullable AnActionEvent event) {
-        // 获取当前项目
+    public AnAction @NotNull [] getChildren(@Nullable AnActionEvent event) {
+        // Get current project
         Project project = getEventProject(event);
         if (project == null) {
             return getEmptyAnAction();
         }
 
-        //获取选中的PSI元素
-        PsiElement psiElement = event.getData(LangDataKeys.PSI_ELEMENT);
+        //Get the selected PSI element
+        PsiElement psiElement = event.getData(CommonDataKeys.PSI_ELEMENT);
         DbTable selectDbTable = null;
         if (psiElement instanceof DbTable) {
             selectDbTable = (DbTable) psiElement;
@@ -67,7 +67,7 @@ public class MainActionGroup extends ActionGroup {
         if (selectDbTable == null) {
             return getEmptyAnAction();
         }
-        //获取选中的所有表
+        //Get all selected tables
         PsiElement[] psiElements = event.getData(LangDataKeys.PSI_ELEMENT_ARRAY);
         if (psiElements == null || psiElements.length == 0) {
             return getEmptyAnAction();
@@ -84,7 +84,7 @@ public class MainActionGroup extends ActionGroup {
             return getEmptyAnAction();
         }
 
-        //保存数据到缓存
+        //Save data to cache
         cacheDataUtils.setDbTableList(dbTableList);
         cacheDataUtils.setSelectDbTable(selectDbTable);
         this.notExistsChildren = false;
@@ -92,21 +92,21 @@ public class MainActionGroup extends ActionGroup {
     }
 
     /**
-     * 初始化注册子菜单项目
+     * Initialize the registration submenu item
      *
-     * @return 子菜单数组
+     * @return Submenu array
      */
     private AnAction[] getMenuList() {
         String mainActionId = "com.sjhy.easy.code.action.generate";
         String configActionId = "com.sjhy.easy.code.action.config";
         ActionManager actionManager = ActionManager.getInstance();
-        // 代码生成菜单
+        // Code generation menu
         AnAction mainAction = actionManager.getAction(mainActionId);
         if (mainAction == null) {
             mainAction = new MainAction("Generate Code");
             actionManager.registerAction(mainActionId, mainAction);
         }
-        // 表配置菜单
+        // Table Configuration Menu
         AnAction configAction = actionManager.getAction(configActionId);
         if (configAction == null) {
             configAction = new ConfigAction("Config Table");
@@ -120,18 +120,18 @@ public class MainActionGroup extends ActionGroup {
                     return;
                 }
                 TableInfoSettingsService.getInstance().removeTableInfo(dbTable);
-                Messages.showInfoMessage(dbTable.getName() + "表配置信息已重置成功", GlobalDict.TITLE_INFO);
+                Messages.showInfoMessage(dbTable.getName() + " table configuration information has been reset successfully", GlobalDict.TITLE_INFO);
             }
         };
-        // 返回所有菜单
+        // Back to all menus
         return new AnAction[]{mainAction, configAction, clearConfigAction};
     }
 
 
     /**
-     * 获取空菜单组
+     * Get empty menu group
      *
-     * @return 空菜单组
+     * @return Empty menu group
      */
     private AnAction[] getEmptyAnAction() {
         this.notExistsChildren = true;

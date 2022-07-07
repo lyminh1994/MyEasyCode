@@ -17,7 +17,6 @@ plugins {
     id 'org.jetbrains.intellij' version '0.7.3'
 }
 
-
 group 'com.sjhy'
 version '1.2.6-java.RELEASE'
 
@@ -55,7 +54,7 @@ intellij {
 
 dependencies {
     // jackson工具
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.9.6'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.13.3'
     // guava工具
 //    compile 'com.google.guava:guava:29.0-jre'
     // velocity支持
@@ -67,10 +66,10 @@ dependencies {
     // freemarker支持
 //    compile 'org.freemarker:freemarker:2.3.30'
     // lombok 支持
-    compileOnly 'org.projectlombok:lombok:1.18.2'
-    annotationProcessor 'org.projectlombok:lombok:1.18.2'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.2'
+    compileOnly 'org.projectlombok:lombok:1.18.24'
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
     // 测试用例
-    testCompile 'junit:junit:4.12'
+    testCompile 'junit:junit:4.13.2'
 }
 

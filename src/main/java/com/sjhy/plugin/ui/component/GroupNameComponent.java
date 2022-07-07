@@ -22,18 +22,18 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 /**
- * 分组编辑组件
+ * Group editing components
  *
  * @author makejava
  * @version 1.0.0
- * @date 2021/08/10 14:13
+ * @since 2021/08/10 14:13
  */
 public class GroupNameComponent<E extends AbstractItem<E>, T extends AbstractGroup<T, E>> {
 
     private Consumer<T> switchGroupConsumer;
 
     /**
-     * 当前分组
+     * Current group
      */
     private String currGroupName;
 
@@ -54,10 +54,10 @@ public class GroupNameComponent<E extends AbstractItem<E>, T extends AbstractGro
     }
 
     /**
-     * 输入分组名
+     * Enter group name
      *
-     * @param initValue 初始值
-     * @param consumer  消费分组名
+     * @param initValue Initial value
+     * @param consumer  Consumption group name
      */
     private void inputGroupName(String initValue, Consumer<String> consumer) {
         String value = Messages.showInputDialog("Group Name:", "Input Group Name:", Messages.getQuestionIcon(), initValue, new InputExistsValidator(groupMap.keySet()));
@@ -72,12 +72,12 @@ public class GroupNameComponent<E extends AbstractItem<E>, T extends AbstractGro
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
                 inputGroupName(currGroupName + "Copy", groupName -> {
-                    // 复制一份，重名命
+                    // Make a copy, rename
                     T cloneObj = groupMap.get(currGroupName).cloneObj();
                     cloneObj.setName(groupName);
-                    // 添加分组
+                    // Add group
                     groupMap.put(groupName, cloneObj);
-                    // 切换分组
+                    // Switch group
                     switchGroupConsumer.accept(cloneObj);
                 });
             }
@@ -95,7 +95,7 @@ public class GroupNameComponent<E extends AbstractItem<E>, T extends AbstractGro
                     obj.setElementList(new ArrayList<>());
                     obj.getElementList().add(item);
                     groupMap.put(groupName, obj);
-                    // 切换分组
+                    // Switch group
                     switchGroupConsumer.accept(obj);
                 });
             }
@@ -107,7 +107,7 @@ public class GroupNameComponent<E extends AbstractItem<E>, T extends AbstractGro
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
                 groupMap.remove(currGroupName);
-                // 切换分组
+                // Switch group
                 switchGroupConsumer.accept(groupMap.get(GlobalDict.DEFAULT_GROUP_NAME));
             }
 
@@ -123,7 +123,7 @@ public class GroupNameComponent<E extends AbstractItem<E>, T extends AbstractGro
         this.panel.add(new JBLabel("Group Name:"));
         this.groupComboBox = new ComboBox<>(this.groupMap.keySet().toArray(new String[0]));
         this.panel.add(this.groupComboBox);
-        // 分组操作
+        // Group operation
         DefaultActionGroup groupAction = new DefaultActionGroup(Arrays.asList(this.copyAction(), this.addAction(), this.removeAction()));
         ActionToolbar groupActionToolbar = ActionManager.getInstance().createActionToolbar("Group Toolbar", groupAction, true);
         this.panel.add(groupActionToolbar.getComponent());
@@ -143,9 +143,9 @@ public class GroupNameComponent<E extends AbstractItem<E>, T extends AbstractGro
     }
 
     /**
-     * 更新分组信息
+     * Update group information
      *
-     * @param groupMap 所有分组信息
+     * @param groupMap All group information
      */
     public void setGroupMap(Map<String, T> groupMap) {
         this.groupMap = groupMap;
@@ -153,7 +153,7 @@ public class GroupNameComponent<E extends AbstractItem<E>, T extends AbstractGro
     }
 
     /**
-     * 刷新下列框
+     * Refresh the following boxes
      */
     private void refreshGroupComboBox() {
         try {
@@ -168,9 +168,9 @@ public class GroupNameComponent<E extends AbstractItem<E>, T extends AbstractGro
     }
 
     /**
-     * 切换选中分组
+     * Toggle selected group
      *
-     * @param currGroupName 分组名
+     * @param currGroupName Group name
      */
     public void setCurrGroupName(String currGroupName) {
         this.currGroupName = currGroupName;

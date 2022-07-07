@@ -1,14 +1,14 @@
-##导入宏定义、设置包名、类名、文件名
+##Import macro definition, set package name, class name, file name
 $!{define.vm}
 #setPackageSuffix("service.impl")
 #setTableSuffix("ServiceImpl")
 #save("/service/impl", "ServiceImpl.java")
 
-##拿到主键
+##Get the primary key
 #if(!$tableInfo.pkColumn.isEmpty())
     #set($pk = $tableInfo.pkColumn.get(0))
 #end
-##业务层类名、持久层类名、实体名
+##Business layer class name, persistence layer class name, entity name
 #set($serviceSortType = $!tool.append($!tableInfo.name, "Service"))
 #set($serviceType = $!tool.append($!tableInfo.savePackageName, ".service.", $serviceSortType))
 #set($repositorySortType = $!tool.append($!tableInfo.name, "Repository"))
@@ -35,7 +35,7 @@ import java.util.stream.StreamSupport;
 
 
 /**
- * $!{tableInfo.comment}业务层
+ * $!{tableInfo.comment} Business Layer
  *
  * @author $!author
  * @since $!time.currTime()
@@ -72,5 +72,4 @@ public class $!{tableName} implements $!serviceSortType {
     public Page<$entityShortType> list(Pageable page) {
         return $!{repositoryVarName}.findAll(page);
     }
-
 }

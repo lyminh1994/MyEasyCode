@@ -7,7 +7,7 @@ import com.sjhy.plugin.tool.ReflectionUtils;
 import java.util.List;
 
 /**
- * 抽象分组类
+ * Abstract grouping class
  *
  * @author makejava
  * @version 1.0.0
@@ -15,35 +15,35 @@ import java.util.List;
  */
 public interface AbstractGroup<T, E extends AbstractItem<E>> {
     /**
-     * 获取分组名称
+     * Get group name
      *
-     * @return 分组名称
+     * @return Group Name
      */
     String getName();
 
     /**
-     * 设置分组名称
+     * Set group name
      *
-     * @param name 分组名称
+     * @param name Group Name
      */
     void setName(String name);
 
     /**
-     * 获取元素集合
+     * Get element collection
      *
-     * @return 元素集合
+     * @return Collection of elements
      */
     List<E> getElementList();
 
     /**
-     * 设置元素集合
+     * Set element collection
      *
-     * @param elementList 元素集合
+     * @param elementList Collection of elements
      */
     void setElementList(List<E> elementList);
 
     /**
-     * 默认子元素
+     * Default child element
      *
      * @return {@link E}
      */
@@ -54,7 +54,7 @@ public interface AbstractGroup<T, E extends AbstractItem<E>> {
     }
 
     /**
-     * 克隆对象
+     * Clone object
      *
      * @return {@link T}
      */
